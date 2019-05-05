@@ -598,7 +598,7 @@ testWithLog(
       fireEvent.click(queryByTestId(`take-order-${order.customerId}`));
     });
 
-    advanceTimers(47000);
+    advanceTimers(46000);
 
     orders = Object.values(getOrders(store.getState));
     const leftOrderIndices = [1, 0];
