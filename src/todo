@@ -1,0 +1,35 @@
+####Different dish preparation phases should have different completetion times - cook.speed * preparation time?
+####Customers should come at different time intervals
+
+Customers should have satisfaction meters
+    ####When customer comes, their time till order taken drops until they leave. The longer they have to wait, the angrier they are
+    ####When order is taken, another timer/satisfaction meter is set. The longer it takes for them to get their order, the angrier they are
+    When dish is served, customer decides if they like it (100% for now)
+    ####Customer satisfaction should be displayed as a progress bar
+    Customers should be displayed in the order they arrived in
+
+Orders
+    Orders should be displayed in the order they were taken
+
+Layout
+    ####Place Cooks next to Orders
+    ####Align Dish and next phase in the card title
+
+Cooks
+    ####Show cook level
+    ####Show cook current exp / to level
+    ####Show current speed multiplier
+
+Levels
+    ####Load levels from JSON
+    Ability to upload own level
+    ####Level in JSON will specify when customer will come and with what dish to prepare
+
+General
+    ####Have a timer for the entire level
+    ####Show number of customers served / total customers
+    ####Switch to redux
+    Save cooks to local storage when level is done
+    Save current levle to local storage when level is done
+    Load cooks from local storage when game is loaded
+    Load level from local storage when game is loaded
