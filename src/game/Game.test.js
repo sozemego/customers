@@ -522,7 +522,6 @@ testWithLog(
 
     orders = Object.values(getOrders(store.getState));
     const elements = queryAllByTestId(/order-id-/g);
-    // debug(elements.map(e => e.getAttribute("data-testid")));
     elements.forEach((element, index) => {
       const order = orders[orderIndicesToTake[index]];
       const expectedId = `order-id-${order.id}`;
@@ -536,7 +535,7 @@ testWithLog(
   "13 Orders should be displayed in the order they were taken after one is finished",
   () => {
     jest.useFakeTimers();
-    const { queryByTestId, queryAllByTestId, debug } = renderWithProvider(
+    const { queryByTestId, queryAllByTestId } = renderWithProvider(
       <Game />
     );
     startLevel("customer order 3");
@@ -552,7 +551,6 @@ testWithLog(
 
     orders = Object.values(getOrders(store.getState));
     const elements = queryAllByTestId(/order-id-/g);
-    // debug(elements.map(e => e.getAttribute("data-testid")));
     elements.forEach((element, index) => {
       const order = orders[orderIndicesToTake[index]];
       const expectedId = `order-id-${order.id}`;
@@ -569,7 +567,6 @@ testWithLog(
 
     const leftOrders = Object.values(getOrders(store.getState));
     const leftOrderElements = queryAllByTestId(/order-id-/g);
-    // debug(leftOrderElements.map(e => e.getAttribute("data-testid")));
     const leftOrderIndicesToTake = [3, 0, 2, 1];
     leftOrderElements.forEach((element, index) => {
       const order = leftOrders[leftOrderIndicesToTake[index]];
@@ -584,7 +581,7 @@ testWithLog(
   "14 Orders should be displayed in the order they were taken after customer leaves from anger",
   () => {
     jest.useFakeTimers();
-    const { queryByTestId, queryAllByTestId, debug } = renderWithProvider(
+    const { queryByTestId, queryAllByTestId } = renderWithProvider(
       <Game />
     );
     startLevel("customer order 4");
@@ -603,7 +600,6 @@ testWithLog(
     orders = Object.values(getOrders(store.getState));
     const leftOrderIndices = [1, 0];
     const elements = queryAllByTestId(/order-id-/g);
-    // debug(elements.map(e => e.getAttribute("data-testid")));
     elements.forEach((element, index) => {
       const order = orders[leftOrderIndices[index]];
       const expectedId = `order-id-${order.id}`;
@@ -612,3 +608,24 @@ testWithLog(
     });
   }
 );
+
+testWithLog("15 Customer leaving from anger should also make the order from that customer disappear", () => {
+  jest.useFakeTimers();
+  const { queryByTestId, queryAllByTestId, debug } = renderWithProvider(
+    <Game />
+  );
+  startLevel(4);
+  addCook();
+  advanceTimers(1000);
+
+  const customer1 = Object.values(getCustomers(store.getState))[0];
+  const customer2 = Object.values(getCustomers(store.getState))[1];
+  fireEvent.click(queryByTestId(`take-order-${customer1.id}`));
+  fireEvent.click(queryByTestId(`take-order-${customer2.id}`));
+  expect(queryAllByTestId(/order-id-/g).length).toBe(2);
+  expect(queryAllByTestId(/take-order-/).length).toBe(2);
+
+  advanceTimers(46000);
+  expect(queryAllByTestId(/order-id-/g).length).toBe(1);
+  expect(queryAllByTestId(/take-order-/).length).toBe(1);
+});
