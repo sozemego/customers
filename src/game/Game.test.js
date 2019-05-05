@@ -9,7 +9,7 @@ import { Game } from "./Game";
 import { Provider } from "react-redux";
 import { cookAdded, levelsLoaded, startGame } from "./actions";
 import { createNewStore } from "../store/store";
-import { getCustomers, getOrders, getTakenOrderIds } from './selectors';
+import { getCustomers, getOrders, getTakenOrderIds } from "./selectors";
 import { WAITING_TIME_TYPE } from "./customer/business";
 import { createCook } from "./cook/business";
 
@@ -31,10 +31,9 @@ beforeAll(() => {
     log(args, "ERROR");
     err(...args);
   };
-  const logFiles = fs.readdirSync('test');
+  const logFiles = fs.readdirSync("test");
   logFiles.forEach(file => {
-    console.log(file);
-    fs.unlinkSync(path.join('test', file));
+    fs.unlinkSync(path.join("test", file));
   });
 });
 
@@ -512,9 +511,7 @@ testWithLog(
   "12 Orders should be displayed in the order they were taken",
   () => {
     jest.useFakeTimers();
-    const { queryByTestId, queryAllByTestId } = renderWithProvider(
-      <Game />
-    );
+    const { queryByTestId, queryAllByTestId } = renderWithProvider(<Game />);
     startLevel("customer order 3");
     addCook();
     advanceTimers(1000);
@@ -541,9 +538,7 @@ testWithLog(
   "13 Orders should be displayed in the order they were taken after one is finished",
   () => {
     jest.useFakeTimers();
-    const { queryByTestId, queryAllByTestId } = renderWithProvider(
-      <Game />
-    );
+    const { queryByTestId, queryAllByTestId } = renderWithProvider(<Game />);
     startLevel("customer order 3");
     addCook();
     advanceTimers(1000);
@@ -587,9 +582,7 @@ testWithLog(
   "14 Orders should be displayed in the order they were taken after customer leaves from anger",
   () => {
     jest.useFakeTimers();
-    const { queryByTestId, queryAllByTestId } = renderWithProvider(
-      <Game />
-    );
+    const { queryByTestId, queryAllByTestId } = renderWithProvider(<Game />);
     startLevel("customer order 4");
     addCook();
     advanceTimers(1000);
@@ -615,23 +608,44 @@ testWithLog(
   }
 );
 
-testWithLog("15 Customer leaving from anger should also make the order from that customer disappear", () => {
-  jest.useFakeTimers();
-  const { queryByTestId, queryAllByTestId } = renderWithProvider(
-    <Game />
-  );
-  startLevel(4);
-  addCook();
-  advanceTimers(1000);
+testWithLog(
+  "15 Customer leaving from anger should also make the order from that customer disappear",
+  () => {
+    jest.useFakeTimers();
+    const { queryByTestId, queryAllByTestId } = renderWithProvider(<Game />);
+    startLevel(4);
+    addCook();
+    advanceTimers(1000);
 
-  const customer1 = Object.values(getCustomers(store.getState))[0];
-  const customer2 = Object.values(getCustomers(store.getState))[1];
-  fireEvent.click(queryByTestId(`take-order-${customer1.id}`));
-  fireEvent.click(queryByTestId(`take-order-${customer2.id}`));
-  expect(queryAllByTestId(/order-id-/g).length).toBe(2);
-  expect(queryAllByTestId(/take-order-/).length).toBe(2);
+    const customer1 = Object.values(getCustomers(store.getState))[0];
+    const customer2 = Object.values(getCustomers(store.getState))[1];
+    fireEvent.click(queryByTestId(`take-order-${customer1.id}`));
+    fireEvent.click(queryByTestId(`take-order-${customer2.id}`));
+    expect(queryAllByTestId(/order-id-/g).length).toBe(2);
+    expect(queryAllByTestId(/take-order-/).length).toBe(2);
 
-  advanceTimers(46000);
-  expect(queryAllByTestId(/order-id-/g).length).toBe(1);
-  expect(queryAllByTestId(/take-order-/).length).toBe(1);
-});
+    advanceTimers(46000);
+    expect(queryAllByTestId(/order-id-/g).length).toBe(1);
+    expect(queryAllByTestId(/take-order-/).length).toBe(1);
+  }
+);
+
+testWithLog(
+  "16 Starting the game again should not render the previous orders_customers",
+  () => {
+    jest.useFakeTimers();
+    const { queryByTestId, queryAllByTestId } = renderWithProvider(<Game />);
+    startLevel(4);
+    addCook();
+    advanceTimers(1000);
+    const customer1 = Object.values(getCustomers(store.getState))[0];
+    fireEvent.click(queryByTestId(`take-order-${customer1.id}`));
+    expect(queryAllByTestId(/order-id-/g).length).toBe(1);
+    expect(queryAllByTestId(/take-order-/).length).toBe(2);
+
+    startLevel(4);
+    advanceTimers(1000);
+    expect(queryAllByTestId(/order-id-/g).length).toBe(0);
+    expect(queryAllByTestId(/take-order-/).length).toBe(2);
+  }
+);

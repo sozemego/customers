@@ -91,7 +91,7 @@ function orderTaken(state, { payload: orderId }) {
 
 function orderDone(state, action) {
   const { orderId, customerId, cookId } = action;
-  const takenOrderIds = [...state.takenOrderIds ];
+  const takenOrderIds = [...state.takenOrderIds];
   const index = takenOrderIds.findIndex(id => id === orderId);
   if (index > -1) {
     takenOrderIds.splice(index, 1);
@@ -157,7 +157,7 @@ function orderPhaseFinished(state, action) {
 
   let customers = { ...state.customers };
 
-  const takenOrderIds = [...state.takenOrderIds ];
+  const takenOrderIds = [...state.takenOrderIds];
   if (dish.phases.length === 0) {
     const customer = { ...customers[order.customerId] };
     customer.phase = CUSTOMER_PHASE.DONE;
@@ -191,12 +191,12 @@ export const reducer = createReducer(initialState, {
     return { ...state, running: true, levelId: payload };
   },
   [GAME_STOPPED]: function gameStopped(state) {
+    const cooks = { ...state.cooks };
+    const levels = { ...state.levels };
     return {
-      ...state,
-      level: null,
-      running: false,
-      customers: {},
-      orders: {}
+      ...initialState,
+      levels,
+      cooks
     };
   },
   [CUSTOMER_ADDED]: customerAdded,
