@@ -76,7 +76,7 @@ function testWithLog(name, callback) {
 }
 
 function advanceTimers(ms) {
-  const increment = 50;
+  const increment = 1000;
   for (let i = 0; i < ms; i += increment) {
     act(() => jest.advanceTimersByTime(increment));
   }
