@@ -1,10 +1,8 @@
 import React, { useEffect } from "react";
-import _ from "lodash";
 import { InfoCard } from "../../components/InfoCard";
 import { Dish } from "../dish/Dish";
-import { ORDER_PHASE } from "../order/business";
 import { Button, Row, Col, Progress } from "antd";
-import { getOrders } from "../selectors";
+import { getOrders, getTakenOrderIds } from '../selectors';
 import { useCounter } from "../../hooks/counter";
 import { WAITING_TIME_TYPE } from "./business";
 
@@ -14,8 +12,9 @@ export function Customer({ customer, takeOrder, canMake, onTimeChanged }) {
   const orders = getOrders();
   const order = orders[orderId];
   const dish = order.dish;
+  const takenOrderIds = getTakenOrderIds();
 
-  const takeOrderEnabled = _.get(order, "phase", "") === ORDER_PHASE.WAITING;
+  const takeOrderEnabled = !takenOrderIds.some(id => id === order.id);
   const maxWaitTime = customer.waitingTimes[WAITING_TIME_TYPE.WAITING].leaveAt(
     dish
   );

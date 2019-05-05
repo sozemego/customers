@@ -1,16 +1,12 @@
 import React from "react";
 import { Order } from "./Order";
-import { ORDER_PHASE } from "./business";
-import { getOrders } from "../selectors";
+import { getOrders, getTakenOrderIds } from '../selectors';
 
 export function Orders(props) {
   const orders = getOrders();
+  const takenOrderIds = getTakenOrderIds();
 
-  const takenOrders = Object.values(orders).filter(
-    order => order.phase === ORDER_PHASE.TAKEN
-  );
-
-  console.log(takenOrders.map(order => order.id));
+  const takenOrders = takenOrderIds.map(id => orders[id]);
 
   return (
     <div>

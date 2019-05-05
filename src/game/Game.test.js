@@ -9,10 +9,9 @@ import { Game } from "./Game";
 import { Provider } from "react-redux";
 import { cookAdded, levelsLoaded, startGame } from "./actions";
 import { createNewStore } from "../store/store";
-import { getActiveCustomerIds, getCustomers, getOrders } from "./selectors";
-import { CUSTOMER_PHASE, WAITING_TIME_TYPE } from "./customer/business";
+import { getCustomers, getOrders, getTakenOrderIds } from './selectors';
+import { WAITING_TIME_TYPE } from "./customer/business";
 import { createCook } from "./cook/business";
-import { ORDER_PHASE } from "./order/business";
 
 let store = null;
 let logFile = "test.txt";
@@ -27,6 +26,16 @@ beforeAll(() => {
     log(args, "LOG");
     // consoleLog(...args);
   };
+  const err = console.err;
+  console.err = (...args) => {
+    log(args, "ERROR");
+    err(...args);
+  };
+  const logFiles = fs.readdirSync('test');
+  logFiles.forEach(file => {
+    console.log(file);
+    fs.unlinkSync(path.join('test', file));
+  });
 });
 
 beforeEach(() => {
@@ -314,7 +323,7 @@ testWithLog("2 game should not render a customer", () => {
 
 testWithLog("3 game should render 3 out of 4 customers", () => {
   jest.useFakeTimers();
-  const { queryAllByTestId, container, debug } = renderWithProvider(<Game />);
+  const { queryAllByTestId, container } = renderWithProvider(<Game />);
 
   startLevel(2);
 
@@ -339,8 +348,6 @@ testWithLog("4 customer should leave after not being taken care of", () => {
   for (let i = 0; i < leaveAt; i++) {
     act(() => jest.advanceTimersByTime(i * 1000));
   }
-  const customerWhoLeft = Object.values(getCustomers(store.getState))[0];
-  expect(customerWhoLeft.phase).toBe(CUSTOMER_PHASE.DONE);
   const customerElements = queryAllByTestId(/customer-id/i);
   expect(customerElements.length).toBe(0);
 });
@@ -353,8 +360,7 @@ testWithLog("5 taking order should render the order in order list", () => {
   const customer = Object.values(getCustomers(store.getState))[0];
   const takeOrderButton = queryByTestId(`take-order-${customer.id}`);
   fireEvent.click(takeOrderButton);
-  const order = Object.values(getOrders(store.getState))[0];
-  const orderElement = queryByTestId(`order-id-${order.id}`);
+  const orderElement = queryByTestId(`order-id-${customer.orderId}`);
   expect(orderElement).not.toBeNull();
 });
 
@@ -473,7 +479,7 @@ testWithLog(
   "11 Customers should be displayed in the order they arrived in after they leave from anger",
   () => {
     jest.useFakeTimers();
-    const { queryAllByTestId, debug } = renderWithProvider(<Game />);
+    const { queryAllByTestId } = renderWithProvider(<Game />);
     startLevel("customer order 2");
     addCook();
     advanceTimers(15000);
@@ -506,7 +512,7 @@ testWithLog(
   "12 Orders should be displayed in the order they were taken",
   () => {
     jest.useFakeTimers();
-    const { queryByTestId, queryAllByTestId, debug } = renderWithProvider(
+    const { queryByTestId, queryAllByTestId } = renderWithProvider(
       <Game />
     );
     startLevel("customer order 3");
@@ -598,7 +604,7 @@ testWithLog(
     advanceTimers(46000);
 
     orders = Object.values(getOrders(store.getState));
-    const leftOrderIndices = [1, 0];
+    const leftOrderIndices = [3, 1];
     const elements = queryAllByTestId(/order-id-/g);
     elements.forEach((element, index) => {
       const order = orders[leftOrderIndices[index]];
@@ -611,7 +617,7 @@ testWithLog(
 
 testWithLog("15 Customer leaving from anger should also make the order from that customer disappear", () => {
   jest.useFakeTimers();
-  const { queryByTestId, queryAllByTestId, debug } = renderWithProvider(
+  const { queryByTestId, queryAllByTestId } = renderWithProvider(
     <Game />
   );
   startLevel(4);

@@ -1,11 +1,5 @@
 import _ from "lodash";
 
-export const ORDER_PHASE = {
-  WAITING: "WAITING",
-  TAKEN: "TAKEN",
-  DONE: "DONE"
-};
-
 let id = 0;
 
 export function createOrder(dish = createDish()) {
@@ -14,7 +8,6 @@ export function createOrder(dish = createDish()) {
     dish,
     cookId: null,
     customerId: null,
-    phase: ORDER_PHASE.WAITING
   };
   return order;
 }

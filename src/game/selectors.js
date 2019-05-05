@@ -44,3 +44,7 @@ export function getOrders(getState) {
 export function getCooks(getState) {
   return createSelector(game => game.cooks)(getState);
 }
+
+export function getTakenOrderIds(getState) {
+  return createSelector(game => game.takenOrderIds)(getState);
+}
