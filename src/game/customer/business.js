@@ -18,7 +18,6 @@ export function createCustomer(id) {
     name: faker.name.firstName(),
     orderId: null,
     avatar: `avatars/avatar_${random}.png`,
-    phase: CUSTOMER_PHASE.ARRIVING,
     waitingTimes: {
       [WAITING_TIME_TYPE.WAITING]: {
         time: 0,

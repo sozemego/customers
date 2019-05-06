@@ -1,5 +1,4 @@
 import { PREPARATION_PHASE } from "./order/business";
-import { CUSTOMER_PHASE } from "./customer/business";
 import { removeId } from "../utils";
 import { createReducer } from "../store/utils";
 import {
@@ -17,15 +16,15 @@ import {
   ORDER_TAKEN,
   WAITING_TIME_CHANGED
 } from "./actions";
+import { CUSTOMER_PHASE } from "./customer/business";
 
 const initialState = {
   running: false,
   customers: {},
   cooks: {},
   orders: {},
-  activeCustomerIds: [],
+  customerPhase: {},
   takenOrderIds: [],
-  orderCustomerMap: {},
   levelId: null,
   levels: null
 };
@@ -38,23 +37,9 @@ function customerAdded(state, { payload: customer }) {
 
 function customerPhaseChanged(state, action) {
   const { customerId, phase } = action;
-  const customers = { ...state.customers };
-  const customer = { ...customers[action.customerId] };
-  customer.phase = phase;
-  customers[customerId] = customer;
-
-  let activeCustomerIds = [...state.activeCustomerIds];
-  if (phase === CUSTOMER_PHASE.ACTIVE) {
-    activeCustomerIds.push(customerId);
-  } else {
-    const index = activeCustomerIds.findIndex(id => id === customerId);
-    if (index > -1) {
-      activeCustomerIds.splice(index, 1);
-    }
-  }
-
-  activeCustomerIds = [...new Set([...activeCustomerIds])];
-  return { ...state, customers, activeCustomerIds };
+  const customerPhase = { ...state.customerPhase };
+  customerPhase[customerId] = phase;
+  return { ...state, customerPhase };
 }
 
 function cookAdded(state, { payload: cook }) {
@@ -156,20 +141,19 @@ function orderPhaseFinished(state, action) {
   orders[orderId] = order;
 
   let customers = { ...state.customers };
-
+  let customerPhase = { ...state.customerPhase };
   const takenOrderIds = [...state.takenOrderIds];
   if (dish.phases.length === 0) {
-    const customer = { ...customers[order.customerId] };
-    customer.phase = CUSTOMER_PHASE.DONE;
-    customers[order.customerId] = customer;
     const index = takenOrderIds.findIndex(id => id === orderId);
     if (index > -1) {
       takenOrderIds.splice(index, 1);
     }
     orders = removeId(orders, order.id);
+    customerPhase = { ...state.customerPhase };
+    customerPhase[order.customerId] = CUSTOMER_PHASE.DONE;
   }
 
-  return { ...state, cooks, orders, customers, takenOrderIds };
+  return { ...state, cooks, orders, customers, takenOrderIds, customerPhase };
 }
 
 function waitingTimeChanged(state, action) {

@@ -1,25 +1,21 @@
 import React from "react";
 import { Customer } from "./Customer";
 import { Card } from "antd";
-import { CUSTOMER_PHASE } from "./business";
-import { getActiveCustomerIds, getCustomers } from "../selectors";
+import { getActiveCustomerIds, getCustomers, getDoneCustomerIds } from '../selectors';
 import { changeWaitingTime, orderTaken } from "../actions";
 import { useDispatch } from "react-redux";
 
 export function Customers(props) {
   const customers = getCustomers();
   const activeCustomerIds = getActiveCustomerIds();
+  const doneCustomerIds = getDoneCustomerIds();
   const dispatch = useDispatch();
 
-  const isDone = customer => customer.phase === CUSTOMER_PHASE.DONE;
-  const isActive = customer => customer.phase === CUSTOMER_PHASE.ACTIVE;
-
   const totalCustomers = Object.values(customers).length;
-  const doneCustomers = Object.values(customers).filter(isDone).length;
+  const doneCustomers = doneCustomerIds.length;
 
   const activeCustomers = activeCustomerIds
-    .map(id => customers[id])
-    .filter(isActive);
+    .map(id => customers[id]);
 
   return (
     <Card

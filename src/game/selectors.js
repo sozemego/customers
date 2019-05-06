@@ -1,4 +1,5 @@
 import { useSelector } from "react-redux";
+import { CUSTOMER_PHASE } from "./customer/business";
 
 function baseSelector(callback) {
   return function(state) {
@@ -34,7 +35,21 @@ export function getCustomers(getState) {
 }
 
 export function getActiveCustomerIds(getState) {
-  return createSelector(game => game.activeCustomerIds)(getState);
+  const customerPhases = createSelector(game => game.customerPhase)(
+    getState
+  );
+  return Object.entries(customerPhases)
+    .filter(([id, phase]) => phase === CUSTOMER_PHASE.ACTIVE)
+    .map(([id, phase]) => id);
+}
+
+export function getDoneCustomerIds(getState) {
+  const customerPhase = createSelector(game => game.customerPhase)(
+    getState
+  );
+  return Object.entries(customerPhase)
+    .filter(([id, phase]) => phase === CUSTOMER_PHASE.DONE)
+    .map(([id, phase]) => id);
 }
 
 export function getOrders(getState) {

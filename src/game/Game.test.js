@@ -9,7 +9,7 @@ import { Game } from "./Game";
 import { Provider } from "react-redux";
 import { cookAdded, levelsLoaded, startGame } from "./actions";
 import { createNewStore } from "../store/store";
-import { getCustomers, getOrders, getTakenOrderIds } from "./selectors";
+import { getCustomers, getOrders } from "./selectors";
 import { WAITING_TIME_TYPE } from "./customer/business";
 import { createCook } from "./cook/business";
 
@@ -76,7 +76,7 @@ function testWithLog(name, callback) {
 }
 
 function advanceTimers(ms) {
-  const increment = 1000;
+  const increment = 250;
   for (let i = 0; i < ms; i += increment) {
     act(() => jest.advanceTimersByTime(increment));
   }
@@ -462,6 +462,7 @@ testWithLog(
     addCook();
     advanceTimers(15000);
     expect(Object.values(getCustomers(store.getState)).length).toBe(6);
+    console.log(Object.values(getCustomers(store.getState)));
 
     const customerIds = [1, 2, 4, 3, 6, 5];
 

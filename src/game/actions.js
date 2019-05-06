@@ -100,6 +100,7 @@ export function startLevel(levelId = 1) {
       const order = createOrder(createDish(customerData.dish));
       dispatch(orderAdded(order));
       dispatch(orderAttachedToCustomer(order.id, customer.id));
+      console.log('customer data', customerData.time)
       const timeoutId = setTimeout(() => {
         dispatch(customerPhaseChanged(customerData.id, CUSTOMER_PHASE.ACTIVE));
       }, customerData.time);
