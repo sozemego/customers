@@ -36,9 +36,12 @@ function customerAdded(state, { payload: customer }) {
 }
 
 function customerPhaseChanged(state, action) {
-  const { customerId, phase } = action;
+  const { customerId, phase, time } = action;
   const customerPhase = { ...state.customerPhase };
-  customerPhase[customerId] = phase;
+  customerPhase[customerId] = {
+    phase,
+    time
+  };
   return { ...state, customerPhase };
 }
 

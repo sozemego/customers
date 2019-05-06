@@ -29,7 +29,8 @@ export const CUSTOMER_PHASE_CHANGED = "CUSTOMER_PHASE_CHANGED";
 export const customerPhaseChanged = makeActionCreator(
   CUSTOMER_PHASE_CHANGED,
   "customerId",
-  "phase"
+  "phase",
+  "time"
 );
 
 export const COOK_ADDED = "COOK_ADDED";
@@ -100,9 +101,8 @@ export function startLevel(levelId = 1) {
       const order = createOrder(createDish(customerData.dish));
       dispatch(orderAdded(order));
       dispatch(orderAttachedToCustomer(order.id, customer.id));
-      console.log('customer data', customerData.time)
       const timeoutId = setTimeout(() => {
-        dispatch(customerPhaseChanged(customerData.id, CUSTOMER_PHASE.ACTIVE));
+        dispatch(customerPhaseChanged(customerData.id, CUSTOMER_PHASE.ACTIVE, Date.now()));
       }, customerData.time);
       customerTimeouts.push(timeoutId);
     });
@@ -130,7 +130,7 @@ export function changeWaitingTime(customer, type, time) {
     const waitingTime = customer.waitingTimes[type];
     const maxTime = waitingTime.leaveAt(dish);
     if (time >= maxTime) {
-      dispatch(customerPhaseChanged(customer.id, CUSTOMER_PHASE.DONE));
+      dispatch(customerPhaseChanged(customer.id, CUSTOMER_PHASE.DONE, Date.now()));
       //need to remove order as well
       const cook = getCooks(getState)[order.cookId];
       if (type === WAITING_TIME_TYPE.ORDER) {

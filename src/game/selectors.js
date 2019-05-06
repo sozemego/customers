@@ -39,7 +39,8 @@ export function getActiveCustomerIds(getState) {
     getState
   );
   return Object.entries(customerPhases)
-    .filter(([id, phase]) => phase === CUSTOMER_PHASE.ACTIVE)
+    .filter(([id, data]) => data.phase === CUSTOMER_PHASE.ACTIVE)
+    .sort((a, b) => a[1].time - b[1].time)
     .map(([id, phase]) => id);
 }
 
@@ -48,7 +49,8 @@ export function getDoneCustomerIds(getState) {
     getState
   );
   return Object.entries(customerPhase)
-    .filter(([id, phase]) => phase === CUSTOMER_PHASE.DONE)
+    .filter(([id, data]) => data.phase === CUSTOMER_PHASE.DONE)
+    .sort((a, b) => a[1].time - b[1].time)
     .map(([id, phase]) => id);
 }
 
