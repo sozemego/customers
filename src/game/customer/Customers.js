@@ -6,7 +6,7 @@ import {
   getCustomers,
   getDoneCustomerIds
 } from "../selectors";
-import { changeWaitingTime, orderTaken } from "../actions";
+import { exceedWaitingTime, orderTaken } from '../actions';
 import { useDispatch } from "react-redux";
 
 export function Customers(props) {
@@ -29,8 +29,8 @@ export function Customers(props) {
         <Customer
           customer={customer}
           takeOrder={() => dispatch(orderTaken(customer.orderId))}
-          onTimeChanged={(type, time) =>
-            dispatch(changeWaitingTime(customer, type, time))
+          onTimeExceeded={(type, time) =>
+            dispatch(exceedWaitingTime(customer, type, time))
           }
           key={customer.id}
         />

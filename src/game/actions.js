@@ -115,9 +115,8 @@ export function stopGame() {
   };
 }
 
-export function changeWaitingTime(customer, type, time) {
-  return function changeWaitingTime(dispatch, getState) {
-    // dispatch(waitingTimeChanged(customer.id, time, type));
+export function exceedWaitingTime(customer, type, time) {
+  return function exceedWaitingTime(dispatch, getState) {
 
     const order = getOrders(getState)[customer.orderId];
     if (!order) {
@@ -125,7 +124,6 @@ export function changeWaitingTime(customer, type, time) {
     }
     const maxTime = leaveAt(order);
     if (time >= maxTime) {
-      console.log(time, maxTime);
       dispatch(
         customerPhaseChanged(customer.id, CUSTOMER_PHASE.DONE, Date.now())
       );

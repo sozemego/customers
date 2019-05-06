@@ -159,17 +159,6 @@ function orderPhaseFinished(state, action) {
   return { ...state, cooks, orders, customers, takenOrderIds, customerPhase };
 }
 
-function waitingTimeChanged(state, action) {
-  const { customerId, time, waitingTimeType } = action;
-  const customers = { ...state.customers };
-  const customer = { ...customers[customerId] };
-  const waitingTime = { ...customer.waitingTimes[waitingTimeType] };
-  waitingTime.time = time;
-  customer.waitingTimes[waitingTimeType] = waitingTime;
-  customers[customerId] = customer;
-  return { ...state, customers };
-}
-
 export const reducer = createReducer(initialState, {
   [LEVELS_LOADED]: function levelsLoaded(state, { payload }) {
     return { ...state, levels: payload };

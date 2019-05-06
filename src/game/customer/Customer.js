@@ -1,13 +1,12 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { InfoCard } from "../../components/InfoCard";
 import { Dish } from "../dish/Dish";
 import { Button, Row, Col, Progress } from "antd";
 import { getOrders, getTakenOrderIds } from "../selectors";
-import { useCounter } from "../../hooks/counter";
 import { leaveAt, WAITING_TIME_TYPE } from "../business";
 import { useTimer } from "../../hooks/timer";
 
-export function Customer({ customer, takeOrder, canMake, onTimeChanged }) {
+export function Customer({ customer, takeOrder, canMake, onTimeExceeded }) {
   const { name, orderId, avatar } = customer;
 
   const orders = getOrders();
@@ -21,7 +20,7 @@ export function Customer({ customer, takeOrder, canMake, onTimeChanged }) {
     1,
     maxWaitTime,
     takeOrderEnabled,
-    () => onTimeChanged(WAITING_TIME_TYPE.WAITING, maxWaitTime)
+    () => onTimeExceeded(WAITING_TIME_TYPE.WAITING, maxWaitTime)
   );
 
   const maxMakeTime = leaveAt(order);
@@ -30,7 +29,7 @@ export function Customer({ customer, takeOrder, canMake, onTimeChanged }) {
     1,
     maxMakeTime,
     !takeOrderEnabled,
-    () => onTimeChanged(WAITING_TIME_TYPE.ORDER, maxMakeTime)
+    () => onTimeExceeded(WAITING_TIME_TYPE.ORDER, maxMakeTime)
   );
 
   return (
