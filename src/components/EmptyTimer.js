@@ -8,7 +8,7 @@ import PropTypes from "prop-types";
 export function EmptyTimer(props) {
   const { delay, time, start, onFinish } = props;
 
-  useTimer(delay, time, start, onFinish, "empty timer");
+  useTimer(delay, 100, time, start, onFinish, "empty timer");
 
   return null;
 }

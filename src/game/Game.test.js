@@ -10,8 +10,8 @@ import { Provider } from "react-redux";
 import { cookAdded, levelsLoaded, startGame } from "./actions";
 import { createNewStore } from "../store/store";
 import { getCustomers, getOrders } from "./selectors";
-import { WAITING_TIME_TYPE } from "./customer/business";
 import { createCook } from "./cook/business";
+import { leaveAt } from "./business";
 
 let store = null;
 let logFile = "test.txt";
@@ -24,7 +24,7 @@ beforeAll(() => {
   const { log: consoleLog } = console;
   console.log = (...args) => {
     log(args, "LOG");
-    // consoleLog(...args);
+    consoleLog(...args);
   };
   const err = console.err;
   console.err = (...args) => {
@@ -340,11 +340,8 @@ testWithLog("4 customer should leave after not being taken care of", () => {
   const customers = Object.values(getCustomers(store.getState));
   const customer = customers[0];
   const order = orders[customer.orderId];
-  const { dish } = order;
-  const leaveAt = customer.waitingTimes[WAITING_TIME_TYPE.WAITING].leaveAt(
-    dish
-  );
-  for (let i = 0; i < leaveAt; i++) {
+  const leaveAtTime = leaveAt(order);
+  for (let i = 0; i < leaveAtTime; i++) {
     act(() => jest.advanceTimersByTime(i * 1000));
   }
   const customerElements = queryAllByTestId(/customer-id/i);
@@ -394,11 +391,8 @@ testWithLog(
     const customers = Object.values(getCustomers(store.getState));
     const customer = customers[0];
     const order = orders[customer.orderId];
-    const { dish } = order;
-    const leaveAt = customer.waitingTimes[WAITING_TIME_TYPE.ORDER].leaveAt(
-      dish
-    );
-    for (let i = 0; i < leaveAt; i++) {
+    const leaveAtTime = leaveAt(order);
+    for (let i = 0; i < leaveAtTime; i++) {
       act(() => jest.advanceTimersByTime(i * 1000));
     }
     const customerElements = queryAllByTestId(/customer-id/i);
@@ -408,7 +402,7 @@ testWithLog(
 
 testWithLog("8 completing the order should remove order", () => {
   jest.useFakeTimers();
-  const { queryByTestId } = renderWithProvider(<Game />);
+  const { queryByTestId, debug, container } = renderWithProvider(<Game />);
   startLevel(6);
   addCook();
   act(() => jest.advanceTimersByTime(1000));
@@ -416,7 +410,9 @@ testWithLog("8 completing the order should remove order", () => {
   expect(queryByTestId(/order-id/g)).not.toBeNull();
 
   fireEvent.click(queryByTestId(/next-phase/g));
-  act(() => jest.advanceTimersByTime(10000));
+  advanceTimers(10000);
+  // act(() => jest.advanceTimersByTime(10000));
+  debug(container);
   fireEvent.click(queryByTestId(/next-phase/g));
   act(() => jest.advanceTimersByTime(12000));
   fireEvent.click(queryByTestId(/next-phase/g));

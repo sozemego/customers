@@ -1,12 +1,8 @@
-import {
-  createCustomer,
-  CUSTOMER_PHASE,
-  isDone,
-  WAITING_TIME_TYPE
-} from "./customer/business";
+import { createCustomer, CUSTOMER_PHASE, isDone } from "./customer/business";
 import { createDish, createOrder } from "./order/business";
 import { getCooks, getCustomers, getLevels, getOrders } from "./selectors";
 import { makeActionCreator, makePayloadActionCreator } from "../store/utils";
+import { leaveAt, WAITING_TIME_TYPE } from "./business";
 
 export const GAME_STARTED = "GAME_STARTED";
 export const gameStarted = makePayloadActionCreator(GAME_STARTED);
@@ -121,16 +117,15 @@ export function stopGame() {
 
 export function changeWaitingTime(customer, type, time) {
   return function changeWaitingTime(dispatch, getState) {
-    dispatch(waitingTimeChanged(customer.id, time, type));
+    // dispatch(waitingTimeChanged(customer.id, time, type));
 
     const order = getOrders(getState)[customer.orderId];
     if (!order) {
       return;
     }
-    const dish = order.dish;
-    const waitingTime = customer.waitingTimes[type];
-    const maxTime = waitingTime.leaveAt(dish);
+    const maxTime = leaveAt(order);
     if (time >= maxTime) {
+      console.log(time, maxTime);
       dispatch(
         customerPhaseChanged(customer.id, CUSTOMER_PHASE.DONE, Date.now())
       );

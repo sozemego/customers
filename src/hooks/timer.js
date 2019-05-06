@@ -1,9 +1,9 @@
 import { useEffect, useRef } from "react";
 import { useCounter } from "./counter";
 
-export function useTimer(delay, max, running, onFinish, name = "default name") {
+export function useTimer(delay, increment, max, running, onFinish, name = "default name") {
   const ref = useRef(false);
-  const { count } = useCounter(delay, delay, max, running);
+  const { count } = useCounter(delay, increment, max, running);
 
   if (count >= max && !ref.current && running) {
     onFinish();
@@ -12,7 +12,7 @@ export function useTimer(delay, max, running, onFinish, name = "default name") {
 
   useEffect(() => {
     ref.current = false;
-  }, [delay, max, running]);
+  }, [delay, max, increment, running]);
 
   return { time: count };
 }

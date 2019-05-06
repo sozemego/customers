@@ -40,7 +40,8 @@ export function Order({ order }) {
   cooks = nextDishStatus ? Object.values(cooks) : [];
 
   const runTimer = !!currentCook;
-  const { time } = useTimer(100, orderTime || 0, !!runTimer, () => {});
+  const { time } = useTimer(100, 100, orderTime || 0, !!runTimer, () => {});
+  console.log(runTimer, orderTime, time);
 
   function createButtonText(cook) {
     return `${cook.name} ${Number(
