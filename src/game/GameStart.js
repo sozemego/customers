@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { Button } from "antd";
 import { isRunning } from "./selectors";
-import { cookAdded, levelsLoaded, startGame, stopGame } from './actions';
+import { cookAdded, levelsLoaded, startGame, stopGame } from "./actions";
 import { useDispatch } from "react-redux";
 import { createCook } from "./cook/business";
 

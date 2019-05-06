@@ -1,6 +1,6 @@
 import React from "react";
 import { Order } from "./Order";
-import { getOrders, getTakenOrderIds } from '../selectors';
+import { getOrders, getTakenOrderIds } from "../selectors";
 
 export function Orders(props) {
   const orders = getOrders();

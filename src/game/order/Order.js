@@ -13,7 +13,7 @@ import { capitaliseFirst } from "../../utils";
 import { useTimer } from "../../hooks/timer";
 import { EmptyTimer } from "../../components/EmptyTimer";
 import { getCooks, getCustomers } from "../selectors";
-import { finishPhase, orderNextPhaseStarted } from '../actions';
+import { finishPhase, orderNextPhaseStarted } from "../actions";
 import { useDispatch } from "react-redux";
 
 const titleContainer = css({
@@ -82,7 +82,9 @@ export function Order({ order }) {
                   <Button
                     type={"primary"}
                     style={{ margin: "4px" }}
-                    onClick={() => dispatch(orderNextPhaseStarted(order.id, cook.id))}
+                    onClick={() =>
+                      dispatch(orderNextPhaseStarted(order.id, cook.id))
+                    }
                     disabled={!!cook.orderId}
                     data-testid={`next-phase-${order.id}`}
                   >

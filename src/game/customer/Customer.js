@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { InfoCard } from "../../components/InfoCard";
 import { Dish } from "../dish/Dish";
 import { Button, Row, Col, Progress } from "antd";
-import { getOrders, getTakenOrderIds } from '../selectors';
+import { getOrders, getTakenOrderIds } from "../selectors";
 import { useCounter } from "../../hooks/counter";
 import { WAITING_TIME_TYPE } from "./business";
 

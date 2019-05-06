@@ -1,7 +1,11 @@
 import React from "react";
 import { Customer } from "./Customer";
 import { Card } from "antd";
-import { getActiveCustomerIds, getCustomers, getDoneCustomerIds } from '../selectors';
+import {
+  getActiveCustomerIds,
+  getCustomers,
+  getDoneCustomerIds
+} from "../selectors";
 import { changeWaitingTime, orderTaken } from "../actions";
 import { useDispatch } from "react-redux";
 
@@ -14,8 +18,7 @@ export function Customers(props) {
   const totalCustomers = Object.values(customers).length;
   const doneCustomers = doneCustomerIds.length;
 
-  const activeCustomers = activeCustomerIds
-    .map(id => customers[id]);
+  const activeCustomers = activeCustomerIds.map(id => customers[id]);
 
   return (
     <Card

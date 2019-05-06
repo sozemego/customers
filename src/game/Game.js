@@ -1,7 +1,7 @@
 import React from "react";
 import { css } from "glamor";
 import { Card, Col, Row } from "antd";
-import { getLevelId, isRunning } from './selectors';
+import { getLevelId, isRunning } from "./selectors";
 import { GameClock } from "../components/GameClock";
 import { Customers } from "./customer/Customers";
 import { Orders } from "./order/Orders";

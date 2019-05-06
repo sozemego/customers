@@ -5,12 +5,7 @@ import {
   WAITING_TIME_TYPE
 } from "./customer/business";
 import { createDish, createOrder } from "./order/business";
-import {
-  getCooks,
-  getCustomers,
-  getLevels,
-  getOrders
-} from "./selectors";
+import { getCooks, getCustomers, getLevels, getOrders } from "./selectors";
 import { makeActionCreator, makePayloadActionCreator } from "../store/utils";
 
 export const GAME_STARTED = "GAME_STARTED";
@@ -102,7 +97,13 @@ export function startLevel(levelId = 1) {
       dispatch(orderAdded(order));
       dispatch(orderAttachedToCustomer(order.id, customer.id));
       const timeoutId = setTimeout(() => {
-        dispatch(customerPhaseChanged(customerData.id, CUSTOMER_PHASE.ACTIVE, Date.now()));
+        dispatch(
+          customerPhaseChanged(
+            customerData.id,
+            CUSTOMER_PHASE.ACTIVE,
+            Date.now()
+          )
+        );
       }, customerData.time);
       customerTimeouts.push(timeoutId);
     });
@@ -130,7 +131,9 @@ export function changeWaitingTime(customer, type, time) {
     const waitingTime = customer.waitingTimes[type];
     const maxTime = waitingTime.leaveAt(dish);
     if (time >= maxTime) {
-      dispatch(customerPhaseChanged(customer.id, CUSTOMER_PHASE.DONE, Date.now()));
+      dispatch(
+        customerPhaseChanged(customer.id, CUSTOMER_PHASE.DONE, Date.now())
+      );
       //need to remove order as well
       const cook = getCooks(getState)[order.cookId];
       if (type === WAITING_TIME_TYPE.ORDER) {

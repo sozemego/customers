@@ -7,7 +7,7 @@ export function createOrder(dish = createDish()) {
     id: ++id,
     dish,
     cookId: null,
-    customerId: null,
+    customerId: null
   };
   return order;
 }
