@@ -147,8 +147,7 @@ function orderPhaseFinished(state, action) {
   order.cookId = null;
   orders[orderId] = order;
 
-  let customers = { ...state.customers };
-  let customerPhase = { ...state.customerPhase };
+  const customerPhase = { ...state.customerPhase };
   const takenOrderIds = [...state.takenOrderIds];
   if (dish.phases.length === 0) {
     const index = takenOrderIds.findIndex(id => id === orderId);
@@ -156,14 +155,13 @@ function orderPhaseFinished(state, action) {
       takenOrderIds.splice(index, 1);
     }
     orders = removeId(orders, order.id);
-    customerPhase = { ...state.customerPhase };
     customerPhase[order.customerId] = {
       phase: CUSTOMER_PHASE.DONE,
       time: Date.now()
     };
   }
 
-  return { ...state, cooks, orders, customers, takenOrderIds, customerPhase };
+  return { ...state, cooks, orders, takenOrderIds, customerPhase };
 }
 
 export const reducer = createReducer(initialState, {
