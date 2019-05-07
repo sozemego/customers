@@ -62,14 +62,6 @@ export const orderPhaseFinished = makeActionCreator(
   "cookId"
 );
 
-export const WAITING_TIME_CHANGED = "WAITING_TIME_CHANGED";
-export const waitingTimeChanged = makeActionCreator(
-  WAITING_TIME_CHANGED,
-  "customerId",
-  "time",
-  "waitingTimeType"
-);
-
 export function startGame(levelId = 1) {
   return function startGame(dispatch, getState) {
     dispatch(stopGame());
@@ -117,7 +109,6 @@ export function stopGame() {
 
 export function exceedWaitingTime(customer, type, time) {
   return function exceedWaitingTime(dispatch, getState) {
-
     const order = getOrders(getState)[customer.orderId];
     if (!order) {
       return;

@@ -13,8 +13,7 @@ import {
   ORDER_DONE,
   ORDER_NEXT_PHASE_STARTED,
   ORDER_PHASE_FINISHED,
-  ORDER_TAKEN,
-  WAITING_TIME_CHANGED
+  ORDER_TAKEN
 } from "./actions";
 import { CUSTOMER_PHASE } from "./customer/business";
 
@@ -183,5 +182,5 @@ export const reducer = createReducer(initialState, {
   [ORDER_TAKEN]: orderTaken,
   [ORDER_DONE]: orderDone,
   [ORDER_NEXT_PHASE_STARTED]: orderNextPhaseStarted,
-  [ORDER_PHASE_FINISHED]: orderPhaseFinished,
+  [ORDER_PHASE_FINISHED]: orderPhaseFinished
 });
