@@ -335,8 +335,6 @@ testWithLog("3 game should render 3 out of 4 customers", () => {
   advanceTimers(6000);
   const customers = queryAllByTestId(/customer-id/i, { container });
   expect(customers.length).toEqual(3);
-  console.log(getCustomers(store.getState));
-  console.log(getCustomerPhase(store.getState));
   expect(getByTestId("arriving-customers").textContent).toBe("🤔 4");
   expect(getByTestId("done-customers").textContent).toBe("😀 0");
   expect(getByTestId("angry-customers").textContent).toBe("🤬 0");
@@ -482,7 +480,6 @@ testWithLog(
     addCook();
     advanceTimers(15000);
     expect(Object.values(getCustomers(store.getState)).length).toBe(6);
-    console.log(Object.values(getCustomers(store.getState)));
 
     const customerIds = [1, 2, 4, 3, 6, 5];
 
