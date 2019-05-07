@@ -31,7 +31,12 @@ const initialState = {
 function customerAdded(state, { payload: customer }) {
   const customers = { ...state.customers };
   customers[customer.id] = customer;
-  return { ...state, customers };
+  const customerPhase = { ...state.customerPhase };
+  customerPhase[customer.id] = {
+    phase: CUSTOMER_PHASE.ARRIVING,
+    time: Date.now()
+  };
+  return { ...state, customers, customerPhase };
 }
 
 function customerPhaseChanged(state, action) {
@@ -152,7 +157,10 @@ function orderPhaseFinished(state, action) {
     }
     orders = removeId(orders, order.id);
     customerPhase = { ...state.customerPhase };
-    customerPhase[order.customerId] = CUSTOMER_PHASE.DONE;
+    customerPhase[order.customerId] = {
+      phase: CUSTOMER_PHASE.DONE,
+      time: Date.now()
+    };
   }
 
   return { ...state, cooks, orders, customers, takenOrderIds, customerPhase };

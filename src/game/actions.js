@@ -116,7 +116,7 @@ export function exceedWaitingTime(customer, type, time) {
     const maxTime = leaveAt(order);
     if (time >= maxTime) {
       dispatch(
-        customerPhaseChanged(customer.id, CUSTOMER_PHASE.DONE, Date.now())
+        customerPhaseChanged(customer.id, CUSTOMER_PHASE.ANGRY, Date.now())
       );
       //need to remove order as well
       const cook = getCooks(getState)[order.cookId];

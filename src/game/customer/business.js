@@ -3,7 +3,8 @@ import faker from "faker";
 export const CUSTOMER_PHASE = {
   ARRIVING: "ARRIVING",
   ACTIVE: "ACTIVE",
-  DONE: "DONE"
+  DONE: "DONE",
+  ANGRY: "ANGRY"
 };
 
 export function createCustomer(id) {
@@ -12,7 +13,7 @@ export function createCustomer(id) {
     id: id || ++id,
     name: faker.name.firstName(),
     orderId: null,
-    avatar: `avatars/avatar_${random}.png`,
+    avatar: `avatars/avatar_${random}.png`
   };
   return customer;
 }

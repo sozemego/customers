@@ -34,18 +34,10 @@ export function getCustomers(getState) {
   return createSelector(game => game.customers)(getState);
 }
 
-export function getActiveCustomerIds(getState) {
-  const customerPhases = createSelector(game => game.customerPhase)(getState);
-  return Object.entries(customerPhases)
-    .filter(([id, data]) => data.phase === CUSTOMER_PHASE.ACTIVE)
-    .sort((a, b) => a[1].time - b[1].time)
-    .map(([id, phase]) => id);
-}
-
-export function getDoneCustomerIds(getState) {
+export function getCustomerIds(phase, getState) {
   const customerPhase = createSelector(game => game.customerPhase)(getState);
   return Object.entries(customerPhase)
-    .filter(([id, data]) => data.phase === CUSTOMER_PHASE.DONE)
+    .filter(([id, data]) => data.phase === phase)
     .sort((a, b) => a[1].time - b[1].time)
     .map(([id, phase]) => id);
 }
