@@ -184,5 +184,4 @@ export const reducer = createReducer(initialState, {
   [ORDER_DONE]: orderDone,
   [ORDER_NEXT_PHASE_STARTED]: orderNextPhaseStarted,
   [ORDER_PHASE_FINISHED]: orderPhaseFinished,
-  [WAITING_TIME_CHANGED]: waitingTimeChanged
 });
