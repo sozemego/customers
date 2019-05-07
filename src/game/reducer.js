@@ -88,8 +88,6 @@ function orderDone(state, action) {
   if (index > -1) {
     takenOrderIds.splice(index, 1);
   }
-  const customers = { ...state.customers };
-  const nextCustomers = removeId(customers, customerId);
 
   const cooks = { ...state.cooks };
   const cook = cooks[cookId];
@@ -98,7 +96,7 @@ function orderDone(state, action) {
     cooks[cookId] = cook;
   }
 
-  return { ...state, customers: nextCustomers, takenOrderIds };
+  return { ...state, takenOrderIds };
 }
 
 function orderNextPhaseStarted(state, action) {

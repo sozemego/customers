@@ -34,8 +34,12 @@ export function getCustomers(getState) {
   return createSelector(game => game.customers)(getState);
 }
 
+export function getCustomerPhase(getState) {
+  return createSelector(game => game.customerPhase)(getState);
+}
+
 export function getCustomerIds(phase, getState) {
-  const customerPhase = createSelector(game => game.customerPhase)(getState);
+  const customerPhase = getCustomerPhase(getState);
   return Object.entries(customerPhase)
     .filter(([id, data]) => data.phase === phase)
     .sort((a, b) => a[1].time - b[1].time)
