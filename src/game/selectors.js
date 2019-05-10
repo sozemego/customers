@@ -1,5 +1,4 @@
 import { useSelector } from "react-redux";
-import { CUSTOMER_PHASE } from "./customer/business";
 
 function baseSelector(callback) {
   return function(state) {
@@ -40,10 +39,22 @@ export function getCustomerPhase(getState) {
 
 export function getCustomerIds(phase, getState) {
   const customerPhase = getCustomerPhase(getState);
-  return Object.entries(customerPhase)
-    .filter(([id, data]) => data.phase === phase)
-    .sort((a, b) => a[1].time - b[1].time)
-    .map(([id, phase]) => id);
+  return (
+    Object.entries(customerPhase)
+      .map(([id, data]) => {
+        data.sort((a, b) => a.time - b.time);
+        return [id, data];
+      })
+      .filter(([id, data]) => data[data.length - 1].phase === phase)
+      .sort((a, b) => {
+        const aPhases = a[1];
+        const bPhases = b[1];
+        const aTime = aPhases[aPhases.length - 1].time;
+        const bTime = bPhases[bPhases.length - 1].time;
+        return aTime - bTime;
+      })
+      .map(([id, phase]) => id)
+  );
 }
 
 export function getOrders(getState) {

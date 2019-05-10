@@ -32,20 +32,24 @@ function customerAdded(state, { payload: customer }) {
   const customers = { ...state.customers };
   customers[customer.id] = customer;
   const customerPhase = { ...state.customerPhase };
-  customerPhase[customer.id] = {
-    phase: CUSTOMER_PHASE.ARRIVING,
-    time: Date.now()
-  };
+  customerPhase[customer.id] = [
+    {
+      phase: CUSTOMER_PHASE.ARRIVING,
+      time: Date.now()
+    }
+  ];
   return { ...state, customers, customerPhase };
 }
 
 function customerPhaseChanged(state, action) {
   const { customerId, phase, time } = action;
   const customerPhase = { ...state.customerPhase };
-  customerPhase[customerId] = {
+  const customerPhases = [...customerPhase[customerId]];
+  customerPhases.push({
     phase,
     time
-  };
+  });
+  customerPhase[customerId] = customerPhases;
   return { ...state, customerPhase };
 }
 
@@ -153,10 +157,12 @@ function orderPhaseFinished(state, action) {
       takenOrderIds.splice(index, 1);
     }
     orders = removeId(orders, order.id);
-    customerPhase[order.customerId] = {
+    const customerPhases = [...customerPhase[order.customerId]];
+    customerPhases.push({
       phase: CUSTOMER_PHASE.DONE,
       time: Date.now()
-    };
+    });
+    customerPhase[order.customerId] = customerPhases;
   }
 
   return { ...state, cooks, orders, takenOrderIds, customerPhase };
