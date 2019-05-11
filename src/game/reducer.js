@@ -54,9 +54,6 @@ function customerPhaseChanged(state, action) {
 
   const orderIdToResult = { ...state.orderIdToResult };
   const orderId = state.customers[customerId].orderId;
-  if (phase === CUSTOMER_PHASE.DONE) {
-    orderIdToResult[orderId] = { percent: 100, orderId };
-  }
   if (phase === CUSTOMER_PHASE.ANGRY) {
     orderIdToResult[orderId] = { percent: 0, orderId };
   }
