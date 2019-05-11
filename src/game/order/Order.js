@@ -26,8 +26,8 @@ const titleContainer = css({
 
 export function Order({ order }) {
   const { customerId, dish } = order;
-  const { phase: dishPhase } = dish;
-  const nextDishPhase = _.get(dish, "phases[0]", "");
+  const { phase: dishStatus } = dish;
+  const nextDishStatus = _.get(dish, "phases[0]", "");
 
   const dispatch = useDispatch();
   const customers = getCustomers();
@@ -36,15 +36,15 @@ export function Order({ order }) {
 
   const currentCook = cooks[order.cookId];
   const orderTime =
-    _.get(currentCook, "speed", 0) * PREPARATION_PHASE_TIME[dishPhase];
-  cooks = nextDishPhase ? Object.values(cooks) : [];
+    _.get(currentCook, "speed", 0) * PREPARATION_PHASE_TIME[dishStatus];
+  cooks = nextDishStatus ? Object.values(cooks) : [];
 
   const runTimer = !!currentCook;
   const { time } = useTimer(100, 100, orderTime || 0, !!runTimer, () => {});
 
   function createButtonText(cook) {
     return `${cook.name} ${Number(
-      (cook.speed * PREPARATION_PHASE_TIME[nextDishPhase.name]) / 1000
+      (cook.speed * PREPARATION_PHASE_TIME[nextDishStatus]) / 1000
     ).toFixed(1)}s`;
   }
 
@@ -52,11 +52,10 @@ export function Order({ order }) {
     return (
       <div className={titleContainer}>
         <InfoCard src={dish.avatar} name={`Ordered by ${customer.name}`} />
-        <div>{capitaliseFirst(getPresentParticiple(dishPhase))}</div>
+        <div>{capitaliseFirst(getPresentParticiple(dishStatus))}</div>
       </div>
     );
   }
-  console.log(dish, dishPhase, nextDishPhase);
 
   return (
     <Card title={title()} data-testid={`order-id-${order.id}`}>
@@ -70,7 +69,7 @@ export function Order({ order }) {
               justifyContent: "flex-start"
             }}
           >
-            <div>{capitaliseFirst(getVerb(nextDishPhase.name))}</div>
+            <div>{capitaliseFirst(getVerb(nextDishStatus))}</div>
             <div
               style={{
                 display: "flex",
@@ -107,7 +106,7 @@ export function Order({ order }) {
             <InfoCard
               src={currentCook.avatar}
               name={`${currentCook.name} is ${getPresentParticiple(
-                dishPhase
+                dishStatus
               )} ${Number(time / 1000).toFixed(1)} / ${orderTime / 1000}s`}
             />
             <EmptyTimer

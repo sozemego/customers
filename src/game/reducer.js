@@ -121,12 +121,8 @@ function orderNextPhaseStarted(state, action) {
   const orders = { ...state.orders };
   const order = { ...orders[orderId] };
   const dish = { ...order.dish };
-  const phases = [...dish.phases];
-  const nextPhaseIndex = phases.findIndex(phase => phase.start === null);
-  const nextPhase = phases[nextPhaseIndex];
-  nextPhase.start = Date.now();
-  dish.phase = nextPhase.name;
-  dish.phases = phases;
+  dish.phase = dish.phases[0];
+  dish.phases = dish.phases.slice(1);
   order.dish = dish;
   order.cookId = cookId;
   orders[orderId] = order;
@@ -146,11 +142,6 @@ function orderPhaseFinished(state, action) {
   const order = { ...orders[orderId] };
   const dish = { ...order.dish };
   dish.phase = PREPARATION_PHASE.WAITING;
-  const phases = [...dish.phases];
-  const currentPhaseIndex = phases.findIndex(phase => phase.end === null);
-  const currentPhase = phases[currentPhaseIndex];
-  currentPhase.end = Date.now();
-  dish.phases = phases;
   order.dish = dish;
   order.cookId = null;
   orders[orderId] = order;
