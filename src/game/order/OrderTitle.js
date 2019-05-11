@@ -1,37 +1,48 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { css } from "glamor";
+import { getOrderIdToResult, getOrders } from "../selectors";
+import { Dish } from "../dish/Dish";
+import { InfoCard } from "../../components/InfoCard";
 
 const containerStyle = css({
   display: "flex",
   flexDirection: "row",
-  alignItems: "center"
+  alignItems: "center",
+  justifyContent: "space-between"
 });
 
 const percentStyle = css({
-  marginLeft: "4px"
+  marginLeft: "4px",
+  display: "inline-flex",
+  flexDirection: "row",
+  alignItems: "center"
 });
 
 export function OrderTitle(props) {
-  const { orderResults } = props;
+  const orderResults = Object.values(getOrderIdToResult());
+  const orders = getOrders();
   return (
     <div className={containerStyle}>
       <div>Orders</div>
-      {orderResults
-        .sort((a, b) => b.percent - a.percent)
-        .map(result => (
-          <span
-            key={result.id}
-            data-testid={`result-${result.id}`}
-            className={percentStyle}
-          >
-            {result.percent}%
+      <div>
+        {orderResults
+          .sort((a, b) => b.percent - a.percent)
+          .map(result => (
+            <span
+              key={result.id}
+              data-testid={`result-${result.id}`}
+              className={percentStyle}
+            >
+            <InfoCard
+              src={orders[result.orderId].dish.avatar}
+              name={`${result.percent}%`}
+            />
           </span>
-        ))}
+          ))}
+      </div>
     </div>
   );
 }
 
-OrderTitle.propTypes = {
-  orderResults: PropTypes.array.isRequired
-};
+OrderTitle.propTypes = {};

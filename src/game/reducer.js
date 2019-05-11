@@ -53,11 +53,12 @@ function customerPhaseChanged(state, action) {
   customerPhase[customerId] = customerPhases;
 
   const orderIdToResult = { ...state.orderIdToResult };
+  const orderId = state.customers[customerId].orderId;
   if (phase === CUSTOMER_PHASE.DONE) {
-    orderIdToResult[state.customers[customerId].orderId] = { percent: 100 };
+    orderIdToResult[orderId] = { percent: 100, orderId };
   }
   if (phase === CUSTOMER_PHASE.ANGRY) {
-    orderIdToResult[state.customers[customerId].orderId] = { percent: 0 };
+    orderIdToResult[orderId] = { percent: 0, orderId };
   }
 
   return { ...state, customerPhase, orderIdToResult };
@@ -171,7 +172,10 @@ function orderDone(state, action) {
   }
 
   const orderIdToResult = { ...state.orderIdToResult };
-  orderIdToResult[orderId] = result;
+  orderIdToResult[orderId] = {
+    ...result,
+    orderId
+  };
 
   return { ...state, takenOrderIds, orderIdToResult };
 }
