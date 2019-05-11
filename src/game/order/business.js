@@ -67,6 +67,13 @@ export function createDish(name) {
   const dish = _.cloneDeep(dishPrototype);
   dish.phase = PREPARATION_PHASE.WAITING;
   dish.maxTime = calculateMaxTime(dish);
+  dish.phases = dish.phases.map(phase => {
+    return {
+      name: phase,
+      start: null,
+      end: null
+    };
+  });
   return dish;
 }
 

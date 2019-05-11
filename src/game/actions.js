@@ -148,9 +148,14 @@ export function finishPhase(orderId, cookId) {
     //The following needs to happen after order phase is finished
     //1. Assigned cook gets experience
     dispatch(cookGainedExperience(cookId, 1));
-    //2. Dish of the order enters waiting state
-    //3. If dish has no more phases, it means it's done, dispatch finishOrder
-    if (order.dish.phases.length === 0) {
+    //2. If dish has no more phases, it means it's done, dispatch finishOrder
+    const unfinishedPhases = order.dish.phases.filter(phase => phase.end === null);
+    if (unfinishedPhases.length === 0) {
+      //3. Decide result for the order
+      const timeUntilTaken = 0;
+      const timeUntilComplete = 0;
+      const leaveAtTime = leaveAt(order);
+
       dispatch(
         finishOrder(orderId, order.customerId, cookId, { percent: 100 })
       );
@@ -159,6 +164,14 @@ export function finishPhase(orderId, cookId) {
       );
     }
   };
+}
+
+function calculateTimeUntilTaken(order) {
+
+}
+
+function calculateTimeUntilComplete(order) {
+
 }
 
 export function finishOrder(orderId, customerId, cookId, result) {
