@@ -21,7 +21,7 @@ const angryCustomersStyle = css({
   color: "red"
 });
 
-export function Title(props) {
+export function CustomerTitle(props) {
   const {
     arrivingCustomers,
     doneCustomers,
@@ -59,7 +59,7 @@ export function Title(props) {
   );
 }
 
-Title.propTypes = {
+CustomerTitle.propTypes = {
   arrivingCustomers: PropTypes.number.isRequired,
   doneCustomers: PropTypes.number.isRequired,
   angryCustomers: PropTypes.number.isRequired,

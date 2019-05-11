@@ -121,7 +121,7 @@ export function exceedWaitingTime(customer, type, time) {
       //need to remove order as well
       const cook = getCooks(getState)[order.cookId];
       if (type === WAITING_TIME_TYPE.ORDER) {
-        dispatch(orderDone(order.id, customer.id, cook ? cook.id : null));
+        dispatch(finishOrder(order.id, customer.id, cook ? cook.id : null));
       }
     }
   };
@@ -146,5 +146,11 @@ export function finishPhase(order, cook) {
       //   // dispatch(startLevel(1));
       // }
     }
+  };
+}
+
+export function finishOrder(orderId, customerId, cookId) {
+  return function finishOrder(dispatch, getState) {
+    dispatch(orderDone(orderId, customerId, cookId));
   };
 }

@@ -46,9 +46,7 @@ export function Game(props) {
         </div>
         <Row style={{ flex: 3, display: "flex", flexDirection: "row" }}>
           <Col span={12}>
-            <Card title={"Orders"} style={{ minHeight: "90vh" }}>
-              <Orders />
-            </Card>
+            <Orders />
           </Col>
           <Col span={12}>
             <Card title={"Cooks"} style={{ minHeight: "90vh" }}>

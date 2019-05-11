@@ -24,6 +24,7 @@ const initialState = {
   orders: {},
   customerPhase: {},
   takenOrderIds: [],
+  orderIdToResult: {},
   levelId: null,
   levels: null
 };
@@ -50,7 +51,16 @@ function customerPhaseChanged(state, action) {
     time
   });
   customerPhase[customerId] = customerPhases;
-  return { ...state, customerPhase };
+
+  const orderIdToResult = { ...state.orderIdToResult };
+  if (phase === CUSTOMER_PHASE.DONE) {
+    orderIdToResult[state.customers[customerId].orderId] = { percent: 100 };
+  }
+  if (phase === CUSTOMER_PHASE.ANGRY) {
+    orderIdToResult[state.customers[customerId].orderId] = { percent: 0 };
+  }
+
+  return { ...state, customerPhase, orderIdToResult };
 }
 
 function cookAdded(state, { payload: cook }) {
@@ -100,7 +110,12 @@ function orderDone(state, action) {
     cooks[cookId] = cook;
   }
 
-  return { ...state, takenOrderIds };
+  const orderIdToResult = { ...state.orderIdToResult };
+  orderIdToResult[orderId] = {
+    percent: 100
+  };
+
+  return { ...state, takenOrderIds, orderIdToResult };
 }
 
 function orderNextPhaseStarted(state, action) {
@@ -122,6 +137,7 @@ function orderNextPhaseStarted(state, action) {
   return { ...state, cooks, orders };
 }
 
+// TODO move a lot of logic for this to a thunk
 function orderPhaseFinished(state, action) {
   const { orderId, cookId } = action;
   const cooks = { ...state.cooks };
@@ -151,6 +167,7 @@ function orderPhaseFinished(state, action) {
 
   const customerPhase = { ...state.customerPhase };
   const takenOrderIds = [...state.takenOrderIds];
+  const orderIdToResult = { ...state.orderIdToResult };
   if (dish.phases.length === 0) {
     const index = takenOrderIds.findIndex(id => id === orderId);
     if (index > -1) {
@@ -163,9 +180,19 @@ function orderPhaseFinished(state, action) {
       time: Date.now()
     });
     customerPhase[order.customerId] = customerPhases;
+    orderIdToResult[order.id] = {
+      percent: 100
+    };
   }
 
-  return { ...state, cooks, orders, takenOrderIds, customerPhase };
+  return {
+    ...state,
+    cooks,
+    orders,
+    takenOrderIds,
+    customerPhase,
+    orderIdToResult
+  };
 }
 
 export const reducer = createReducer(initialState, {

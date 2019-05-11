@@ -4,7 +4,7 @@ import { Card } from "antd";
 import { getCustomerIds, getCustomers } from "../selectors";
 import { exceedWaitingTime, orderTaken } from "../actions";
 import { useDispatch } from "react-redux";
-import { Title } from "./Title";
+import { CustomerTitle } from "./CustomerTitle";
 import { CUSTOMER_PHASE } from "./business";
 
 export function Customers(props) {
@@ -20,7 +20,7 @@ export function Customers(props) {
   return (
     <Card
       title={
-        <Title
+        <CustomerTitle
           arrivingCustomers={
             arrivingCustomerIds.length + activeCustomers.length
           }

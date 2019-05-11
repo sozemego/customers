@@ -9,7 +9,7 @@ import { Game } from "./Game";
 import { Provider } from "react-redux";
 import { cookAdded, levelsLoaded, startGame } from "./actions";
 import { createNewStore } from "../store/store";
-import { getCustomerPhase, getCustomers, getOrders } from './selectors';
+import { getCustomers, getOrderIdToResult, getOrders } from "./selectors";
 import { createCook } from "./cook/business";
 import { leaveAt } from "./business";
 
@@ -293,6 +293,25 @@ function getLevels() {
           dish: "SALAD"
         }
       ]
+    },
+    "order result 1": {
+      customers: [
+        {
+          id: 1,
+          time: 0,
+          dish: "SALAD"
+        },
+        {
+          id: 2,
+          time: 0,
+          dish: "PIZZA"
+        },
+        {
+          id: 3,
+          time: 0,
+          dish: "SALAD"
+        }
+      ]
     }
   };
   return levels;
@@ -330,7 +349,9 @@ testWithLog("2 game should not render a customer", () => {
 
 testWithLog("3 game should render 3 out of 4 customers", () => {
   jest.useFakeTimers();
-  const { queryAllByTestId, container, getByTestId } = renderWithProvider(<Game />);
+  const { queryAllByTestId, container, getByTestId } = renderWithProvider(
+    <Game />
+  );
   startLevel(2);
   advanceTimers(6000);
   const customers = queryAllByTestId(/customer-id/i, { container });
@@ -395,7 +416,9 @@ testWithLog(
   "7 taking order and then waiting till customer gets angry should remove the customer",
   () => {
     jest.useFakeTimers();
-    const { queryByTestId, queryAllByTestId, getByTestId } = renderWithProvider(<Game />);
+    const { queryByTestId, queryAllByTestId, getByTestId } = renderWithProvider(
+      <Game />
+    );
     startLevel(5);
     act(() => jest.advanceTimersByTime(1000));
     const customer1 = Object.values(getCustomers(store.getState))[0];
@@ -420,7 +443,7 @@ testWithLog(
 
 testWithLog("8 completing the order should remove order", () => {
   jest.useFakeTimers();
-  const { queryByTestId, debug, container, getByTestId } = renderWithProvider(<Game />);
+  const { queryByTestId, getByTestId } = renderWithProvider(<Game />);
   startLevel(6);
   addCook();
   act(() => jest.advanceTimersByTime(1000));
@@ -429,8 +452,6 @@ testWithLog("8 completing the order should remove order", () => {
 
   fireEvent.click(queryByTestId(/next-phase/g));
   advanceTimers(10000);
-  // act(() => jest.advanceTimersByTime(10000));
-  debug(container);
   fireEvent.click(queryByTestId(/next-phase/g));
   act(() => jest.advanceTimersByTime(12000));
   fireEvent.click(queryByTestId(/next-phase/g));
@@ -665,5 +686,83 @@ testWithLog(
     advanceTimers(1000);
     expect(queryAllByTestId(/order-id-/g).length).toBe(0);
     expect(queryAllByTestId(/take-order-/).length).toBe(2);
+  }
+);
+
+testWithLog(
+  "17 There should be no finished order results if no orders are finished",
+  () => {
+    jest.useFakeTimers();
+    const { queryAllByTestId } = renderWithProvider(<Game />);
+    startLevel("order result 1");
+    addCook();
+    advanceTimers(1000);
+    expect(Object.values(getOrderIdToResult(store.getState)).length).toBe(0);
+    expect(queryAllByTestId(/result-/g).length).toBe(0);
+  }
+);
+
+testWithLog(
+  "18 There is one order result after order is finished successfully",
+  () => {
+    jest.useFakeTimers();
+    const { queryByTestId, queryAllByTestId } = renderWithProvider(<Game />);
+    startLevel(1);
+    addCook();
+    advanceTimers(1000);
+
+    fireEvent.click(queryByTestId(`take-order-1`));
+    expect(queryByTestId(/order-id/g)).not.toBeNull();
+    expect(queryAllByTestId(/order-id-/g).length).toBe(1);
+    fireEvent.click(queryByTestId(/next-phase/g));
+    advanceTimers(10000);
+    fireEvent.click(queryByTestId(/next-phase/g));
+    advanceTimers(12000);
+    fireEvent.click(queryByTestId(/next-phase/g));
+    advanceTimers(6000);
+    expect(queryAllByTestId(/order-id-/g).length).toBe(0);
+    expect(Object.values(getOrderIdToResult(store.getState)).length).toBe(1);
+    expect(queryAllByTestId(/result-/g).length).toBe(1);
+  }
+);
+
+testWithLog(
+  "19 There should be one order result after customer leaves without order taken",
+  () => {
+    jest.useFakeTimers();
+    const { queryAllByTestId, getByTestId } = renderWithProvider(<Game />);
+    startLevel(1);
+    addCook();
+    advanceTimers(460000);
+    expect(queryAllByTestId(/order-id-/g).length).toBe(0);
+    expect(getByTestId("arriving-customers").textContent).toBe("🤔 0");
+    expect(getByTestId("done-customers").textContent).toBe("😀 0");
+    expect(getByTestId("angry-customers").textContent).toBe("🤬 1");
+    expect(getByTestId("total-customers").textContent).toBe("1");
+    console.log(getOrderIdToResult(store.getState));
+    expect(Object.values(getOrderIdToResult(store.getState)).length).toBe(1);
+    expect(queryAllByTestId(/result-/g).length).toBe(1);
+  }
+);
+
+testWithLog(
+  "20 There should be one order result after customer leaves after taking order and not finishing it",
+  () => {
+    jest.useFakeTimers();
+    const { queryAllByTestId, getByTestId, queryByTestId } = renderWithProvider(
+      <Game />
+    );
+    startLevel(1);
+    addCook();
+    advanceTimers(1000);
+    fireEvent.click(queryByTestId(`take-order-1`));
+    advanceTimers(460000);
+    expect(queryAllByTestId(/order-id-/g).length).toBe(0);
+    expect(getByTestId("arriving-customers").textContent).toBe("🤔 0");
+    expect(getByTestId("done-customers").textContent).toBe("😀 0");
+    expect(getByTestId("angry-customers").textContent).toBe("🤬 1");
+    expect(getByTestId("total-customers").textContent).toBe("1");
+    expect(Object.values(getOrderIdToResult(store.getState)).length).toBe(1);
+    expect(queryAllByTestId(/result-/g).length).toBe(1);
   }
 );
