@@ -2,7 +2,8 @@ import { PREPARATION_PHASE } from "./order/business";
 import { removeId } from "../utils";
 import { createReducer } from "../store/utils";
 import {
-  COOK_ADDED, COOK_GAINED_EXPERIENCE,
+  COOK_ADDED,
+  COOK_GAINED_EXPERIENCE,
   CUSTOMER_ADDED,
   CUSTOMER_PHASE_CHANGED,
   GAME_STARTED,
@@ -13,8 +14,8 @@ import {
   ORDER_DONE,
   ORDER_NEXT_PHASE_STARTED,
   ORDER_PHASE_FINISHED,
-  ORDER_TAKEN,
-} from './actions';
+  ORDER_TAKEN
+} from "./actions";
 import { CUSTOMER_PHASE } from "./customer/business";
 
 const initialState = {
@@ -113,29 +114,6 @@ function orderTaken(state, { payload: orderId }) {
   return { ...state, takenOrderIds };
 }
 
-function orderDone(state, action) {
-  const { orderId, customerId, cookId } = action;
-  const takenOrderIds = [...state.takenOrderIds];
-  const index = takenOrderIds.findIndex(id => id === orderId);
-  if (index > -1) {
-    takenOrderIds.splice(index, 1);
-  }
-
-  const cooks = { ...state.cooks };
-  const cook = cooks[cookId];
-  if (cook) {
-    cook.orderId = null;
-    cooks[cookId] = cook;
-  }
-
-  const orderIdToResult = { ...state.orderIdToResult };
-  orderIdToResult[orderId] = {
-    percent: 100
-  };
-
-  return { ...state, takenOrderIds, orderIdToResult };
-}
-
 function orderNextPhaseStarted(state, action) {
   const { orderId, cookId } = action;
   const cooks = { ...state.cooks };
@@ -155,16 +133,15 @@ function orderNextPhaseStarted(state, action) {
   return { ...state, cooks, orders };
 }
 
-// TODO move a lot of logic for this to a thunk
 function orderPhaseFinished(state, action) {
   const { orderId, cookId } = action;
+
   const cooks = { ...state.cooks };
   const cook = { ...cooks[cookId] };
   cook.orderId = null;
-
   cooks[cookId] = cook;
 
-  let orders = { ...state.orders };
+  const orders = { ...state.orders };
   const order = { ...orders[orderId] };
   const dish = { ...order.dish };
   dish.phase = PREPARATION_PHASE.WAITING;
@@ -172,33 +149,32 @@ function orderPhaseFinished(state, action) {
   order.cookId = null;
   orders[orderId] = order;
 
-  const customerPhase = { ...state.customerPhase };
-  const takenOrderIds = [...state.takenOrderIds];
-  const orderIdToResult = { ...state.orderIdToResult };
-  if (dish.phases.length === 0) {
-    const index = takenOrderIds.findIndex(id => id === orderId);
-    if (index > -1) {
-      takenOrderIds.splice(index, 1);
-    }
-    const customerPhases = [...customerPhase[order.customerId]];
-    customerPhases.push({
-      phase: CUSTOMER_PHASE.DONE,
-      time: Date.now()
-    });
-    customerPhase[order.customerId] = customerPhases;
-    orderIdToResult[order.id] = {
-      percent: 100
-    };
-  }
-
   return {
     ...state,
     cooks,
-    orders,
-    takenOrderIds,
-    customerPhase,
-    orderIdToResult
+    orders
   };
+}
+
+function orderDone(state, action) {
+  const { orderId, customerId, cookId, result } = action;
+  const takenOrderIds = [...state.takenOrderIds];
+  const index = takenOrderIds.findIndex(id => id === orderId);
+  if (index > -1) {
+    takenOrderIds.splice(index, 1);
+  }
+
+  const cooks = { ...state.cooks };
+  const cook = cooks[cookId];
+  if (cook) {
+    cook.orderId = null;
+    cooks[cookId] = cook;
+  }
+
+  const orderIdToResult = { ...state.orderIdToResult };
+  orderIdToResult[orderId] = result;
+
+  return { ...state, takenOrderIds, orderIdToResult };
 }
 
 export const reducer = createReducer(initialState, {

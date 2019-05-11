@@ -45,7 +45,8 @@ export const orderDone = makeActionCreator(
   ORDER_DONE,
   "orderId",
   "customerId",
-  "cookId"
+  "cookId",
+  "result"
 );
 
 export const ORDER_NEXT_PHASE_STARTED = "ORDER_NEXT_PHASE_STARTED";
@@ -128,7 +129,11 @@ export function exceedWaitingTime(customer, type, time) {
       //need to remove order as well
       const cook = getCooks(getState)[order.cookId];
       if (type === WAITING_TIME_TYPE.ORDER) {
-        dispatch(finishOrder(order.id, customer.id, cook ? cook.id : null));
+        dispatch(
+          finishOrder(order.id, customer.id, cook ? cook.id : null, {
+            percent: 0
+          })
+        );
       }
     }
   };
@@ -146,13 +151,18 @@ export function finishPhase(orderId, cookId) {
     //2. Dish of the order enters waiting state
     //3. If dish has no more phases, it means it's done, dispatch finishOrder
     if (order.dish.phases.length === 0) {
-      dispatch(finishOrder(orderId, order.customerId, cookId));
+      dispatch(
+        finishOrder(orderId, order.customerId, cookId, { percent: 100 })
+      );
+      dispatch(
+        customerPhaseChanged(order.customerId, CUSTOMER_PHASE.DONE, Date.now())
+      );
     }
   };
 }
 
-export function finishOrder(orderId, customerId, cookId) {
+export function finishOrder(orderId, customerId, cookId, result) {
   return function finishOrder(dispatch, getState) {
-    dispatch(orderDone(orderId, customerId, cookId));
+    dispatch(orderDone(orderId, customerId, cookId, result));
   };
 }
