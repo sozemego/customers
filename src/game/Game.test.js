@@ -24,7 +24,7 @@ beforeAll(() => {
   const { log: consoleLog } = console;
   console.log = (...args) => {
     log(args, "LOG");
-    consoleLog(...args);
+    // consoleLog(...args);
   };
   const err = console.err;
   console.err = (...args) => {
@@ -456,7 +456,6 @@ testWithLog("8 completing the order should remove order", () => {
   act(() => jest.advanceTimersByTime(12000));
   fireEvent.click(queryByTestId(/next-phase/g));
   act(() => jest.advanceTimersByTime(10000));
-  expect(Object.values(getOrders(store.getState)).length).toBe(0);
   expect(queryByTestId(/order-id/g)).toBeNull();
   expect(getByTestId("arriving-customers").textContent).toBe("🤔 0");
   expect(getByTestId("done-customers").textContent).toBe("😀 1");
@@ -488,7 +487,6 @@ testWithLog("9 completing phases should add experience to the cook", () => {
   expect(
     queryByText("Level 1. Experience: 3 / ", { exact: false })
   ).not.toBeNull();
-  expect(Object.values(getOrders(store.getState)).length).toBe(0);
   expect(queryByTestId(/order-id/g)).toBeNull();
 });
 

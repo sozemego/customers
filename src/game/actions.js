@@ -62,6 +62,13 @@ export const orderPhaseFinished = makeActionCreator(
   "cookId"
 );
 
+export const COOK_GAINED_EXPERIENCE = "COOK_GAINED_EXPERIENCE";
+export const cookGainedExperience = makeActionCreator(
+  COOK_GAINED_EXPERIENCE,
+  "cookId",
+  "experience"
+);
+
 export function startGame(levelId = 1) {
   return function startGame(dispatch, getState) {
     dispatch(stopGame());
@@ -127,24 +134,19 @@ export function exceedWaitingTime(customer, type, time) {
   };
 }
 
-export function finishPhase(order, cook) {
+export function finishPhase(orderId, cookId) {
   return (dispatch, getState) => {
-    dispatch(orderPhaseFinished(order.id, cook.id));
+    dispatch(orderPhaseFinished(orderId, cookId));
 
-    //1 check if all customers are done!
-    const customers = Object.values(getCustomers(getState));
-    const doneCustomers = customers.filter(isDone);
-    if (doneCustomers.length === customers.length) {
-      // const level = getLevelId(getState);
-      // const levels = getLevels(getState);
-      // const nextLevelNumber = level + 1;
-      // const nextLevel = levels[nextLevelNumber];
-      // // dispatch(stopGame());
-      // if (nextLevel) {
-      //   // dispatch(startLevel(nextLevelNumber));
-      // } else {
-      //   // dispatch(startLevel(1));
-      // }
+    const order = getOrders(getState)[orderId];
+
+    //The following needs to happen after order phase is finished
+    //1. Assigned cook gets experience
+    dispatch(cookGainedExperience(cookId, 1));
+    //2. Dish of the order enters waiting state
+    //3. If dish has no more phases, it means it's done, dispatch finishOrder
+    if (order.dish.phases.length === 0) {
+      dispatch(finishOrder(orderId, order.customerId, cookId));
     }
   };
 }

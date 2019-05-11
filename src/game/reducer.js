@@ -2,7 +2,7 @@ import { PREPARATION_PHASE } from "./order/business";
 import { removeId } from "../utils";
 import { createReducer } from "../store/utils";
 import {
-  COOK_ADDED,
+  COOK_ADDED, COOK_GAINED_EXPERIENCE,
   CUSTOMER_ADDED,
   CUSTOMER_PHASE_CHANGED,
   GAME_STARTED,
@@ -13,8 +13,8 @@ import {
   ORDER_DONE,
   ORDER_NEXT_PHASE_STARTED,
   ORDER_PHASE_FINISHED,
-  ORDER_TAKEN
-} from "./actions";
+  ORDER_TAKEN,
+} from './actions';
 import { CUSTOMER_PHASE } from "./customer/business";
 
 const initialState = {
@@ -66,6 +66,24 @@ function customerPhaseChanged(state, action) {
 function cookAdded(state, { payload: cook }) {
   const cooks = { ...state.cooks };
   cooks[cook.id] = cook;
+  return { ...state, cooks };
+}
+
+function cookGainedExperience(state, action) {
+  const { cookId, experience } = action;
+  const cooks = { ...state.cooks };
+  const cook = cooks[cookId];
+  const { experience: cookExperience, nextLevel } = cook;
+  const nextExperience = cookExperience + experience;
+  if (nextExperience >= nextLevel) {
+    cook.level += 1;
+    cook.experience = 0;
+    cook.speed = Number(Number(cook.speed * 0.9).toFixed(1));
+    cook.nextLevel = nextLevel * 2;
+  } else {
+    cook.experience = nextExperience;
+  }
+  cooks[cookId] = cook;
   return { ...state, cooks };
 }
 
@@ -144,17 +162,6 @@ function orderPhaseFinished(state, action) {
   const cook = { ...cooks[cookId] };
   cook.orderId = null;
 
-  const { experience, nextLevel } = cook;
-  const nextExperience = experience + 1;
-  if (nextExperience >= nextLevel) {
-    cook.level += 1;
-    cook.experience = 0;
-    cook.speed = Number(Number(cook.speed * 0.9).toFixed(1));
-    cook.nextLevel = nextLevel * 2;
-  } else {
-    cook.experience = nextExperience;
-  }
-
   cooks[cookId] = cook;
 
   let orders = { ...state.orders };
@@ -173,7 +180,6 @@ function orderPhaseFinished(state, action) {
     if (index > -1) {
       takenOrderIds.splice(index, 1);
     }
-    orders = removeId(orders, order.id);
     const customerPhases = [...customerPhase[order.customerId]];
     customerPhases.push({
       phase: CUSTOMER_PHASE.DONE,
@@ -214,6 +220,7 @@ export const reducer = createReducer(initialState, {
   [CUSTOMER_ADDED]: customerAdded,
   [CUSTOMER_PHASE_CHANGED]: customerPhaseChanged,
   [COOK_ADDED]: cookAdded,
+  [COOK_GAINED_EXPERIENCE]: cookGainedExperience,
   [ORDER_ADDED]: orderAdded,
   [ORDER_ATTACHED_TO_CUSTOMER]: orderAttachedToCustomer,
   [ORDER_TAKEN]: orderTaken,

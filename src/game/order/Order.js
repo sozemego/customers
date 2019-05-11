@@ -113,7 +113,7 @@ export function Order({ order }) {
               time={orderTime}
               start={true}
               onFinish={() => {
-                dispatch(finishPhase(order, currentCook));
+                dispatch(finishPhase(order.id, currentCook.id));
               }}
             />
           </div>
