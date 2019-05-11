@@ -2,14 +2,14 @@ import React from "react";
 import PropTypes from "prop-types";
 import { css } from "glamor";
 import { getOrderIdToResult, getOrders } from "../selectors";
-import { Dish } from "../dish/Dish";
 import { InfoCard } from "../../components/InfoCard";
 
 const containerStyle = css({
   display: "flex",
   flexDirection: "row",
   alignItems: "center",
-  justifyContent: "space-between"
+  justifyContent: "space-between",
+  minHeight: "36px"
 });
 
 const percentStyle = css({

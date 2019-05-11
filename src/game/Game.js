@@ -49,9 +49,7 @@ export function Game(props) {
             <Orders />
           </Col>
           <Col span={12}>
-            <Card title={"Cooks"} style={{ minHeight: "90vh" }}>
-              <Cooks />
-            </Card>
+            <Cooks />
           </Col>
         </Row>
       </div>
