@@ -1,5 +1,4 @@
 import { PREPARATION_PHASE } from "./order/business";
-import { removeId } from "../utils";
 import { createReducer } from "../store/utils";
 import {
   COOK_ADDED,
@@ -157,7 +156,7 @@ function orderPhaseFinished(state, action) {
 }
 
 function orderDone(state, action) {
-  const { orderId, customerId, cookId, result } = action;
+  const { orderId, cookId, result } = action;
   const takenOrderIds = [...state.takenOrderIds];
   const index = takenOrderIds.findIndex(id => id === orderId);
   if (index > -1) {

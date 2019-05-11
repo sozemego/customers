@@ -1,6 +1,6 @@
-import { createCustomer, CUSTOMER_PHASE, isDone } from "./customer/business";
+import { createCustomer, CUSTOMER_PHASE } from "./customer/business";
 import { createDish, createOrder } from "./order/business";
-import { getCooks, getCustomers, getLevels, getOrders } from "./selectors";
+import { getCooks, getLevels, getOrders } from "./selectors";
 import { makeActionCreator, makePayloadActionCreator } from "../store/utils";
 import { leaveAt, WAITING_TIME_TYPE } from "./business";
 

@@ -37,21 +37,27 @@ export function CustomerTitle(props) {
           className={`${sectionStyle} ${arrivingCustomersStyle}`}
           data-testid={"arriving-customers"}
         >
-          🤔 {arrivingCustomers}
+          <span role={"img"} aria-label={"not done customers"}>
+            🤔 {arrivingCustomers}
+          </span>
         </span>
         /
         <span
           className={`${sectionStyle} ${doneCustomersStyle}`}
           data-testid={"done-customers"}
         >
-          😀 {doneCustomers}
+          <span role={"img"} aria-label={"done customers"}>
+            😀 {doneCustomers}
+          </span>
         </span>
         /
         <span
           className={`${sectionStyle} ${angryCustomersStyle}`}
           data-testid={"angry-customers"}
         >
-          🤬 {angryCustomers}
+          <span role={"img"} aria-label={"angry customers"}>
+            🤬 {angryCustomers}
+          </span>
         </span>
       </div>
       <span data-testid={"total-customers"}>{totalCustomers}</span>

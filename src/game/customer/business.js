@@ -17,7 +17,3 @@ export function createCustomer(id) {
   };
   return customer;
 }
-
-export function isDone(customer) {
-  return customer.phase === CUSTOMER_PHASE.DONE;
-}
