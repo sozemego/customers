@@ -22,9 +22,19 @@ const percentStyle = css({
 export function OrderTitle(props) {
   const orderResults = Object.values(getOrderIdToResult());
   const orders = getOrders();
+  let averageResult = null;
+  if (orderResults.length > 0) {
+    const sum = orderResults
+      .map(result => result.percent)
+      .reduce((prev, current) => {
+        return prev + current;
+      }, 0);
+    averageResult = sum / orderResults.length;
+  }
+
   return (
     <div className={containerStyle}>
-      <div>Orders</div>
+      <div>Orders {averageResult ? `[Avg: ${averageResult}%]` : null}</div>
       <div>
         {orderResults
           .sort((a, b) => b.percent - a.percent)
@@ -34,11 +44,11 @@ export function OrderTitle(props) {
               data-testid={`result-${result.id}`}
               className={percentStyle}
             >
-            <InfoCard
-              src={orders[result.orderId].dish.avatar}
-              name={`${result.percent}%`}
-            />
-          </span>
+              <InfoCard
+                src={orders[result.orderId].dish.avatar}
+                name={`${result.percent}%`}
+              />
+            </span>
           ))}
       </div>
     </div>
