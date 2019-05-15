@@ -31,9 +31,9 @@ beforeAll(() => {
     log(args, "ERROR");
     err(...args);
   };
-  const logFiles = fs.readdirSync("test");
+  const logFiles = fs.readdirSync("./test");
   logFiles.forEach(file => {
-    fs.unlinkSync(path.join("test", file));
+    fs.unlinkSync(path.join("./test", file));
   });
 });
 
