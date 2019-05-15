@@ -17,7 +17,7 @@ let store = null;
 let logFile = "test.txt";
 
 function setLog(file) {
-  logFile = `test/${file}.txt`;
+  logFile = `./test/${file}.txt`;
 }
 
 beforeAll(() => {
