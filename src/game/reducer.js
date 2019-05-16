@@ -29,6 +29,8 @@ const initialState = {
   levels: null
 };
 
+let orderResultId = 0;
+
 function customerAdded(state, { payload: customer }) {
   const customers = { ...state.customers };
   customers[customer.id] = customer;
@@ -55,7 +57,7 @@ function customerPhaseChanged(state, action) {
   const orderIdToResult = { ...state.orderIdToResult };
   const orderId = state.customers[customerId].orderId;
   if (phase === CUSTOMER_PHASE.ANGRY) {
-    orderIdToResult[orderId] = { percent: 0, orderId };
+    orderIdToResult[orderId] = { percent: 0, orderId, id: ++orderResultId };
   }
 
   return { ...state, customerPhase, orderIdToResult };
@@ -171,7 +173,8 @@ function orderDone(state, action) {
   const orderIdToResult = { ...state.orderIdToResult };
   orderIdToResult[orderId] = {
     ...result,
-    orderId
+    orderId,
+    id: ++orderResultId
   };
 
   return { ...state, takenOrderIds, orderIdToResult };
