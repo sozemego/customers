@@ -148,8 +148,7 @@ export function finishPhase(orderId, cookId) {
     //The following needs to happen after order phase is finished
     //1. Assigned cook gets experience
     dispatch(cookGainedExperience(cookId, 1));
-    //2. Dish of the order enters waiting state
-    //3. If dish has no more phases, it means it's done, dispatch finishOrder
+    //2. If dish has no more phases, it means it's done
     if (order.dish.phases.length === 0) {
       dispatch(
         finishOrder(orderId, order.customerId, cookId, { percent: 100 })
