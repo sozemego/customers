@@ -1,6 +1,6 @@
 import React from "react";
 import { css } from "glamor";
-import { Card, Col, Row } from "antd";
+import { Col, Row } from "antd";
 import { getLevelId, isRunning } from "./selectors";
 import { GameClock } from "../components/GameClock";
 import { Customers } from "./customer/Customers";

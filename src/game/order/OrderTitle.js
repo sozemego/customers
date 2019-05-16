@@ -1,5 +1,4 @@
 import React from "react";
-import PropTypes from "prop-types";
 import { css } from "glamor";
 import { getOrderIdToResult, getOrders } from "../selectors";
 import { InfoCard } from "../../components/InfoCard";
@@ -54,5 +53,3 @@ export function OrderTitle(props) {
     </div>
   );
 }
-
-OrderTitle.propTypes = {};
