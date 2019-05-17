@@ -1,6 +1,12 @@
 import { createCustomer, CUSTOMER_PHASE } from "./customer/business";
 import { createDish, createOrder } from "./order/business";
-import { getCooks, getLevels, getOrders } from "./selectors";
+import {
+  getActions,
+  getCooks,
+  getCustomers,
+  getLevels,
+  getOrders
+} from "./selectors";
 import { makeActionCreator, makePayloadActionCreator } from "../store/utils";
 import { leaveAt, WAITING_TIME_TYPE } from "./business";
 
@@ -151,22 +157,45 @@ export function finishPhase(orderId, cookId) {
     dispatch(orderPhaseFinished(orderId, cookId));
 
     const order = getOrders(getState)[orderId];
-
     //The following needs to happen after order phase is finished
     //1. Assigned cook gets experience
     dispatch(cookGainedExperience(cookId, 1));
     //2. If dish has no more phases, it means it's done
     if (order.dish.phases.length === 0) {
+      dispatch(
+        customerPhaseChanged(order.customerId, CUSTOMER_PHASE.DONE, Date.now())
+      );
+      const customers = getCustomers(getState);
+      const customer = customers[order.customerId];
       //3. find out how much time has passed since customer arrived and order was taken
+      const customerActions = getActions(
+        CUSTOMER_PHASE_CHANGED,
+        getState
+      ).filter(({ action }) => action.customerId === customer.id);
+      const orderActions = getActions(ORDER_TAKEN, getState).filter(
+        ({ action }) => action.payload === orderId
+      );
+      const arrivedAtTime = arrivedAt(customerActions);
+      const doneAtTime = doneAt(customerActions);
+      const orderTakenAtTime = orderTakenAt(orderActions);
       //4. find out how much time has passed since order was taken and order was served
       dispatch(
         finishOrder(orderId, order.customerId, cookId, { percent: 100 })
       );
-      dispatch(
-        customerPhaseChanged(order.customerId, CUSTOMER_PHASE.DONE, Date.now())
-      );
     }
   };
+}
+
+function arrivedAt(actions) {
+  return 15;
+}
+
+function doneAt(actions) {
+  return 15;
+}
+
+function orderTakenAt(actions) {
+  return 15;
 }
 
 export function finishOrder(orderId, customerId, cookId, result) {

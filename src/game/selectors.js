@@ -70,3 +70,8 @@ export function getTakenOrderIds(getState) {
 export function getOrderIdToResult(getState) {
   return createSelector(game => game.orderIdToResult)(getState);
 }
+
+export function getActions(type, getState) {
+  const allActions = createSelector(game => game.actions)(getState);
+  return allActions.filter(action => action.action.type === type);
+}
