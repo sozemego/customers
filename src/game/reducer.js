@@ -25,7 +25,7 @@ const initialState = {
   customerPhase: {},
   takenOrderIds: [],
   orderIdToResult: {},
-  events: [],
+  actions: [],
   levelId: null,
   levels: null
 };
@@ -183,10 +183,10 @@ function orderDone(state, action) {
 
 export function actionRegistered(state, action) {
   const { action: registeredAction, timestamp } = action;
-  const events = [...state.events];
-  events.push({ action: registeredAction, timestamp });
-  state[events] = events;
-  return { ...state, events };
+  const actions = [...state.actions];
+  actions.push({ action: registeredAction, timestamp });
+  state[actions] = actions;
+  return { ...state, actions };
 }
 
 export const reducer = createReducer(initialState, {
