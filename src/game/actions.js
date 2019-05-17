@@ -70,6 +70,13 @@ export const cookGainedExperience = makeActionCreator(
   "experience"
 );
 
+export const ACTION_REGISTERED = "ACTION_REGISTERED";
+export const actionRegistered = makeActionCreator(
+  ACTION_REGISTERED,
+  "action",
+  "timestamp"
+);
+
 export function startGame(levelId = 1) {
   return function startGame(dispatch, getState) {
     dispatch(stopGame());
@@ -150,6 +157,8 @@ export function finishPhase(orderId, cookId) {
     dispatch(cookGainedExperience(cookId, 1));
     //2. If dish has no more phases, it means it's done
     if (order.dish.phases.length === 0) {
+      //3. find out how much time has passed since customer arrived and order was taken
+      //4. find out how much time has passed since order was taken and order was served
       dispatch(
         finishOrder(orderId, order.customerId, cookId, { percent: 100 })
       );

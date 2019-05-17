@@ -4,7 +4,7 @@ import {
   COOK_ADDED,
   COOK_GAINED_EXPERIENCE,
   CUSTOMER_ADDED,
-  CUSTOMER_PHASE_CHANGED,
+  CUSTOMER_PHASE_CHANGED, ACTION_REGISTERED,
   GAME_STARTED,
   GAME_STOPPED,
   LEVELS_LOADED,
@@ -25,6 +25,7 @@ const initialState = {
   customerPhase: {},
   takenOrderIds: [],
   orderIdToResult: {},
+  events: [],
   levelId: null,
   levels: null
 };
@@ -180,6 +181,14 @@ function orderDone(state, action) {
   return { ...state, takenOrderIds, orderIdToResult };
 }
 
+export function actionRegistered(state, action) {
+  const { action: registeredAction, timestamp } = action;
+  const events = [...state.events];
+  events.push({ action: registeredAction, timestamp });
+  state[events] = events;
+  return { ...state, events };
+}
+
 export const reducer = createReducer(initialState, {
   [LEVELS_LOADED]: function levelsLoaded(state, { payload }) {
     return { ...state, levels: payload };
@@ -205,5 +214,6 @@ export const reducer = createReducer(initialState, {
   [ORDER_TAKEN]: orderTaken,
   [ORDER_DONE]: orderDone,
   [ORDER_NEXT_PHASE_STARTED]: orderNextPhaseStarted,
-  [ORDER_PHASE_FINISHED]: orderPhaseFinished
+  [ORDER_PHASE_FINISHED]: orderPhaseFinished,
+  [ACTION_REGISTERED]: actionRegistered,
 });
