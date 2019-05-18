@@ -157,6 +157,15 @@ export function finishPhase(orderId, cookId) {
     dispatch(orderPhaseFinished(orderId, cookId));
 
     const order = getOrders(getState)[orderId];
+    const customers = getCustomers(getState);
+    const customer = customers[order.customerId];
+    const customerActions = getActions(CUSTOMER_PHASE_CHANGED, getState).filter(
+      ({ action }) => action.customerId === customer.id
+    );
+    const orderActions = getActions(ORDER_TAKEN, getState).filter(
+      ({ action }) => action.payload === orderId
+    );
+
     //The following needs to happen after order phase is finished
     //1. Assigned cook gets experience
     dispatch(cookGainedExperience(cookId, 1));
@@ -165,19 +174,11 @@ export function finishPhase(orderId, cookId) {
       dispatch(
         customerPhaseChanged(order.customerId, CUSTOMER_PHASE.DONE, Date.now())
       );
-      const customers = getCustomers(getState);
-      const customer = customers[order.customerId];
       //3. find out how much time has passed since customer arrived and order was taken
-      const customerActions = getActions(
-        CUSTOMER_PHASE_CHANGED,
-        getState
-      ).filter(({ action }) => action.customerId === customer.id);
-      const orderActions = getActions(ORDER_TAKEN, getState).filter(
-        ({ action }) => action.payload === orderId
-      );
       const arrivedAtTime = arrivedAt(customerActions);
-      const doneAtTime = doneAt(customerActions);
+      const doneAtTime =  doneAt(customerActions);
       const orderTakenAtTime = orderTakenAt(orderActions);
+      console.log(arrivedAtTime, doneAtTime, orderTakenAtTime);
       //4. find out how much time has passed since order was taken and order was served
       dispatch(
         finishOrder(orderId, order.customerId, cookId, { percent: 100 })
@@ -187,15 +188,27 @@ export function finishPhase(orderId, cookId) {
 }
 
 function arrivedAt(actions) {
-  return 15;
+  const activeAction = actions.filter(
+    ({ action }) => action.phase === CUSTOMER_PHASE.ACTIVE
+  )[0];
+  return activeAction.timestamp;
 }
 
 function doneAt(actions) {
-  return 15;
+  const doneAction = actions.filter(
+    ({ action }) => action.phase === CUSTOMER_PHASE.DONE
+  )[0];
+  return doneAction.timestamp;
 }
 
 function orderTakenAt(actions) {
-  return 15;
+  return actions[0].timestamp;
+}
+
+function convertToSeconds(timestamp) {
+  const seconds = timestamp / 1000;
+  console.log(seconds);
+  return seconds;
 }
 
 export function finishOrder(orderId, customerId, cookId, result) {

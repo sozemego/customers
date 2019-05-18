@@ -185,7 +185,6 @@ export function actionRegistered(state, action) {
   const { action: registeredAction, timestamp } = action;
   const actions = [...state.actions];
   actions.push({ action: registeredAction, timestamp });
-  state[actions] = actions;
   return { ...state, actions };
 }
 
