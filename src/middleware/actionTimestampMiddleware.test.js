@@ -45,3 +45,19 @@ it('actions after GAME_STARTED should have timestamp in the form of seconds afte
 	expect(levelsLoadedAction.timestamp).toBeGreaterThanOrEqual(0);
 	expect(levelsLoadedAction.timestamp).toBeLessThanOrEqual(1000);
 });
+
+it('2. actions after GAME_STARTED should have timestamp in the form of seconds after GAME_STARTED action', () => {
+	dispatch(gameStarted('level 5'));
+	dispatch(levelsLoaded({}));
+	dispatch(levelsLoaded({}));
+	dispatch(levelsLoaded({}));
+	dispatch(levelsLoaded({}));
+	dispatch(levelsLoaded({}));
+	dispatch(levelsLoaded({}));
+	dispatch(levelsLoaded({}));
+	const state = getState();
+	console.log(state.game.actions);
+	const levelsLoadedAction = state.game.actions[1];
+	expect(levelsLoadedAction.timestamp).toBeGreaterThanOrEqual(0);
+	expect(levelsLoadedAction.timestamp).toBeLessThanOrEqual(1000);
+});

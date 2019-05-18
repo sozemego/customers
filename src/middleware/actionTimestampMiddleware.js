@@ -9,11 +9,12 @@ export const actionTimestampMiddleware = store => next => action => {
   if (nextAction.type !== ACTION_REGISTERED) {
     let timestamp = Date.now();
     if (nextAction.type !== GAME_STARTED) {
-      const gameStartedTime = store
-        .getState()
-        .game.actions.filter(({ action }) => action.type === GAME_STARTED)[0]
-        .timestamp;
-      timestamp = Date.now() - gameStartedTime;
+    	const state = store.getState();
+    	const actions = state.game.actions;
+    	const gameStartedActions = actions.filter(({ action }) => action.type === GAME_STARTED);
+			if (gameStartedActions.length > 0) {
+				timestamp = Date.now() - gameStartedActions[0].timestamp;
+			}
     }
     store.dispatch(actionRegistered(action, timestamp));
   }
