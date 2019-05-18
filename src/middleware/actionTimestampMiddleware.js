@@ -1,4 +1,4 @@
-import { ACTION_REGISTERED, actionRegistered } from "./actions";
+import { ACTION_REGISTERED, actionRegistered } from "../game/actions";
 
 export const actionTimestampMiddleware = store => next => action => {
   const nextAction = next(action);
