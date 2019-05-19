@@ -53,6 +53,7 @@ function startLevel(levelId) {
   const { dispatch } = store;
   dispatch(levelsLoaded(getLevels()));
   dispatch(startGame(levelId));
+  advanceTimers(100);
 }
 
 function addCook() {
@@ -369,6 +370,7 @@ testWithLog("4 customer should leave after not being taken care of", () => {
 
   const orders = getOrders(store.getState);
   const customers = Object.values(getCustomers(store.getState));
+  console.log(customers);
   const customer = customers[0];
   const order = orders[customer.orderId];
   const leaveAtTime = leaveAt(order);
