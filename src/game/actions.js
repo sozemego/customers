@@ -4,7 +4,8 @@ import {
   getActions,
   getCooks,
   getCustomers,
-  getLevels, getOrderIdToResult,
+  getLevels,
+  getOrderIdToResult,
   getOrders
 } from "./selectors";
 import { makeActionCreator, makePayloadActionCreator } from "../store/utils";
@@ -33,6 +34,9 @@ export const customerPhaseChanged = makeActionCreator(
 
 export const COOK_ADDED = "COOK_ADDED";
 export const cookAdded = makePayloadActionCreator(COOK_ADDED);
+
+export const COOKS_RESET = "COOKS_RESET";
+export const cooksReset = makeActionCreator(COOKS_RESET);
 
 export const ORDER_ADDED = "ORDER_ADDED";
 export const orderAdded = makePayloadActionCreator(ORDER_ADDED);
@@ -94,7 +98,17 @@ export function startGame(levelId) {
     }
 
     dispatch(stopGame());
+    dispatch(loadCooks());
 
+    setTimeout(() => {
+      dispatch(startLevel(levelId));
+    }, 0);
+  };
+}
+
+export function loadCooks() {
+  return function loadCooks(dispatch, getState) {
+    dispatch(cooksReset());
     const cooks = getFromLocalStorage();
     if (cooks.length === 0) {
       dispatch(cookAdded(createCook()));
@@ -102,10 +116,6 @@ export function startGame(levelId) {
     } else {
       cooks.forEach(cook => dispatch(cookAdded(cook)));
     }
-
-    setTimeout(() => {
-      dispatch(startLevel(levelId));
-    }, 0);
   };
 }
 
@@ -260,7 +270,7 @@ export function finishOrder(orderId, customerId, cookId, result) {
     const orderCount = Object.values(getOrders(getState)).length;
     const resultCount = Object.values(getOrderIdToResult(getState)).length;
 
-    if(orderCount === resultCount) {
+    if (orderCount === resultCount) {
       dispatch(levelFinished());
     }
   };

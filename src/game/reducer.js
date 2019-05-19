@@ -15,7 +15,8 @@ import {
   ORDER_NEXT_PHASE_STARTED,
   ORDER_PHASE_FINISHED,
   ORDER_TAKEN,
-  LEVEL_FINISHED
+  LEVEL_FINISHED,
+  COOKS_RESET
 } from "./actions";
 import { CUSTOMER_PHASE } from "./customer/business";
 import { saveToLocalStorage } from "./cook/business";
@@ -214,6 +215,9 @@ export const reducer = createReducer(initialState, {
   [CUSTOMER_ADDED]: customerAdded,
   [CUSTOMER_PHASE_CHANGED]: customerPhaseChanged,
   [COOK_ADDED]: cookAdded,
+  [COOKS_RESET]: function cooksReset(state, action) {
+    return { ...state, cooks: {} };
+  },
   [COOK_GAINED_EXPERIENCE]: cookGainedExperience,
   [ORDER_ADDED]: orderAdded,
   [ORDER_ATTACHED_TO_CUSTOMER]: orderAttachedToCustomer,
