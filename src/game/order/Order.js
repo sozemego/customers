@@ -24,6 +24,25 @@ const titleContainer = css({
   alignItems: "center"
 });
 
+const waitingContainerStyle = css({
+  display: "flex",
+  flexDirection: "row",
+  alignItems: "center",
+  justifyContent: "flex-start"
+});
+
+const cookButtonsStyle = css({
+  display: "flex",
+  flexDirection: "row",
+  flexWrap: "wrap"
+});
+
+const orderInProgressContainerStyle = css({
+  display: "flex",
+  flexDirection: "row",
+  alignItems: "center"
+});
+
 export function Order({ order }) {
   const { customerId, dish } = order;
   const { phase: dishStatus } = dish;
@@ -61,22 +80,9 @@ export function Order({ order }) {
     <Card title={title()} data-testid={`order-id-${order.id}`}>
       <Row>
         {dish.phase === PREPARATION_PHASE.WAITING && (
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              alignItems: "center",
-              justifyContent: "flex-start"
-            }}
-          >
+          <div className={waitingContainerStyle}>
             <div>{capitaliseFirst(getVerb(nextDishStatus))}</div>
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                flexWrap: "wrap"
-              }}
-            >
+            <div className={cookButtonsStyle}>
               {cooks.map(cook => (
                 <div key={cook.id}>
                   <Button
@@ -96,13 +102,7 @@ export function Order({ order }) {
           </div>
         )}
         {dish.phase !== PREPARATION_PHASE.WAITING && (
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              alignItems: "center"
-            }}
-          >
+          <div className={orderInProgressContainerStyle}>
             <InfoCard
               src={currentCook.avatar}
               name={`${currentCook.name} is ${getPresentParticiple(
