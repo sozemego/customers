@@ -1,12 +1,6 @@
 import { createCustomer, CUSTOMER_PHASE } from "./customer/business";
 import { createDish, createOrder } from "./order/business";
-import {
-  getActions,
-  getCooks,
-  getCustomers,
-  getLevels,
-  getOrders
-} from "./selectors";
+import { getActions, getCooks, getCustomers, getLevels, getOrders } from "./selectors";
 import { makeActionCreator, makePayloadActionCreator } from "../store/utils";
 import { leaveAt, WAITING_TIME_TYPE } from "./business";
 
@@ -181,24 +175,24 @@ export function finishPhase(orderId, cookId) {
       const orderActions = getActions(ORDER_TAKEN, getState).filter(
         ({ action }) => action.payload === orderId
       );
-      //3. calculate penalty based on time until order was taken
       const arrivedAtTime = arrivedAt(customerActions);
       const orderTakenAtTime = orderTakenAt(orderActions);
       const timeUntilTaken = orderTakenAtTime - arrivedAtTime;
-      const doneAtTime = doneAt(customerActions);
-      const timeUntilDone = doneAtTime - orderTakenAtTime;
       const maxTime = leaveAt(order) * 1000;
       const timeOfResultReduction = maxTime * 0.65;
       const reductionInterval = maxTime - timeOfResultReduction;
+
+      //3. calculate penalty based on time until order was taken
       let takingOrderPart = 50;
       const takenTimeOver = timeUntilTaken - timeOfResultReduction;
       if (takenTimeOver > 0) {
         const reduction = takenTimeOver / reductionInterval;
         takingOrderPart = round(takingOrderPart * reduction);
       }
+
       //4. calculate penalty based on time until order was done
       let makingOrderPart = 50;
-      const orderDoneTimeOver = timeUntilDone - timeOfResultReduction;
+      const orderDoneTimeOver = doneAt(customerActions) - orderTakenAtTime - timeOfResultReduction;
       if (orderDoneTimeOver > 0) {
         const reduction = orderDoneTimeOver / reductionInterval;
         makingOrderPart = round(makingOrderPart * reduction);
