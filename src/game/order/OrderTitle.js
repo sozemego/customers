@@ -11,6 +11,12 @@ const containerStyle = css({
   minHeight: "36px"
 });
 
+const resultsContainer = css({
+  display: "flex",
+  flexDirection: "row",
+  flexWrap: "wrap"
+});
+
 const percentStyle = css({
   marginLeft: "4px",
   display: "inline-flex",
@@ -34,7 +40,7 @@ export function OrderTitle(props) {
   return (
     <div className={containerStyle}>
       <div>Orders {averageResult ? `[Avg: ${averageResult}%]` : null}</div>
-      <div>
+      <div className={resultsContainer}>
         {orderResults
           .sort((a, b) => b.percent - a.percent)
           .map(result => (
