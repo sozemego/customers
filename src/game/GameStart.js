@@ -9,7 +9,6 @@ export function GameStart(props) {
   const running = isRunning();
   const dispatch = useDispatch();
   const levels = getLevels() || {};
-  console.log(levels);
 
   const startGameCallback = () => dispatch(startGame(1));
   const stopGameCallback = () => dispatch(stopGame());
