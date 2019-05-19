@@ -4,7 +4,8 @@ import {
   COOK_ADDED,
   COOK_GAINED_EXPERIENCE,
   CUSTOMER_ADDED,
-  CUSTOMER_PHASE_CHANGED, ACTION_REGISTERED,
+  CUSTOMER_PHASE_CHANGED,
+  ACTION_REGISTERED,
   GAME_STARTED,
   GAME_STOPPED,
   LEVELS_LOADED,
@@ -216,5 +217,5 @@ export const reducer = createReducer(initialState, {
   [ORDER_DONE]: orderDone,
   [ORDER_NEXT_PHASE_STARTED]: orderNextPhaseStarted,
   [ORDER_PHASE_FINISHED]: orderPhaseFinished,
-  [ACTION_REGISTERED]: actionRegistered,
+  [ACTION_REGISTERED]: actionRegistered
 });

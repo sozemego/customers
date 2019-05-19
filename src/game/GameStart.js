@@ -35,11 +35,19 @@ export function GameStart(props) {
             Stop
           </Button>
         )}
-        <div style={{ display: "flex", flexDirection: "row", alignItems: "center" }}>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center"
+          }}
+        >
           <div>Level select</div>
           <select onChange={e => dispatch(startGame(e.target.value))}>
             {Object.entries(levels).map(([id, level]) => (
-              <option value={id} key={id}>{id}</option>
+              <option value={id} key={id}>
+                {id}
+              </option>
             ))}
           </select>
         </div>
