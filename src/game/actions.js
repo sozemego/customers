@@ -4,7 +4,7 @@ import {
   getActions,
   getCooks,
   getCustomers,
-  getLevels,
+  getLevels, getOrderIdToResult,
   getOrders
 } from "./selectors";
 import { makeActionCreator, makePayloadActionCreator } from "../store/utils";
@@ -83,6 +83,9 @@ export const actionRegistered = makeActionCreator(
   "action",
   "timestamp"
 );
+
+export const LEVEL_FINISHED = "LEVEL_FINISHED";
+export const levelFinished = makeActionCreator(LEVEL_FINISHED);
 
 export function startGame(levelId) {
   return function startGame(dispatch, getState) {
@@ -253,5 +256,12 @@ function round(percentage) {
 export function finishOrder(orderId, customerId, cookId, result) {
   return function finishOrder(dispatch, getState) {
     dispatch(orderDone(orderId, customerId, cookId, result));
+
+    const orderCount = Object.values(getOrders(getState)).length;
+    const resultCount = Object.values(getOrderIdToResult(getState)).length;
+
+    if(orderCount === resultCount) {
+      dispatch(levelFinished());
+    }
   };
 }

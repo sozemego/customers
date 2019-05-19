@@ -14,7 +14,8 @@ import {
   ORDER_DONE,
   ORDER_NEXT_PHASE_STARTED,
   ORDER_PHASE_FINISHED,
-  ORDER_TAKEN
+  ORDER_TAKEN,
+  LEVEL_FINISHED
 } from "./actions";
 import { CUSTOMER_PHASE } from "./customer/business";
 import { saveToLocalStorage } from "./cook/business";
@@ -194,12 +195,15 @@ export const reducer = createReducer(initialState, {
   [LEVELS_LOADED]: function levelsLoaded(state, { payload }) {
     return { ...state, levels: payload };
   },
+  [LEVEL_FINISHED]: function levelFinished(state, action) {
+    saveToLocalStorage(state.cooks);
+    return { ...state };
+  },
   [GAME_STARTED]: function gameStarted(state, { payload }) {
     return { ...state, running: true, levelId: payload };
   },
   [GAME_STOPPED]: function gameStopped(state) {
     const cooks = { ...state.cooks };
-    saveToLocalStorage(cooks);
     const levels = { ...state.levels };
     return {
       ...initialState,

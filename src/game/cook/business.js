@@ -22,10 +22,13 @@ export function getFromLocalStorage() {
     return null;
   }
 
-  return Object.values(decode64(cooks64, true));
+  const cooks = Object.values(decode64(cooks64, true));
+  console.log(`Loaded ${cooks.length} cooks from localStorage`);
+  return cooks;
 }
 
 export function saveToLocalStorage(cooks) {
   const cooks64 = encode64(cooks);
   localStorage.setItem("cooks", cooks64);
+  console.log(`Saved ${Object.values(cooks).length} cooks to localStorage`);
 }
