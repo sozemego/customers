@@ -193,7 +193,7 @@ export function finishPhase(orderId, cookId) {
       const takenTimeOver = timeUntilTaken - timeOfResultReduction;
       if (takenTimeOver > 0) {
         const reduction = takenTimeOver / reductionInterval;
-        takingOrderPart = round(takingOrderPart * reduction);
+        takingOrderPart = round(takingOrderPart - (takingOrderPart * reduction));
       }
 
       //4. calculate penalty based on time until order was done
@@ -202,7 +202,7 @@ export function finishPhase(orderId, cookId) {
         doneAt(customerActions) - orderTakenAtTime - timeOfResultReduction;
       if (orderDoneTimeOver > 0) {
         const reduction = orderDoneTimeOver / reductionInterval;
-        makingOrderPart = round(makingOrderPart * reduction);
+        makingOrderPart = round(makingOrderPart - (makingOrderPart *  reduction));
       }
       //4. find out how much time has passed since order was taken and order was served
       dispatch(
