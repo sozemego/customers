@@ -89,7 +89,9 @@ export function startGame(levelId) {
       levelId = Object.keys(getLevels(getState))[0];
     }
     dispatch(stopGame());
-    dispatch(startLevel(levelId));
+    setTimeout(() => {
+      dispatch(startLevel(levelId));
+    }, 0);
   };
 }
 
@@ -179,14 +181,12 @@ export function finishPhase(orderId, cookId) {
       const orderActions = getActions(ORDER_TAKEN, getState).filter(
         ({ action }) => action.payload === orderId
       );
-      //3. find out how much time has passed since customer arrived and order was taken
+      //3. calculate penalty based on time until order was taken
       const arrivedAtTime = arrivedAt(customerActions);
       const orderTakenAtTime = orderTakenAt(orderActions);
       const timeUntilTaken = orderTakenAtTime - arrivedAtTime;
       const doneAtTime = doneAt(customerActions);
       const timeUntilDone = doneAtTime - orderTakenAtTime;
-      console.log("Time until taken", timeUntilTaken);
-      console.log("Time until done", timeUntilDone);
       const maxTime = leaveAt(order) * 1000;
       const timeOfResultReduction = maxTime * 0.65;
       const reductionInterval = maxTime - timeOfResultReduction;
@@ -196,6 +196,7 @@ export function finishPhase(orderId, cookId) {
         const reduction = takenTimeOver / reductionInterval;
         takingOrderPart = round(takingOrderPart * reduction);
       }
+      //4. calculate penalty based on time until order was done
       let makingOrderPart = 50;
       const orderDoneTimeOver = timeUntilDone - timeOfResultReduction;
       if (orderDoneTimeOver > 0) {
