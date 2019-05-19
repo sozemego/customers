@@ -169,27 +169,47 @@ export function finishPhase(orderId, cookId) {
         customerPhaseChanged(order.customerId, CUSTOMER_PHASE.DONE, Date.now())
       );
 
-      const customerActions = getActions(CUSTOMER_PHASE_CHANGED, getState).filter(
-        ({ action }) => action.customerId === customer.id
-      );
+      const customerActions = getActions(
+        CUSTOMER_PHASE_CHANGED,
+        getState
+      ).filter(({ action }) => action.customerId === customer.id);
       const orderActions = getActions(ORDER_TAKEN, getState).filter(
         ({ action }) => action.payload === orderId
       );
       //3. find out how much time has passed since customer arrived and order was taken
       const arrivedAtTime = arrivedAt(customerActions);
-      const doneAtTime =  doneAt(customerActions);
       const orderTakenAtTime = orderTakenAt(orderActions);
-      console.log(arrivedAtTime, doneAtTime, orderTakenAtTime);
+      const timeUntilTaken = orderTakenAtTime - arrivedAtTime;
+      const doneAtTime = doneAt(customerActions);
+      const timeUntilDone = doneAtTime - orderTakenAtTime;
+      console.log("Time until taken", timeUntilTaken);
+      console.log("Time until done", timeUntilDone);
+      const maxTime = leaveAt(order) * 1000;
+      const timeOfResultReduction = maxTime * 0.65;
+      const reductionInterval = maxTime - timeOfResultReduction;
+      let takingOrderPart = 50;
+      const takenTimeOver = timeUntilTaken - timeOfResultReduction;
+      if (takenTimeOver > 0) {
+        const reduction = takenTimeOver / reductionInterval;
+        takingOrderPart = round(takingOrderPart * reduction);
+      }
+      let makingOrderPart = 50;
+      const orderDoneTimeOver = timeUntilDone - timeOfResultReduction;
+      if (orderDoneTimeOver > 0) {
+        const reduction = orderDoneTimeOver / reductionInterval;
+        makingOrderPart = round(makingOrderPart * reduction);
+      }
       //4. find out how much time has passed since order was taken and order was served
       dispatch(
-        finishOrder(orderId, order.customerId, cookId, { percent: 100 })
+        finishOrder(orderId, order.customerId, cookId, {
+          percent: takingOrderPart + makingOrderPart
+        })
       );
     }
   };
 }
 
 function arrivedAt(actions) {
-	console.log(actions);
   const activeAction = actions.filter(
     ({ action }) => action.phase === CUSTOMER_PHASE.ACTIVE
   )[0];
@@ -201,7 +221,7 @@ function doneAt(actions) {
     ({ action }) => action.phase === CUSTOMER_PHASE.DONE
   );
   if (doneActions.length === 0) {
-    throw new Error('Customer needs to have a DONE phase');
+    throw new Error("Customer needs to have a DONE phase");
   }
   return doneActions[0].timestamp;
 }
@@ -210,10 +230,8 @@ function orderTakenAt(actions) {
   return actions[0].timestamp;
 }
 
-function convertToSeconds(timestamp) {
-  const seconds = timestamp / 1000;
-  console.log(seconds);
-  return seconds;
+function round(percentage) {
+  return Number(percentage.toFixed(0));
 }
 
 export function finishOrder(orderId, customerId, cookId, result) {
