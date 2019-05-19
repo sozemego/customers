@@ -10,7 +10,7 @@ export function GameStart(props) {
   const dispatch = useDispatch();
   const levels = getLevels() || {};
 
-  const startGameCallback = () => dispatch(startGame(1));
+  const startGameCallback = () => dispatch(startGame());
   const stopGameCallback = () => dispatch(stopGame());
 
   useEffect(() => {
@@ -22,7 +22,7 @@ export function GameStart(props) {
         dispatch(cookAdded(createCook()));
       })
       .then(() => {
-        dispatch(startGame(1));
+        dispatch(startGame());
       });
   }, []);
 
@@ -36,11 +36,11 @@ export function GameStart(props) {
           justifyContent: "center"
         }}
       >
-        {!running && (
-          <Button onClick={startGameCallback} type={"danger"}>
-            Start
-          </Button>
-        )}
+        {/*{!running && (*/}
+        {/*  <Button onClick={startGameCallback} type={"danger"}>*/}
+        {/*    Start*/}
+        {/*  </Button>*/}
+        {/*)}*/}
         {running && (
           <Button onClick={stopGameCallback} type={"danger"}>
             Stop

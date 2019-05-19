@@ -83,8 +83,11 @@ export const actionRegistered = makeActionCreator(
   "timestamp"
 );
 
-export function startGame(levelId = 1) {
+export function startGame(levelId) {
   return function startGame(dispatch, getState) {
+    if (!levelId) {
+      levelId = Object.keys(getLevels(getState))[0];
+    }
     dispatch(stopGame());
     dispatch(startLevel(levelId));
   };
