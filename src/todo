@@ -1,16 +1,18 @@
+Starting a new level should reset the game clock
+
 ####Different dish preparation phases should have different completetion times - cook.speed * preparation time?
 ####Customers should come at different time intervals
 
 Customers should have satisfaction meters
     ####When customer comes, their time till order taken drops until they leave. The longer they have to wait, the angrier they are
     ####When order is taken, another timer/satisfaction meter is set. The longer it takes for them to get their order, the angrier they are
-    When dish is served, customer decides if they like it (100% for now)
+    When dish is served, customer decides if they like it
     ####Customer satisfaction should be displayed as a progress bar
     ####Customers should be displayed in the order they arrived in
-    When a customer leaves, it should me marked as an 'angry' customer in the Customers section
+    ####When a customer leaves, it should me marked as an 'angry' customer in the Customers section
 
 Orders
-    Orders should be displayed in the order they were taken
+    ####Orders should be displayed in the order they were taken
 
 Layout
     ####Place Cooks next to Orders
@@ -31,6 +33,6 @@ General
     ####Show number of customers served / total customers
     ####Switch to redux
     Save cooks to local storage when level is done
-    Save current levle to local storage when level is done
+    Save current level to local storage when level is done
     Load cooks from local storage when game is loaded
     Load level from local storage when game is loaded
