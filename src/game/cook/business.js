@@ -1,4 +1,5 @@
 import faker from "faker";
+import { decode64, encode64 } from "../../utils";
 
 let id = 0;
 
@@ -13,4 +14,18 @@ export function createCook() {
 		experience: 0,
 		nextLevel: 5
 	};
+}
+
+export function getFromLocalStorage() {
+	const cooks64 = localStorage.getItem('cooks');
+	if (!cooks64) {
+		return null;
+	}
+
+	return Object.values(decode64(cooks64, true));
+}
+
+export function saveToLocalStorage(cooks) {
+	const cooks64 = encode64(cooks);
+	localStorage.setItem('cooks', cooks64);
 }

@@ -16,6 +16,7 @@ import {
   ORDER_TAKEN
 } from "./actions";
 import { CUSTOMER_PHASE } from "./customer/business";
+import { saveToLocalStorage } from "./cook/business";
 
 const initialState = {
   running: false,
@@ -197,6 +198,7 @@ export const reducer = createReducer(initialState, {
   },
   [GAME_STOPPED]: function gameStopped(state) {
     const cooks = { ...state.cooks };
+    saveToLocalStorage(cooks);
     const levels = { ...state.levels };
     return {
       ...initialState,

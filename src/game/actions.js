@@ -9,6 +9,7 @@ import {
 } from "./selectors";
 import { makeActionCreator, makePayloadActionCreator } from "../store/utils";
 import { leaveAt, WAITING_TIME_TYPE } from "./business";
+import { createCook, getFromLocalStorage } from "./cook/business";
 
 export const GAME_STARTED = "GAME_STARTED";
 export const gameStarted = makePayloadActionCreator(GAME_STARTED);
@@ -88,7 +89,17 @@ export function startGame(levelId) {
     if (!levelId) {
       levelId = Object.keys(getLevels(getState))[0];
     }
+
     dispatch(stopGame());
+
+    const cooks = getFromLocalStorage();
+    if(cooks.length === 0) {
+      dispatch(cookAdded(createCook()));
+      dispatch(cookAdded(createCook()));
+    } else {
+      cooks.forEach(cook => dispatch(cookAdded(cook)));
+    }
+
     setTimeout(() => {
       dispatch(startLevel(levelId));
     }, 0);

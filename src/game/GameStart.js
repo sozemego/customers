@@ -1,26 +1,20 @@
 import React, { useEffect } from "react";
 import { Button } from "antd";
 import { getLevels, isRunning } from "./selectors";
-import { cookAdded, levelsLoaded, startGame, stopGame } from "./actions";
+import { levelsLoaded, startGame, stopGame } from "./actions";
 import { useDispatch } from "react-redux";
-import { createCook } from "./cook/business";
 
 export function GameStart(props) {
   const running = isRunning();
   const dispatch = useDispatch();
   const levels = getLevels() || {};
 
-  const startGameCallback = () => dispatch(startGame());
   const stopGameCallback = () => dispatch(stopGame());
 
   useEffect(() => {
     fetch(`/levels.json`)
       .then(res => res.json())
       .then(res => dispatch(levelsLoaded(res)))
-      .then(() => {
-        dispatch(cookAdded(createCook()));
-        dispatch(cookAdded(createCook()));
-      })
       .then(() => {
         dispatch(startGame());
       });
@@ -36,11 +30,6 @@ export function GameStart(props) {
           justifyContent: "center"
         }}
       >
-        {/*{!running && (*/}
-        {/*  <Button onClick={startGameCallback} type={"danger"}>*/}
-        {/*    Start*/}
-        {/*  </Button>*/}
-        {/*)}*/}
         {running && (
           <Button onClick={stopGameCallback} type={"danger"}>
             Stop

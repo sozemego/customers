@@ -1,4 +1,72 @@
 {
+  "test 1": {
+    "customers": [
+      {
+        "id": 1,
+        "time": 0,
+        "dish": "SALAD"
+      }
+    ]
+  },
+  "Hard level 1": {
+    "customers": [
+      {
+        "id": 1,
+        "time": 0,
+        "dish": "SALAD"
+      },
+      {
+        "id": 2,
+        "time": 0,
+        "dish": "SALAD"
+      },
+      {
+        "id": 3,
+        "time": 0,
+        "dish": "SALAD"
+      },
+      {
+        "id": 4,
+        "time": 10000,
+        "dish": "PIZZA"
+      },
+      {
+        "id": 5,
+        "time": 11000,
+        "dish": "PIZZA"
+      },
+      {
+        "id": 6,
+        "time": 18000,
+        "dish": "SALAD"
+      },
+      {
+        "id": 7,
+        "time": 19000,
+        "dish": "PIZZA"
+      },
+      {
+        "id": 8,
+        "time": 22000,
+        "dish": "SALAD"
+      },
+      {
+        "id": 9,
+        "time": 22000,
+        "dish": "SALAD"
+      },
+      {
+        "id": 10,
+        "time": 30000,
+        "dish": "SALAD"
+      },
+      {
+        "id": 11,
+        "time": 30000,
+        "dish": "SALAD"
+      }
+    ]
+  },
   "Level 1": {
     "customers": [
       {

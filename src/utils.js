@@ -10,3 +10,18 @@ export function removeId(map, id) {
       return nextMap;
     }, {});
 }
+
+export function encode64(obj) {
+  if (obj instanceof String) {
+    return btoa(obj);
+  }
+  return btoa(JSON.stringify(obj));
+}
+
+export function decode64(obj, asObject = true) {
+  const decoded = atob(obj);
+  if (asObject) {
+    return JSON.parse(decoded);
+  }
+  return decoded;
+}
