@@ -9,7 +9,7 @@ export function createCook() {
     name: faker.name.firstName(),
     avatar: faker.image.avatar(24, 24, true),
     orderId: null,
-    speed: 0.1,
+    speed: 1,
     level: 1,
     experience: 0,
     nextLevel: 5
