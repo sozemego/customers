@@ -159,12 +159,6 @@ export function finishPhase(orderId, cookId) {
     const order = getOrders(getState)[orderId];
     const customers = getCustomers(getState);
     const customer = customers[order.customerId];
-    const customerActions = getActions(CUSTOMER_PHASE_CHANGED, getState).filter(
-      ({ action }) => action.customerId === customer.id
-    );
-    const orderActions = getActions(ORDER_TAKEN, getState).filter(
-      ({ action }) => action.payload === orderId
-    );
 
     //The following needs to happen after order phase is finished
     //1. Assigned cook gets experience
@@ -173,6 +167,13 @@ export function finishPhase(orderId, cookId) {
     if (order.dish.phases.length === 0) {
       dispatch(
         customerPhaseChanged(order.customerId, CUSTOMER_PHASE.DONE, Date.now())
+      );
+
+      const customerActions = getActions(CUSTOMER_PHASE_CHANGED, getState).filter(
+        ({ action }) => action.customerId === customer.id
+      );
+      const orderActions = getActions(ORDER_TAKEN, getState).filter(
+        ({ action }) => action.payload === orderId
       );
       //3. find out how much time has passed since customer arrived and order was taken
       const arrivedAtTime = arrivedAt(customerActions);
@@ -188,6 +189,7 @@ export function finishPhase(orderId, cookId) {
 }
 
 function arrivedAt(actions) {
+	console.log(actions);
   const activeAction = actions.filter(
     ({ action }) => action.phase === CUSTOMER_PHASE.ACTIVE
   )[0];
@@ -195,10 +197,13 @@ function arrivedAt(actions) {
 }
 
 function doneAt(actions) {
-  const doneAction = actions.filter(
+  const doneActions = actions.filter(
     ({ action }) => action.phase === CUSTOMER_PHASE.DONE
-  )[0];
-  return doneAction.timestamp;
+  );
+  if (doneActions.length === 0) {
+    throw new Error('Customer needs to have a DONE phase');
+  }
+  return doneActions[0].timestamp;
 }
 
 function orderTakenAt(actions) {

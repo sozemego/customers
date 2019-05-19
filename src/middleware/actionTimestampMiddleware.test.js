@@ -1,3 +1,4 @@
+import lolex from 'lolex';
 import { createNewStore } from "../store/store";
 import { gameStarted, gameStopped, levelsLoaded, stopGame } from "../game/actions";
 const { describe, it, expect } = global;
@@ -6,10 +7,17 @@ let store = null;
 let dispatch = null;
 let getState = null;
 
+let clock = null;
+
 beforeEach(() => {
   store = createNewStore();
   dispatch = store.dispatch;
   getState = store.getState;
+  clock = lolex.install();
+});
+
+afterEach(() => {
+	clock.uninstall();
 });
 
 it("emitting GAME_STARTED action should store a ACTION_REGISTERED action in the store", () => {
@@ -46,7 +54,7 @@ it('actions after GAME_STARTED should have timestamp in the form of seconds afte
 	expect(levelsLoadedAction.timestamp).toBeLessThanOrEqual(1000);
 });
 
-it('2. actions after GAME_STARTED should have timestamp in the form of seconds after GAME_STARTED action', () => {
+it('2. actions after GAME_STARTED should have timestamp in the form of milliseconds after GAME_STARTED action', () => {
 	dispatch(gameStarted('level 5'));
 	dispatch(levelsLoaded({}));
 	dispatch(levelsLoaded({}));
@@ -56,7 +64,6 @@ it('2. actions after GAME_STARTED should have timestamp in the form of seconds a
 	dispatch(levelsLoaded({}));
 	dispatch(levelsLoaded({}));
 	const state = getState();
-	console.log(state.game.actions);
 	const levelsLoadedAction = state.game.actions[1];
 	expect(levelsLoadedAction.timestamp).toBeGreaterThanOrEqual(0);
 	expect(levelsLoadedAction.timestamp).toBeLessThanOrEqual(1000);
