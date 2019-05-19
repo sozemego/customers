@@ -28,7 +28,7 @@ export function OrderTitle(props) {
       .reduce((prev, current) => {
         return prev + current;
       }, 0);
-    averageResult = sum / orderResults.length;
+    averageResult = (sum / orderResults.length).toFixed(1);
   }
 
   return (
