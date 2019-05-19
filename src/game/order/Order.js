@@ -28,7 +28,7 @@ const waitingContainerStyle = css({
   display: "flex",
   flexDirection: "row",
   alignItems: "center",
-  justifyContent: "flex-start"
+  justifyContent: "space-between"
 });
 
 const cookButtonsStyle = css({
@@ -40,6 +40,14 @@ const cookButtonsStyle = css({
 const orderInProgressContainerStyle = css({
   display: "flex",
   flexDirection: "row",
+  alignItems: "center"
+});
+
+const rowContainer = css({
+  minHeight: "68px",
+  display: "flex",
+  flexDirection: "row",
+  justifyContent: "space-between",
   alignItems: "center"
 });
 
@@ -78,47 +86,49 @@ export function Order({ order }) {
 
   return (
     <Card title={title()} data-testid={`order-id-${order.id}`}>
-      <Row>
-        {dish.phase === PREPARATION_PHASE.WAITING && (
-          <div className={waitingContainerStyle}>
+      <div className={rowContainer}>
+        <div>
+          {dish.phase === PREPARATION_PHASE.WAITING && (
             <div>{capitaliseFirst(getVerb(nextDishStatus))}</div>
-            <div className={cookButtonsStyle}>
-              {cooks.map(cook => (
-                <div key={cook.id}>
-                  <Button
-                    type={"primary"}
-                    style={{ margin: "4px" }}
-                    onClick={() =>
-                      dispatch(orderNextPhaseStarted(order.id, cook.id))
-                    }
-                    disabled={!!cook.orderId}
-                    data-testid={`next-phase-${order.id}`}
-                  >
-                    {createButtonText(cook)}
-                  </Button>
-                </div>
-              ))}
+          )}
+          {dish.phase !== PREPARATION_PHASE.WAITING && (
+            <div className={orderInProgressContainerStyle}>
+              <InfoCard
+                src={currentCook.avatar}
+                name={`${currentCook.name} is ${getPresentParticiple(
+                  dishStatus
+                )} ${Number(time / 1000).toFixed(1)} / ${orderTime / 1000}s`}
+              />
+              <EmptyTimer
+                time={orderTime}
+                start={true}
+                onFinish={() => {
+                  dispatch(finishPhase(order.id, currentCook.id));
+                }}
+              />
             </div>
-          </div>
-        )}
-        {dish.phase !== PREPARATION_PHASE.WAITING && (
-          <div className={orderInProgressContainerStyle}>
-            <InfoCard
-              src={currentCook.avatar}
-              name={`${currentCook.name} is ${getPresentParticiple(
-                dishStatus
-              )} ${Number(time / 1000).toFixed(1)} / ${orderTime / 1000}s`}
-            />
-            <EmptyTimer
-              time={orderTime}
-              start={true}
-              onFinish={() => {
-                dispatch(finishPhase(order.id, currentCook.id));
-              }}
-            />
-          </div>
-        )}
-      </Row>
+          )}
+        </div>
+        <div className={cookButtonsStyle}>
+          {cooks.map(cook => (
+            <div key={cook.id}>
+              <Button
+                type={"primary"}
+                style={{ margin: "4px" }}
+                onClick={() =>
+                  dispatch(orderNextPhaseStarted(order.id, cook.id))
+                }
+                disabled={
+                  !!cook.orderId || dish.phase !== PREPARATION_PHASE.WAITING
+                }
+                data-testid={`next-phase-${order.id}`}
+              >
+                {createButtonText(cook)}
+              </Button>
+            </div>
+          ))}
+        </div>
+      </div>
     </Card>
   );
 }
