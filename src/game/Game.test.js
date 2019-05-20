@@ -9,7 +9,7 @@ import { Game } from "./Game";
 import { Provider } from "react-redux";
 import { cookAdded, levelsLoaded, startGame } from "./actions";
 import { createNewStore } from "../store/store";
-import { getCustomers, getOrderIdToResult, getOrders } from "./selectors";
+import { getCooks, getCustomers, getOrderIdToResult, getOrders } from "./selectors";
 import { createCook } from "./cook/business";
 import { leaveAt } from "./business";
 
@@ -39,6 +39,7 @@ beforeAll(() => {
 
 beforeEach(() => {
   store = createNewStore();
+  localStorage.removeItem('cooks');
 });
 afterEach(cleanup);
 
@@ -476,6 +477,7 @@ testWithLog("9 completing phases should add experience to the cook", () => {
 
   fireEvent.click(queryByTestId(/next-phase/g));
   act(() => jest.advanceTimersByTime(10000));
+  console.log(getCooks(store.getState));
   expect(
     queryByText("Level 1. Experience: 1 / ", { exact: false })
   ).not.toBeNull();
@@ -766,3 +768,17 @@ testWithLog(
     expect(queryAllByTestId(/result-/g).length).toBe(1);
   }
 );
+
+testWithLog("21 Pausing the game should stop game clock", () => {
+  jest.useFakeTimers();
+  const { queryAllByTestId, getByTestId, queryByTestId } = renderWithProvider(
+    <Game />
+  );
+  startLevel(1);
+  addCook();
+  advanceTimers(1000);
+  const time = getByTestId("game-clock").content;
+  fireEvent.click(queryByTestId(`pause`));
+  advanceTimers(5000);
+  expect(getByTestId("game-clock").content).toBe(time);
+});
