@@ -9,7 +9,6 @@ export function useCounter(
   const [count, setCount] = useState(0);
   useEffect(() => {
     if (running) {
-      setCount(0);
       const intervalId = setInterval(() => {
         setCount(count => {
           const nextCount = count + increment;
