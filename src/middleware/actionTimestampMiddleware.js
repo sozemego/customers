@@ -4,6 +4,13 @@ import {
   GAME_STARTED
 } from "../game/actions";
 
+/**
+ * The purpose of this middleware is to store all actions as they happen
+ * and add a timestamp to them.
+ * GAME_STARTED action gets a Date.now() value as timestamp.
+ * Other actions have timestamp values relative to GAME_STARTED,
+ * in milliseconds since GAME_STARTED happened.
+ */
 export const actionTimestampMiddleware = store => next => action => {
   const nextAction = next(action);
   if (nextAction.type !== ACTION_REGISTERED) {
