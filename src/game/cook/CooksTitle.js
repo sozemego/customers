@@ -1,19 +1,20 @@
 import React from "react";
 import { Button } from "antd";
+import { css } from "glamor";
 import { saveToLocalStorage } from "./business";
 import { useDispatch } from "react-redux";
 import { loadCooks } from "../actions";
 
+const containerStyle = css({
+  minHeight: "36px",
+  display: "flex",
+  justifyContent: "space-between"
+});
+
 export function CooksTitle(props) {
   const dispatch = useDispatch();
   return (
-    <div
-      style={{
-        minHeight: "36px",
-        display: "flex",
-        justifyContent: "space-between"
-      }}
-    >
+    <div className={containerStyle}>
       <div>Cooks</div>
       <Button
         onClick={() => {
