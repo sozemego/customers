@@ -837,3 +837,23 @@ testWithLog(
     expect(customers.length).toBe(8);
   }
 );
+
+testWithLog(
+  "23 Customers not arrive when game is paused",
+  () => {
+    jest.useFakeTimers();
+    const { queryAllByTestId, getByTestId } = renderWithProvider(
+      <div>
+        <GameInfo />
+        <GameStart />
+        <Game />
+      </div>
+    );
+    startLevel("customer order 2");
+    addCook();
+    fireEvent.click(getByTestId("pause-game"));
+    advanceTimers(12000);
+    let customers = queryAllByTestId(/customer-id/g);
+    expect(customers.length).toBe(0);
+  }
+);

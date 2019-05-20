@@ -1,3 +1,5 @@
+Pausing should also stop customers from arriving
+
 ####Starting a new level should reset the game clock
 
 ####Different dish preparation phases should have different completetion times - cook.speed * preparation time?
