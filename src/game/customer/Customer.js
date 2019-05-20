@@ -1,10 +1,30 @@
 import React from "react";
+import { Button, Row, Col, Progress } from "antd";
+import { css } from "glamor";
 import { InfoCard } from "../../components/InfoCard";
 import { Dish } from "../dish/Dish";
-import { Button, Row, Col, Progress } from "antd";
 import { getOrders, getTakenOrderIds, isPaused } from "../selectors";
 import { leaveAt, WAITING_TIME_TYPE } from "../business";
 import { useTimer } from "../../hooks/timer";
+
+const progressContainerStyle = css({
+  display: "flex",
+  flexDirection: "row",
+  justifyContent: "flex-start"
+});
+
+const takeOrderProgressContainerStyle = css({
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "center"
+});
+
+const makeOrderProgressContainerStyle = css({
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "center",
+  marginLeft: "12px"
+});
 
 export function Customer({ customer, takeOrder, canMake, onTimeExceeded }) {
   const { name, orderId, avatar } = customer;
@@ -20,7 +40,7 @@ export function Customer({ customer, takeOrder, canMake, onTimeExceeded }) {
     1000,
     1,
     maxWaitTime,
-    paused ? false: takeOrderEnabled,
+    paused ? false : takeOrderEnabled,
     () => onTimeExceeded(WAITING_TIME_TYPE.WAITING, maxWaitTime)
   );
 
@@ -53,20 +73,8 @@ export function Customer({ customer, takeOrder, canMake, onTimeExceeded }) {
       </Row>
       <Row type={"flex"} justify={"start"}>
         <Col span={24}>
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "flex-start"
-            }}
-          >
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center"
-              }}
-            >
+          <div className={progressContainerStyle}>
+            <div className={takeOrderProgressContainerStyle}>
               <div>Take order {`${waitingTime} / ${maxWaitTime}s`}</div>
               <Progress
                 default={"default"}
@@ -82,14 +90,7 @@ export function Customer({ customer, takeOrder, canMake, onTimeExceeded }) {
               />
             </div>
             {!takeOrderEnabled && (
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                  marginLeft: "12px"
-                }}
-              >
+              <div className={makeOrderProgressContainerStyle}>
                 <div>Make order {`${orderTime} / ${maxMakeTime}s`}</div>
                 <Progress
                   default={"default"}
