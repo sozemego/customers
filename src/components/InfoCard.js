@@ -16,9 +16,9 @@ const bodyStyle = css({
   overflow: "auto"
 });
 
-const nameStyle = {
+const nameStyle = css({
   marginLeft: "4px"
-};
+});
 
 export function InfoCard(props) {
   const { src, name, className, containerClassName } = props;
@@ -27,7 +27,7 @@ export function InfoCard(props) {
     <div className={containerClassName}>
       <div className={className}>
         <Avatar src={src} />
-        <span style={nameStyle}>{name}</span>
+        <span className={nameStyle}>{name}</span>
       </div>
     </div>
   );
