@@ -9,11 +9,7 @@ import { Game } from "./Game";
 import { Provider } from "react-redux";
 import { cookAdded, levelsLoaded, startGame } from "./actions";
 import { createNewStore } from "../store/store";
-import {
-  getCustomers,
-  getOrderIdToResult,
-  getOrders
-} from "./selectors";
+import { getCustomers, getOrderIdToResult, getOrders } from "./selectors";
 import { createCook } from "./cook/business";
 import { leaveAt } from "./business";
 import { GameStart } from "./GameStart";
@@ -778,7 +774,7 @@ testWithLog("21 Pausing the game should stop game clock", () => {
   jest.useFakeTimers();
   const { queryAllByTestId, getByTestId, queryByTestId } = renderWithProvider(
     <div>
-      <GameInfo/>
+      <GameInfo />
       <GameStart />
       <Game />
     </div>
@@ -792,3 +788,52 @@ testWithLog("21 Pausing the game should stop game clock", () => {
   const nextTime = getByTestId("game-clock").textContent;
   expect(nextTime).toBe(time);
 });
+
+testWithLog(
+  "22 Customers should not leave with anger when game is paused",
+  () => {
+    jest.useFakeTimers();
+    const { queryAllByTestId, getByTestId } = renderWithProvider(
+      <div>
+        <GameInfo />
+        <GameStart />
+        <Game />
+      </div>
+    );
+    startLevel("customer order 2");
+    addCook();
+    advanceTimers(12000);
+    let customers = queryAllByTestId(/customer-id/g);
+    expect(customers.length).toBe(8);
+    fireEvent.click(getByTestId("pause-game"));
+    advanceTimers(100000);
+    customers = queryAllByTestId(/customer-id/g);
+    expect(customers.length).toBe(8);
+  }
+);
+
+testWithLog(
+  "22 Customers should not leave with anger when game is paused (after their order was taken)",
+  () => {
+    jest.useFakeTimers();
+    const { queryAllByTestId, getByTestId } = renderWithProvider(
+      <div>
+        <GameInfo />
+        <GameStart />
+        <Game />
+      </div>
+    );
+    startLevel("customer order 2");
+    addCook();
+    advanceTimers(12000);
+    let customers = queryAllByTestId(/customer-id/g);
+    expect(customers.length).toBe(8);
+    queryAllByTestId(/take-order/g).forEach(button => {
+      fireEvent.click(button);
+    });
+    fireEvent.click(getByTestId("pause-game"));
+    advanceTimers(100000);
+    customers = queryAllByTestId(/order-id/g);
+    expect(customers.length).toBe(8);
+  }
+);
