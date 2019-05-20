@@ -12,7 +12,7 @@ import { InfoCard } from "../../components/InfoCard";
 import { capitaliseFirst } from "../../utils";
 import { useTimer } from "../../hooks/timer";
 import { EmptyTimer } from "../../components/EmptyTimer";
-import { getCooks, getCustomers } from "../selectors";
+import { getCooks, getCustomers, isPaused } from "../selectors";
 import { finishPhase, orderNextPhaseStarted } from "../actions";
 import { useDispatch } from "react-redux";
 
@@ -56,6 +56,7 @@ export function Order({ order }) {
   const { phase: dishStatus } = dish;
   const nextDishStatus = _.get(dish, "phases[0]", "");
 
+  const paused = isPaused();
   const dispatch = useDispatch();
   const customers = getCustomers();
   let cooks = getCooks();
@@ -101,7 +102,7 @@ export function Order({ order }) {
               />
               <EmptyTimer
                 time={orderTime}
-                start={true}
+                start={!paused}
                 onFinish={() => {
                   dispatch(finishPhase(order.id, currentCook.id));
                 }}

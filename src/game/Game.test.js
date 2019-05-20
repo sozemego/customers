@@ -9,9 +9,15 @@ import { Game } from "./Game";
 import { Provider } from "react-redux";
 import { cookAdded, levelsLoaded, startGame } from "./actions";
 import { createNewStore } from "../store/store";
-import { getCooks, getCustomers, getOrderIdToResult, getOrders } from "./selectors";
+import {
+  getCustomers,
+  getOrderIdToResult,
+  getOrders
+} from "./selectors";
 import { createCook } from "./cook/business";
 import { leaveAt } from "./business";
+import { GameStart } from "./GameStart";
+import { GameInfo } from "./GameInfo";
 
 let store = null;
 let logFile = "test.txt";
@@ -39,7 +45,7 @@ beforeAll(() => {
 
 beforeEach(() => {
   store = createNewStore();
-  localStorage.removeItem('cooks');
+  localStorage.removeItem("cooks");
 });
 afterEach(cleanup);
 
@@ -771,13 +777,18 @@ testWithLog(
 testWithLog("21 Pausing the game should stop game clock", () => {
   jest.useFakeTimers();
   const { queryAllByTestId, getByTestId, queryByTestId } = renderWithProvider(
-    <Game />
+    <div>
+      <GameInfo/>
+      <GameStart />
+      <Game />
+    </div>
   );
   startLevel(1);
   addCook();
   advanceTimers(1000);
-  const time = getByTestId("game-clock").content;
-  fireEvent.click(queryByTestId(`pause`));
+  const time = getByTestId("game-clock").textContent;
+  fireEvent.click(getByTestId(`pause-game`));
   advanceTimers(5000);
-  expect(getByTestId("game-clock").content).toBe(time);
+  const nextTime = getByTestId("game-clock").textContent;
+  expect(nextTime).toBe(time);
 });

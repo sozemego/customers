@@ -2,13 +2,14 @@ import React from "react";
 import { InfoCard } from "../../components/InfoCard";
 import { Dish } from "../dish/Dish";
 import { Button, Row, Col, Progress } from "antd";
-import { getOrders, getTakenOrderIds } from "../selectors";
+import { getOrders, getTakenOrderIds, isPaused } from "../selectors";
 import { leaveAt, WAITING_TIME_TYPE } from "../business";
 import { useTimer } from "../../hooks/timer";
 
 export function Customer({ customer, takeOrder, canMake, onTimeExceeded }) {
   const { name, orderId, avatar } = customer;
 
+  const paused = isPaused();
   const orders = getOrders();
   const order = orders[orderId];
   const takenOrderIds = getTakenOrderIds();
@@ -19,7 +20,7 @@ export function Customer({ customer, takeOrder, canMake, onTimeExceeded }) {
     1000,
     1,
     maxWaitTime,
-    takeOrderEnabled,
+    paused ? false: takeOrderEnabled,
     () => onTimeExceeded(WAITING_TIME_TYPE.WAITING, maxWaitTime)
   );
 
@@ -28,7 +29,7 @@ export function Customer({ customer, takeOrder, canMake, onTimeExceeded }) {
     1000,
     1,
     maxMakeTime,
-    !takeOrderEnabled,
+    paused ? false : !takeOrderEnabled,
     () => onTimeExceeded(WAITING_TIME_TYPE.ORDER, maxMakeTime)
   );
 
