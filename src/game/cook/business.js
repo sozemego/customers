@@ -19,7 +19,7 @@ export function createCook() {
 export function getFromLocalStorage() {
   const cooks64 = localStorage.getItem("cooks");
   if (!cooks64) {
-    return null;
+    return [];
   }
 
   const cooks = Object.values(decode64(cooks64, true));
