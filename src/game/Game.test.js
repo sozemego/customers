@@ -477,7 +477,6 @@ testWithLog("9 completing phases should add experience to the cook", () => {
 
   fireEvent.click(queryByTestId(/next-phase/g));
   act(() => jest.advanceTimersByTime(10000));
-  console.log(getCooks(store.getState));
   expect(
     queryByText("Level 1. Experience: 1 / ", { exact: false })
   ).not.toBeNull();
