@@ -15,6 +15,9 @@ import { createCook, getFromLocalStorage } from "./cook/business";
 export const GAME_STARTED = "GAME_STARTED";
 export const gameStarted = makePayloadActionCreator(GAME_STARTED);
 
+export const GAME_PAUSED = "GAME_PAUSED";
+export const gamePaused = makePayloadActionCreator(GAME_PAUSED);
+
 export const LEVELS_LOADED = "LEVELS_LOADED";
 export const levelsLoaded = makePayloadActionCreator(LEVELS_LOADED);
 
