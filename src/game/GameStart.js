@@ -25,8 +25,9 @@ export function GameStart(props) {
       <div
         style={{
           display: "flex",
-          flexDirection: "row",
-          justifyContent: "center"
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center"
         }}
       >
         {running && (
@@ -39,7 +40,7 @@ export function GameStart(props) {
               type={"danger"}
               data-testid={"pause-game"}
             >
-              {paused ? 'Resume' : 'Pause'}
+              {paused ? "Resume" : "Pause"}
             </Button>
           </div>
         )}
