@@ -21,6 +21,10 @@ export function isRunning(getState) {
   return createSelector(game => game.running)(getState);
 }
 
+export function isPaused(getState) {
+  return createSelector(game => game.paused)(getState);
+}
+
 export function getLevels(getState) {
   return createSelector(game => game.levels)(getState);
 }
