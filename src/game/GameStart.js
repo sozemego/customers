@@ -1,15 +1,14 @@
 import React, { useEffect } from "react";
 import { Button } from "antd";
-import { getLevels, isRunning } from "./selectors";
-import { levelsLoaded, startGame, stopGame } from "./actions";
+import { getLevels, isPaused, isRunning } from "./selectors";
+import { gamePaused, levelsLoaded, startGame, stopGame } from "./actions";
 import { useDispatch } from "react-redux";
 
 export function GameStart(props) {
   const running = isRunning();
+  const paused = isPaused();
   const dispatch = useDispatch();
   const levels = getLevels() || {};
-
-  const stopGameCallback = () => dispatch(stopGame());
 
   useEffect(() => {
     fetch(`/levels.json`)
@@ -31,9 +30,18 @@ export function GameStart(props) {
         }}
       >
         {running && (
-          <Button onClick={stopGameCallback} type={"danger"}>
-            Stop
-          </Button>
+          <div>
+            <Button onClick={() => dispatch(stopGame())} type={"danger"}>
+              Stop
+            </Button>
+            <Button
+              onClick={() => dispatch(gamePaused(!paused))}
+              type={"danger"}
+              data-testid={"pause-game"}
+            >
+              {paused ? 'Resume' : 'Pause'}
+            </Button>
+          </div>
         )}
         <div
           style={{
