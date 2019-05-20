@@ -19,5 +19,5 @@ export function GameClock() {
     minutes = `0${minutes}`;
   }
 
-  return <div>{`${minutes}:${seconds}`}</div>;
+  return <div data-testid={"game-clock"}>{`${minutes}:${seconds}`}</div>;
 }
