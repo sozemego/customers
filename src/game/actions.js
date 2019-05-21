@@ -122,8 +122,6 @@ export function loadCooks() {
   };
 }
 
-const customerTimeouts = [];
-
 export function startLevel(levelId = 1) {
   return function startLevel(dispatch, getState) {
     const levels = getLevels(getState);
@@ -132,21 +130,20 @@ export function startLevel(levelId = 1) {
     const { customers } = level;
 
     customers.forEach(customerData => {
-      const customer = createCustomer(customerData.id);
+      const customer = createCustomer(customerData);
       dispatch(customerAdded(customer));
       const order = createOrder(createDish(customerData.dish));
       dispatch(orderAdded(order));
       dispatch(orderAttachedToCustomer(order.id, customer.id));
-      const timeoutId = setTimeout(() => {
-        dispatch(
-          customerPhaseChanged(
-            customerData.id,
-            CUSTOMER_PHASE.ACTIVE,
-            Date.now()
-          )
-        );
-      }, customerData.time);
-      customerTimeouts.push(timeoutId);
+      // const timeoutId = setTimeout(() => {
+      //   dispatch(
+      //     customerPhaseChanged(
+      //       customerData.id,
+      //       CUSTOMER_PHASE.ACTIVE,
+      //       Date.now()
+      //     )
+      //   );
+      // }, customerData.time);
     });
 
     dispatch(gameStarted(levelId));
@@ -156,7 +153,6 @@ export function startLevel(levelId = 1) {
 export function stopGame() {
   return function stopGame(dispatch, getState) {
     dispatch(gameStopped());
-    customerTimeouts.forEach(clearTimeout);
   };
 }
 

@@ -316,6 +316,50 @@ function getLevels() {
           dish: "SALAD"
         }
       ]
+    },
+    "customers paused": {
+      customers: [
+        {
+          id: 1,
+          time: 1000,
+          dish: "SALAD"
+        },
+        {
+          id: 2,
+          time: 1000,
+          dish: "SALAD"
+        },
+        {
+          id: 3,
+          time: 5000,
+          dish: "SALAD"
+        },
+        {
+          id: 4,
+          time: 2500,
+          dish: "SALAD"
+        },
+        {
+          id: 5,
+          time: 10000,
+          dish: "SALAD"
+        },
+        {
+          id: 6,
+          time: 7500,
+          dish: "SALAD"
+        },
+        {
+          id: 7,
+          time: 1000,
+          dish: "PIZZA"
+        },
+        {
+          id: 8,
+          time: 10000,
+          dish: "PIZZA"
+        }
+      ]
     }
   };
   return levels;
@@ -849,7 +893,7 @@ testWithLog(
         <Game />
       </div>
     );
-    startLevel("customer order 2");
+    startLevel("customers paused");
     addCook();
     fireEvent.click(getByTestId("pause-game"));
     advanceTimers(12000);

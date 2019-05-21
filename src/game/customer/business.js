@@ -7,13 +7,14 @@ export const CUSTOMER_PHASE = {
   ANGRY: "ANGRY"
 };
 
-export function createCustomer(id) {
+export function createCustomer(customerData) {
   const random = Math.floor(Math.random() * 9);
   const customer = {
-    id: id || ++id,
+    id: customerData.id || ++id,
     name: faker.name.firstName(),
     orderId: null,
-    avatar: `avatars/avatar_${random}.png`
+    avatar: `avatars/avatar_${random}.png`,
+    time: customerData.time
   };
   return customer;
 }
