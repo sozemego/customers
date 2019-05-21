@@ -897,7 +897,7 @@ testWithLog(
     addCook();
     fireEvent.click(getByTestId("pause-game"));
     advanceTimers(12000);
-    let customers = queryAllByTestId(/customer-id/g);
+    const customers = queryAllByTestId(/customer-id/g);
     expect(customers.length).toBe(0);
   }
 );
