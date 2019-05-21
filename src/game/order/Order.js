@@ -66,7 +66,8 @@ export function Order({ order }) {
     100,
     orderTime || 0,
     paused ? false : !!runTimer,
-    () => {}
+    () => dispatch(finishPhase(order.id, currentCook.id)),
+    true
   );
 
   function createButtonText(cook) {
@@ -98,13 +99,6 @@ export function Order({ order }) {
                 name={`${currentCook.name} is ${getPresentParticiple(
                   dishStatus
                 )} ${Number(time / 1000).toFixed(1)} / ${orderTime / 1000}s`}
-              />
-              <EmptyTimer
-                time={orderTime}
-                start={!paused}
-                onFinish={() => {
-                  dispatch(finishPhase(order.id, currentCook.id));
-                }}
               />
             </div>
           )}

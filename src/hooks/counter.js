@@ -25,6 +25,7 @@ export function useCounter(
   }, [delay, increment, max, running]);
 
   return {
-    count
+    count,
+    setCount
   };
 }
