@@ -3,7 +3,11 @@ import { Button, Row, Col, Progress } from "antd";
 import { css } from "glamor";
 import { InfoCard } from "../../components/InfoCard";
 import { Dish } from "../dish/Dish";
-import { getOrders, getTakenOrderIds, isPaused } from "../selectors";
+import {
+  getOrders,
+  isOrderTaken,
+  isPaused
+} from "../selectors";
 import { leaveAt, WAITING_TIME_TYPE } from "../business";
 import { useTimer } from "../../hooks/timer";
 
@@ -32,9 +36,9 @@ export function Customer({ customer, takeOrder, canMake, onTimeExceeded }) {
   const paused = isPaused();
   const orders = getOrders();
   const order = orders[orderId];
-  const takenOrderIds = getTakenOrderIds();
+  const orderTaken = isOrderTaken(order.id);
 
-  const takeOrderEnabled = !takenOrderIds.some(id => id === order.id);
+  const takeOrderEnabled = !orderTaken;
   const maxWaitTime = leaveAt(order);
   const { time: waitingTime } = useTimer(
     1000,
