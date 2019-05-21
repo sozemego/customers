@@ -11,7 +11,6 @@ import { Button, Card } from "antd";
 import { InfoCard } from "../../components/InfoCard";
 import { capitaliseFirst } from "../../utils";
 import { useTimer } from "../../hooks/timer";
-import { EmptyTimer } from "../../components/EmptyTimer";
 import { getCooks, getCustomers, isPaused } from "../selectors";
 import { finishPhase, orderNextPhaseStarted } from "../actions";
 import { useDispatch } from "react-redux";
@@ -113,7 +112,9 @@ export function Order({ order }) {
                   dispatch(orderNextPhaseStarted(order.id, cook.id))
                 }
                 disabled={
-                  paused || !!cook.orderId || dish.phase !== PREPARATION_PHASE.WAITING
+                  paused ||
+                  !!cook.orderId ||
+                  dish.phase !== PREPARATION_PHASE.WAITING
                 }
                 data-testid={`next-phase-${order.id}`}
               >
