@@ -9,11 +9,17 @@ import { Game } from "./Game";
 import { Provider } from "react-redux";
 import { cookAdded, levelsLoaded, startGame } from "./actions";
 import { createNewStore } from "../store/store";
-import { getCustomers, getOrderIdToResult, getOrders } from "./selectors";
+import {
+  getCustomers,
+  getOrderIdToResult,
+  getOrders,
+  getTakenOrderIds
+} from "./selectors";
 import { createCook } from "./cook/business";
 import { leaveAt } from "./business";
 import { GameStart } from "./GameStart";
 import { GameInfo } from "./GameInfo";
+import { PREPARATION_PHASE } from "./order/business";
 
 let store = null;
 let logFile = "test.txt";
@@ -882,11 +888,28 @@ testWithLog(
   }
 );
 
+testWithLog("23 Customers not arrive when game is paused", () => {
+  jest.useFakeTimers();
+  const { queryAllByTestId, getByTestId } = renderWithProvider(
+    <div>
+      <GameInfo />
+      <GameStart />
+      <Game />
+    </div>
+  );
+  startLevel("customers paused");
+  addCook();
+  fireEvent.click(getByTestId("pause-game"));
+  advanceTimers(12000);
+  const customers = queryAllByTestId(/customer-id/g);
+  expect(customers.length).toBe(0);
+});
+
 testWithLog(
-  "23 Customers not arrive when game is paused",
+  "24 Taking orders should not be possible when game is paused",
   () => {
     jest.useFakeTimers();
-    const { queryAllByTestId, getByTestId } = renderWithProvider(
+    const { getByTestId, queryAllByTestId } = renderWithProvider(
       <div>
         <GameInfo />
         <GameStart />
@@ -895,9 +918,37 @@ testWithLog(
     );
     startLevel("customers paused");
     addCook();
+    advanceTimers(2000);
     fireEvent.click(getByTestId("pause-game"));
-    advanceTimers(12000);
-    const customers = queryAllByTestId(/customer-id/g);
-    expect(customers.length).toBe(0);
+    const takeOrderButton = getByTestId(/take-order-/g);
+    fireEvent.click(takeOrderButton);
+    const orderElements = queryAllByTestId(/order-id-/g);
+    expect(orderElements.length).toBe(0);
+  }
+);
+
+testWithLog(
+  "25 Taking next order phases should not be possible when game is paused",
+  () => {
+    jest.useFakeTimers();
+    const { getByTestId, queryAllByTestId } = renderWithProvider(
+      <div>
+        <GameInfo />
+        <GameStart />
+        <Game />
+      </div>
+    );
+    startLevel("customers paused");
+    addCook();
+    advanceTimers(2000);
+    const takeOrderButton = getByTestId(/take-order-/g);
+    fireEvent.click(takeOrderButton);
+    fireEvent.click(getByTestId("pause-game"));
+    const orderElements = queryAllByTestId(/order-id-/g);
+    expect(orderElements.length).toBe(1);
+    fireEvent.click(getByTestId(/next-phase/g));
+    const orders = getOrders(store.getState);
+    const takenOrders = getTakenOrderIds(store.getState).map(id => orders[id]);
+    expect(takenOrders[0].dish.phase).toBe(PREPARATION_PHASE.WAITING);
   }
 );

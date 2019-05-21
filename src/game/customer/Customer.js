@@ -68,7 +68,7 @@ export function Customer({ customer, takeOrder, canMake, onTimeExceeded }) {
           <Button
             onClick={takeOrder}
             type="primary"
-            disabled={!takeOrderEnabled}
+            disabled={paused || !takeOrderEnabled}
             data-testid={`take-order-${customer.id}`}
           >
             Take order

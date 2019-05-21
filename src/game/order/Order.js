@@ -119,7 +119,7 @@ export function Order({ order }) {
                   dispatch(orderNextPhaseStarted(order.id, cook.id))
                 }
                 disabled={
-                  !!cook.orderId || dish.phase !== PREPARATION_PHASE.WAITING
+                  paused || !!cook.orderId || dish.phase !== PREPARATION_PHASE.WAITING
                 }
                 data-testid={`next-phase-${order.id}`}
               >
