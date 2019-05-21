@@ -7,7 +7,7 @@ import {
   PREPARATION_PHASE_TIME
 } from "./business";
 import { css } from "glamor";
-import { Row, Button, Card } from "antd";
+import { Button, Card } from "antd";
 import { InfoCard } from "../../components/InfoCard";
 import { capitaliseFirst } from "../../utils";
 import { useTimer } from "../../hooks/timer";
@@ -22,13 +22,6 @@ const titleContainer = css({
   flexDirection: "row",
   justifyContent: "space-between",
   alignItems: "center"
-});
-
-const waitingContainerStyle = css({
-  display: "flex",
-  flexDirection: "row",
-  alignItems: "center",
-  justifyContent: "space-between"
 });
 
 const cookButtonsStyle = css({
