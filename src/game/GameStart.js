@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "antd";
 import { getLevels, isPaused, isRunning } from "./selectors";
 import { gamePaused, levelsLoaded, startGame, stopGame } from "./actions";
@@ -9,6 +9,8 @@ export function GameStart(props) {
   const paused = isPaused();
   const dispatch = useDispatch();
   const levels = getLevels() || {};
+
+  const [level, setLevel] = useState(0);
 
   useEffect(() => {
     fetch(`/levels.json`)
@@ -52,7 +54,18 @@ export function GameStart(props) {
           }}
         >
           <div>Level select</div>
-          <select onChange={e => dispatch(startGame(e.target.value))}>
+          <Button
+            onClick={() => {
+              dispatch(startGame(level));
+            }}
+          >
+            Start level
+          </Button>
+          <select
+            onChange={e =>
+              setLevel(Object.keys(levels)[e.target.selectedIndex])
+            }
+          >
             {Object.entries(levels).map(([id, level]) => (
               <option value={id} key={id}>
                 {id}

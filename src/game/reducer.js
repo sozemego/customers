@@ -200,7 +200,7 @@ export const reducer = createReducer(initialState, {
   },
   [LEVEL_FINISHED]: function levelFinished(state, action) {
     saveToLocalStorage(state.cooks);
-    return { ...state };
+    return { ...state, paused: true };
   },
   [GAME_STARTED]: function gameStarted(state, { payload }) {
     return { ...state, running: true, levelId: payload };
