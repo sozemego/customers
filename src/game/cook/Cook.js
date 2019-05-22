@@ -40,9 +40,11 @@ export function Cook({ cook }) {
           containerClassName={cookCardContainerStyle.toString()}
         />
         <div>
-          <div>{`Level ${cook.level}. Experience: ${cook.experience} / ${
-            cook.nextLevel
-          }.`}</div>
+          <div>
+            {`Level ${cook.level}. Experience: ${cook.experience} / ${
+              cook.nextLevel
+            }.`}
+          </div>
           <div>{`Speed modifier: ${cook.speed}`}</div>
         </div>
       </div>
