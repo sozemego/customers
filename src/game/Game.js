@@ -45,10 +45,10 @@ export function Game(props) {
           <Customers />
         </div>
         <Row style={{ flex: 3, display: "flex", flexDirection: "row" }}>
-          <Col span={12}>
+          <Col span={16}>
             <Orders />
           </Col>
-          <Col span={12}>
+          <Col span={8}>
             <Cooks />
           </Col>
         </Row>
