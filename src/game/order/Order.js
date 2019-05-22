@@ -107,7 +107,7 @@ export function Order({ order }) {
             <div key={cook.id}>
               <Button
                 type={"primary"}
-                style={{ margin: "4px" }}
+                style={{ margin: "4px", height: "100%" }}
                 onClick={() =>
                   dispatch(orderNextPhaseStarted(order.id, cook.id))
                 }
@@ -118,7 +118,10 @@ export function Order({ order }) {
                 }
                 data-testid={`next-phase-${order.id}`}
               >
-                {createButtonText(cook)}
+                <InfoCard
+                  src={cook.avatar}
+                  name={createButtonText(cook)}
+                />
               </Button>
             </div>
           ))}
