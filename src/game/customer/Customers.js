@@ -11,6 +11,8 @@ import { useDispatch } from "react-redux";
 import { CustomerTitle } from "./CustomerTitle";
 import { CUSTOMER_PHASE } from "./business";
 import { EmptyTimer } from "../../components/EmptyTimer";
+import { useTransition, animated } from "react-spring";
+import { InfoCard } from "../../components/InfoCard";
 
 export function Customers(props) {
   const customers = getCustomers();
@@ -23,6 +25,24 @@ export function Customers(props) {
 
   const activeCustomers = activeCustomerIds.map(id => customers[id]);
   const arrivingCustomers = arrivingCustomerIds.map(id => customers[id]);
+
+  const transitions = useTransition(
+    arrivingCustomers,
+    function keyTransform(customer) {
+      return customer.id;
+    },
+    {
+      from: { opacity: 0 },
+      enter: { opacity: 1 },
+      leave: { opacity: 0 },
+      config(customer, phase) {
+        if (phase === "leave") {
+          return { duration: 0 };
+        }
+        return { duration: customer.time };
+      }
+    }
+  );
 
   return (
     <Card
@@ -63,6 +83,11 @@ export function Customers(props) {
             );
           }}
         />
+      ))}
+      {transitions.map(({ item, key, props }) => (
+        <animated.div key={key} style={props}>
+          <InfoCard src={item.avatar} name={item.name} />
+        </animated.div>
       ))}
     </Card>
   );
