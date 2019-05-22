@@ -12,7 +12,7 @@ export function Orders(props) {
 
   return (
     <Card title={<OrderTitle />} style={{ minHeight: "90vh" }}>
-      {takenOrders.map((order, index) => (
+      {takenOrders.map(order => (
         <Order order={order} key={order.id} />
       ))}
     </Card>
