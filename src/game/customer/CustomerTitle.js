@@ -5,7 +5,8 @@ import PropTypes from "prop-types";
 const containerStyle = css({
   display: "flex",
   justifyContent: "space-between",
-  minHeight: "36px"
+  minHeight: "36px",
+  alignItems: "center"
 });
 
 const sectionStyle = css({

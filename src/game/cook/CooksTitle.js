@@ -8,7 +8,8 @@ import { loadCooks } from "../actions";
 const containerStyle = css({
   minHeight: "36px",
   display: "flex",
-  justifyContent: "space-between"
+  justifyContent: "space-between",
+  alignItems: "center"
 });
 
 export function CooksTitle(props) {
