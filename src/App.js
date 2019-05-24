@@ -16,7 +16,7 @@ class App extends Component {
     //poor man's history listener
     setInterval(() => {
       const pathname = getPathname();
-      if (this.pathname !== this) {
+      if (this.pathname !== pathname) {
         this.pathname = pathname;
         this.setState({});
       }
