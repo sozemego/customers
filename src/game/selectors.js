@@ -79,6 +79,11 @@ export function isOrderTaken(orderId, getState) {
   return takenOrderIds.some(id => id === orderId);
 }
 
+export function isOrderDone(orderId, getState) {
+  const orderIdToResult = getOrderIdToResult(getState);
+  return !!orderIdToResult[orderId];
+}
+
 export function getOrderIdToResult(getState) {
   return createSelector(game => game.orderIdToResult)(getState);
 }

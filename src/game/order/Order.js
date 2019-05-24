@@ -11,7 +11,7 @@ import { Button, Card } from "antd";
 import { InfoCard } from "../../components/InfoCard";
 import { capitaliseFirst } from "../../utils";
 import { useTimer } from "../../hooks/timer";
-import { getCooks, getCustomers, isPaused } from "../selectors";
+import { getCooks, getCustomers, isOrderDone, isPaused } from "../selectors";
 import { finishPhase, orderNextPhaseStarted } from "../actions";
 import { useDispatch } from "react-redux";
 
@@ -44,7 +44,8 @@ const rowContainer = css({
 });
 
 export function Order({ order }) {
-  const { customerId, dish } = order;
+  const { customerId, dish, id } = order;
+  const isDone = isOrderDone(id);
   const { phase: dishStatus } = dish;
   const nextDishStatus = _.get(dish, "phases[0]", "");
 
@@ -85,7 +86,7 @@ export function Order({ order }) {
   }
 
   return (
-    <Card title={title()} data-testid={`order-id-${order.id}`}>
+    <Card title={title()} data-testid={isDone ? null : `order-id-${order.id}`}>
       <div className={rowContainer}>
         <div>
           {dish.phase === PREPARATION_PHASE.WAITING && (
