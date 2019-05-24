@@ -423,7 +423,6 @@ testWithLog("4 customer should leave after not being taken care of", () => {
 
   const orders = getOrders(store.getState);
   const customers = Object.values(getCustomers(store.getState));
-  console.log(customers);
   const customer = customers[0];
   const order = orders[customer.orderId];
   const leaveAtTime = leaveAt(order);
@@ -792,7 +791,6 @@ testWithLog(
     expect(getByTestId("done-customers").textContent).toBe("😀 0");
     expect(getByTestId("angry-customers").textContent).toBe("🤬 1");
     expect(getByTestId("total-customers").textContent).toBe("1");
-    console.log(getOrderIdToResult(store.getState));
     expect(Object.values(getOrderIdToResult(store.getState)).length).toBe(1);
     expect(queryAllByTestId(/result-/g).length).toBe(1);
   }

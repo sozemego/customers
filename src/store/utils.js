@@ -20,9 +20,7 @@ export function makePayloadActionCreator(type) {
 export function createReducer(initialState, handlers) {
   return function reducer(state = initialState, action) {
     if (handlers.hasOwnProperty(action.type)) {
-      const nextState = handlers[action.type](state, action);
-      // console.log(nextState);
-      return nextState;
+      return handlers[action.type](state, action);
     } else {
       return state;
     }
