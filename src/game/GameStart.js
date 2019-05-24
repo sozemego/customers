@@ -3,6 +3,7 @@ import { Button } from "antd";
 import { getLevels, isPaused, isRunning } from "./selectors";
 import { gamePaused, levelsLoaded, startGame, stopGame } from "./actions";
 import { useDispatch } from "react-redux";
+import { redirect } from "../history";
 
 export function GameStart(props) {
   const running = isRunning();
@@ -43,6 +44,15 @@ export function GameStart(props) {
               data-testid={"pause-game"}
             >
               {paused ? "Resume" : "Pause"}
+            </Button>
+            <Button
+              type={"danger"}
+              data-testid={"level-editor"}
+              onClick={() => {
+                redirect("/leveleditor");
+              }}
+            >
+              Level editor
             </Button>
           </div>
         )}

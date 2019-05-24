@@ -6,15 +6,41 @@ import "antd/dist/antd.css";
 import { H1 } from "./components/H1";
 import { Provider } from "react-redux";
 import { store } from "./store/store";
+import { LevelEditor } from "./levelEditor/LevelEditor";
+import { getPathname } from "./history";
 
 class App extends Component {
+
+  componentDidMount() {
+    this.pathname = getPathname();
+    //poor man's history listener
+    setInterval(() => {
+      const pathname = getPathname();
+      if (this.pathname !== this) {
+        this.pathname = pathname;
+        this.setState({});
+      }
+    }, 50);
+  }
+
   render() {
-    return (
-      <Provider store={store}>
-        <H1>Customers</H1>
+    const pathname = getPathname();
+    let component = (
+      <>
         <GameInfo />
         <GameStart />
         <Game />
+      </>
+    );
+
+    if (pathname === "/leveleditor") {
+      component = <LevelEditor />;
+    }
+
+    return (
+      <Provider store={store}>
+        <H1>Customers</H1>
+        {component}
       </Provider>
     );
   }
