@@ -83,8 +83,6 @@ export function LevelEditor(props) {
     return <div className={errorStyle}>{error}</div>;
   }
 
-  console.log(errors);
-
   return (
     <div>
       <div className={buttonContainerStyle}>
