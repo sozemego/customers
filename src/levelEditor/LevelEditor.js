@@ -6,7 +6,11 @@ import { css } from "glamor";
 import faker from "faker";
 import { createDish, DISH } from "../game/dish/business";
 import { Dish } from "../game/dish/Dish";
-import { saveLevelToLocalStorage, validateLevel } from "./business";
+import {
+  getLevelsFromLocalStorage,
+  saveLevelToLocalStorage,
+  validateLevel
+} from "./business";
 import { getLevels } from "../game/selectors";
 import { useStore } from "react-redux";
 
@@ -67,7 +71,7 @@ let nextCustomerId = 0;
 export function LevelEditor(props) {
   const getState = useStore().getState;
   const levels = getLevels() || {};
-  const [id, setId] = useState(null);
+  const [id, setId] = useState("");
   const [customers, setCustomers] = useState([]);
   const [changed, setChanged] = useState(false);
 
@@ -88,7 +92,7 @@ export function LevelEditor(props) {
     return <div className={errorStyle}>{error}</div>;
   }
 
-  const defaultDish = Object.values(DISH)[0].name;
+  const defaultDish = Object.values(DISH)[0].name.toUpperCase();
 
   return (
     <div style={{ width: "100%" }}>
@@ -100,7 +104,7 @@ export function LevelEditor(props) {
           type={"danger"}
           onClick={() => {
             setCustomers([]);
-            setId(null);
+            setId("");
           }}
         >
           Reset level
@@ -116,7 +120,7 @@ export function LevelEditor(props) {
         </Button>
         <select
           onChange={e => {
-            const nextLevelId = Object.keys(levels)[e.target.selectedIndex];
+            const nextLevelId = Object.keys(levels)[e.target.selectedIndex - 1];
             const nextLevel = levels[nextLevelId];
             const nextCustomers = nextLevel.customers.map(customer => {
               const name = customer.name || faker.name.firstName();
@@ -129,7 +133,9 @@ export function LevelEditor(props) {
             setId(nextLevelId);
             setChanged(true);
           }}
+          value={id}
         >
+          <option value={""}>-</option>
           {Object.entries(levels).map(([id, level]) => (
             <option value={id} key={id}>
               {id}
@@ -139,10 +145,18 @@ export function LevelEditor(props) {
         <Button
           type={"danger"}
           onClick={() => {
-            saveLevelToLocalStorage({
-              id,
-              customers
-            }, getState);
+            const errors = validateLevel({ id, customers });
+            if (!errors.isValid) {
+              console.log("Level invalid, cannot save", errors);
+              return;
+            }
+            saveLevelToLocalStorage(
+              {
+                id,
+                customers
+              },
+              getState
+            );
             setChanged(false);
           }}
         >
