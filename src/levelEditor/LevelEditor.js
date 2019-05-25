@@ -6,15 +6,18 @@ import { css } from "glamor";
 import faker from "faker";
 import { createDish, DISH } from "../game/dish/business";
 import { Dish } from "../game/dish/Dish";
-import { validateLevel } from "./business";
+import { saveLevelToLocalStorage, validateLevel } from "./business";
 import { getLevels } from "../game/selectors";
+import { useStore } from "react-redux";
 
 const Option = Select.Option;
 
 const buttonContainerStyle = css({
   display: "flex",
   flexDirection: "row",
-  justifyContent: "center"
+  justifyContent: "center",
+  width: "100%",
+  flexWrap: "wrap"
 });
 
 const nameContainerStyle = css({
@@ -62,8 +65,8 @@ const errorStyle = css({
 let nextCustomerId = 0;
 
 export function LevelEditor(props) {
+  const getState = useStore().getState;
   const levels = getLevels() || {};
-  // console.log(levels);
   const [id, setId] = useState(null);
   const [customers, setCustomers] = useState([]);
   const [changed, setChanged] = useState(false);
@@ -88,7 +91,7 @@ export function LevelEditor(props) {
   const defaultDish = Object.values(DISH)[0].name;
 
   return (
-    <div>
+    <div style={{ width: "100%" }}>
       <div className={buttonContainerStyle}>
         <Button type={"danger"} onClick={() => redirect("/")}>
           Back
@@ -124,6 +127,7 @@ export function LevelEditor(props) {
             });
             setCustomers(nextCustomers);
             setId(nextLevelId);
+            setChanged(true);
           }}
         >
           {Object.entries(levels).map(([id, level]) => (
@@ -132,6 +136,18 @@ export function LevelEditor(props) {
             </option>
           ))}
         </select>
+        <Button
+          type={"danger"}
+          onClick={() => {
+            saveLevelToLocalStorage({
+              id,
+              customers
+            }, getState);
+            setChanged(false);
+          }}
+        >
+          Save {changed ? `*` : null}
+        </Button>
       </div>
       <div className={nameContainerStyle}>
         <Input

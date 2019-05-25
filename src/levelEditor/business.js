@@ -1,3 +1,6 @@
+import { getLevels } from "../game/selectors";
+import { encode64 } from "../utils";
+
 export function validateLevel(level) {
   const { id, customers } = level;
 
@@ -28,4 +31,15 @@ export function validateLevel(level) {
   });
 
   return errors;
+}
+
+export function saveLevelToLocalStorage(level, getState) {
+  if (!level.id) {
+    return;
+  }
+  const levels = getLevels(getState);
+  levels[level.id] = level;
+  const base64 = encode64(levels);
+  localStorage.setItem("levels", base64);
+  console.log(`Saved level ${level.id} to localStorage`);
 }
