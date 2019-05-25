@@ -62,13 +62,10 @@ const errorStyle = css({
 let nextCustomerId = 0;
 
 export function LevelEditor(props) {
-  const levels = getLevels();
+  const levels = getLevels() || {};
   console.log(levels);
   const [id, setId] = useState(null);
   const [customers, setCustomers] = useState([]);
-
-  console.log("id", id);
-  console.log("customers", customers);
 
   function onCustomerChange(index, key, value) {
     const customer = customers[index];
@@ -112,6 +109,20 @@ export function LevelEditor(props) {
         >
           Sort customers by time
         </Button>
+        <select
+          onChange={e => {
+            const nextLevelId = Object.keys(levels)[e.target.selectedIndex];
+            const nextLevel = levels[nextLevelId];
+            setCustomers([...nextLevel.customers]);
+            setId(nextLevelId);
+          }}
+        >
+          {Object.entries(levels).map(([id, level]) => (
+            <option value={id} key={id}>
+              {id}
+            </option>
+          ))}
+        </select>
       </div>
       <div className={nameContainerStyle}>
         <Input
