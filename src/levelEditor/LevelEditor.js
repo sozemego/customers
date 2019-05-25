@@ -7,6 +7,7 @@ import faker from "faker";
 import { createDish, DISH } from "../game/dish/business";
 import { Dish } from "../game/dish/Dish";
 import { validateLevel } from "./business";
+import { getLevels } from "../game/selectors";
 
 const Option = Select.Option;
 
@@ -61,6 +62,8 @@ const errorStyle = css({
 let nextCustomerId = 0;
 
 export function LevelEditor(props) {
+  const levels = getLevels();
+  console.log(levels);
   const [id, setId] = useState(null);
   const [customers, setCustomers] = useState([]);
 

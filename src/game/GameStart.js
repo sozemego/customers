@@ -13,15 +13,6 @@ export function GameStart(props) {
 
   const [level, setLevel] = useState(0);
 
-  useEffect(() => {
-    fetch(`/levels.json`)
-      .then(res => res.json())
-      .then(res => dispatch(levelsLoaded(res)))
-      .then(() => {
-        dispatch(startGame());
-      });
-  }, []);
-
   return (
     <div style={{ textAlign: "center" }}>
       <div style={{ textAlign: "center" }}>Game options</div>
