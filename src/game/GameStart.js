@@ -36,15 +36,6 @@ export function GameStart(props) {
             >
               {paused ? "Resume" : "Pause"}
             </Button>
-            <Button
-              type={"danger"}
-              data-testid={"level-editor"}
-              onClick={() => {
-                redirect("/leveleditor");
-              }}
-            >
-              Level editor
-            </Button>
           </div>
         )}
         <div
@@ -73,6 +64,15 @@ export function GameStart(props) {
               </option>
             ))}
           </select>
+          <Button
+            type={"danger"}
+            data-testid={"level-editor"}
+            onClick={() => {
+              redirect("/leveleditor");
+            }}
+          >
+            Level editor
+          </Button>
         </div>
       </div>
     </div>
