@@ -1,12 +1,12 @@
 export function validateLevel(level) {
-  const { name, customers } = level;
+  const { id, customers } = level;
 
   const errors = {
     customers: {}
   };
 
-  if (!name) {
-    errors.name = "Level needs a name";
+  if (!id) {
+    errors.id = "Level needs a name";
   }
 
   customers.forEach(customer => {

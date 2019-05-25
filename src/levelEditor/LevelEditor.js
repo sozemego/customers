@@ -58,13 +58,13 @@ const errorStyle = css({
   color: "red"
 });
 
-let id = 0;
+let nextCustomerId = 0;
 
 export function LevelEditor(props) {
-  const [name, setName] = useState(null);
+  const [id, setId] = useState(null);
   const [customers, setCustomers] = useState([]);
 
-  console.log("name", name);
+  console.log("id", id);
   console.log("customers", customers);
 
   function onCustomerChange(index, key, value) {
@@ -74,7 +74,7 @@ export function LevelEditor(props) {
   }
 
   const errors = validateLevel({
-    name,
+    id,
     customers
   });
 
@@ -93,7 +93,7 @@ export function LevelEditor(props) {
           type={"danger"}
           onClick={() => {
             setCustomers([]);
-            setName(null);
+            setId(null);
           }}
         >
           Reset level
@@ -111,15 +111,15 @@ export function LevelEditor(props) {
       <div className={nameContainerStyle}>
         <Input
           placeholder={"Level name"}
-          value={name}
+          value={id}
           allowClear
           addonBefore={"Level name"}
           onChange={e => {
-            setName(e.target.value);
+            setId(e.target.value);
           }}
           style={{ width: "25%" }}
         />
-        <div>{errorComponent(errors.name)}</div>
+        <div>{errorComponent(errors.id)}</div>
       </div>
       <div className={addCustomerButtonStyle}>
         <Button
@@ -127,7 +127,7 @@ export function LevelEditor(props) {
           onClick={() => {
             setCustomers([
               ...customers,
-              { id: ++id, name: faker.name.firstName(), time: 0 }
+              { id: ++nextCustomerId, name: faker.name.firstName(), time: 0 }
             ]);
           }}
         >
