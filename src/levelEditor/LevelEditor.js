@@ -63,14 +63,16 @@ let nextCustomerId = 0;
 
 export function LevelEditor(props) {
   const levels = getLevels() || {};
-  console.log(levels);
+  // console.log(levels);
   const [id, setId] = useState(null);
   const [customers, setCustomers] = useState([]);
+  const [changed, setChanged] = useState(false);
 
   function onCustomerChange(index, key, value) {
     const customer = customers[index];
     customer[key] = value;
     setCustomers([...customers]);
+    setChanged(true);
   }
 
   const errors = validateLevel({
@@ -113,7 +115,14 @@ export function LevelEditor(props) {
           onChange={e => {
             const nextLevelId = Object.keys(levels)[e.target.selectedIndex];
             const nextLevel = levels[nextLevelId];
-            setCustomers([...nextLevel.customers]);
+            const nextCustomers = nextLevel.customers.map(customer => {
+              const name = customer.name || faker.name.firstName();
+              return {
+                ...customer,
+                name
+              };
+            });
+            setCustomers(nextCustomers);
             setId(nextLevelId);
           }}
         >
@@ -199,15 +208,15 @@ export function LevelEditor(props) {
                       onCustomerChange(index, "dish", value);
                     }}
                     filterOption={(input, option) =>
-                      option.key.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                      option.key.toUpperCase().indexOf(input.toUpperCase()) >= 0
                     }
-                    value={customer.dish}
+                    value={customer.dish.toUpperCase()}
                   >
                     {Object.values(DISH)
                       .map(dish => dish.name.toUpperCase())
                       .map(name => createDish(name))
                       .map(dish => (
-                        <Option value={dish.name} key={dish.name}>
+                        <Option value={dish.name.toUpperCase()} key={dish.name}>
                           <Dish dish={dish} />
                         </Option>
                       ))}
