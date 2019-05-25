@@ -83,6 +83,8 @@ export function LevelEditor(props) {
     return <div className={errorStyle}>{error}</div>;
   }
 
+  const defaultDish = Object.values(DISH)[0].name;
+
   return (
     <div>
       <div className={buttonContainerStyle}>
@@ -127,7 +129,12 @@ export function LevelEditor(props) {
           onClick={() => {
             setCustomers([
               ...customers,
-              { id: ++nextCustomerId, name: faker.name.firstName(), time: 0 }
+              {
+                id: ++nextCustomerId,
+                name: faker.name.firstName(),
+                time: 0,
+                dish: defaultDish
+              }
             ]);
           }}
         >
