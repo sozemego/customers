@@ -8,6 +8,7 @@ import { LevelEditor } from "./levelEditor/LevelEditor";
 import { getPathname } from "./history";
 import { levelsLoaded } from "./game/actions";
 import { connect } from "react-redux";
+import { getLevelsFromLocalStorage } from "./levelEditor/business";
 
 class App extends Component {
   componentDidMount() {
@@ -23,7 +24,15 @@ class App extends Component {
 
     fetch(`/levels.json`)
       .then(res => res.json())
-      .then(res => this.props.dispatch(levelsLoaded(res)));
+      .then(res => {
+        const levels = getLevelsFromLocalStorage();
+        this.props.dispatch(
+          levelsLoaded({
+            ...res,
+            ...levels
+          })
+        );
+      });
   }
 
   render() {
