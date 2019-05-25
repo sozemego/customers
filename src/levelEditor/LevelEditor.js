@@ -13,7 +13,6 @@ import {
 } from "./business";
 import { getLevels } from "../game/selectors";
 import { useDispatch, useStore } from "react-redux";
-import { removeId } from "../utils";
 import { levelsLoaded } from "../game/actions";
 
 const Option = Select.Option;
@@ -22,8 +21,9 @@ const buttonContainerStyle = css({
   display: "flex",
   flexDirection: "row",
   justifyContent: "center",
-  width: "100%",
-  flexWrap: "wrap"
+  width: "500px",
+  flexWrap: "wrap",
+  alignSelf: "center"
 });
 
 const nameContainerStyle = css({
@@ -98,7 +98,7 @@ export function LevelEditor(props) {
   const defaultDish = Object.values(DISH)[0].name.toUpperCase();
 
   return (
-    <div style={{ width: "100%" }}>
+    <div style={{ width: "100%", display: "flex", flexDirection: "column" }}>
       <div className={buttonContainerStyle}>
         <Button type={"danger"} onClick={() => redirect("/")}>
           Back
