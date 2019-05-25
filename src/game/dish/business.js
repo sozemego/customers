@@ -1,3 +1,5 @@
+import _ from "lodash";
+
 export const PREPARATION_PHASE = {
   WAITING: "WAITING",
   GATHER_INGREDIENTS: "GATHER_INGREDIENTS",
@@ -43,3 +45,25 @@ export const DISH = {
     ]
   }
 };
+
+
+export function createDish(name) {
+  if (!name) {
+    const index = _.random(0, Object.keys(DISH).length - 1, false);
+    name = Object.keys(DISH)[index];
+  }
+  const dishPrototype = DISH[name];
+  const dish = _.cloneDeep(dishPrototype);
+  dish.phase = PREPARATION_PHASE.WAITING;
+  dish.maxTime = calculateMaxTime(dish);
+  return dish;
+}
+
+function calculateMaxTime(dish) {
+  const { phases } = dish;
+  let time = 0;
+  phases.forEach(phase => {
+    time += PREPARATION_PHASE_TIME[phase];
+  });
+  return time;
+}

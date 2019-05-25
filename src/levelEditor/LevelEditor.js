@@ -4,6 +4,7 @@ import { Select } from "antd";
 import { redirect } from "../history";
 import { css } from "glamor";
 import faker from "faker";
+import { DISH } from "../game/dish/business";
 
 const Option = Select.Option;
 
@@ -117,6 +118,11 @@ export function LevelEditor(props) {
                   // option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                 }
               >
+                {Object.values(DISH).map(dish => (
+                  <div>
+
+                  </div>
+                ))}
                 <Option value="jack">Jack</Option>
                 <Option value="lucy">Lucy</Option>
                 <Option value="tom">Tom</Option>

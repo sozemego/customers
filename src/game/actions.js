@@ -1,5 +1,5 @@
 import { createCustomer, CUSTOMER_PHASE } from "./customer/business";
-import { createDish, createOrder } from "./order/business";
+import { createOrder } from "./order/business";
 import {
   getActions,
   getCooks,
@@ -11,6 +11,7 @@ import {
 import { makeActionCreator, makePayloadActionCreator } from "../store/utils";
 import { leaveAt, WAITING_TIME_TYPE } from "./business";
 import { createCook, getFromLocalStorage } from "./cook/business";
+import { createDish } from "./dish/business";
 
 export const GAME_STARTED = "GAME_STARTED";
 export const gameStarted = makePayloadActionCreator(GAME_STARTED);

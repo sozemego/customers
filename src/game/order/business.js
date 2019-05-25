@@ -1,8 +1,6 @@
-import _ from "lodash";
 import {
-  DISH,
+  createDish,
   PREPARATION_PHASE,
-  PREPARATION_PHASE_TIME
 } from "../dish/business";
 
 let id = 0;
@@ -15,27 +13,6 @@ export function createOrder(dish = createDish()) {
     customerId: null
   };
   return order;
-}
-
-export function createDish(name) {
-  if (!name) {
-    const index = _.random(0, Object.keys(DISH).length - 1, false);
-    name = Object.keys(DISH)[index];
-  }
-  const dishPrototype = DISH[name];
-  const dish = _.cloneDeep(dishPrototype);
-  dish.phase = PREPARATION_PHASE.WAITING;
-  dish.maxTime = calculateMaxTime(dish);
-  return dish;
-}
-
-function calculateMaxTime(dish) {
-  const { phases } = dish;
-  let time = 0;
-  phases.forEach(phase => {
-    time += PREPARATION_PHASE_TIME[phase];
-  });
-  return time;
 }
 
 const PHASE_PRESENT_PARTICIPLE_MAP = {
