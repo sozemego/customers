@@ -66,3 +66,32 @@ export function getLevelsFromLocalStorage() {
   }
   return decode64(base64, true);
 }
+
+/**
+ * Loads a level.
+ */
+export function loadLevel(str) {
+  if (!str || typeof str !== "string") {
+    throw Error(`Invalid string ${str}`);
+  }
+  //1. attempts to decode string from base64
+  try {
+    return decode64(str, true);
+  } catch (e) {
+    console.log(`${str} is not in base64`);
+  }
+  //2. if that failed try to see if this is parseable json
+  try {
+    str = JSON.parse(str);
+  } catch (e) {
+    console.log(`${str} is not a parseable json`);
+    throw new Error(`Invalid input ${str}`);
+  }
+
+  const errors = validateLevel(str);
+  if (!errors.isValid) {
+  	console.log(`Invalid level ${str}`);
+    throw new Error(`Invalid level ${str}`);
+  }
+  return str;
+}

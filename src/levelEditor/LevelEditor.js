@@ -7,6 +7,7 @@ import faker from "faker";
 import { createDish, DISH } from "../game/dish/business";
 import { Dish } from "../game/dish/Dish";
 import {
+  loadLevel,
   saveLevelsToLocalStorage,
   saveLevelToLocalStorage,
   validateLevel
@@ -21,7 +22,7 @@ const buttonContainerStyle = css({
   display: "flex",
   flexDirection: "row",
   justifyContent: "center",
-  width: "500px",
+  maxWidth: "1000px",
   flexWrap: "wrap",
   alignSelf: "center"
 });
@@ -77,6 +78,7 @@ export function LevelEditor(props) {
   const [id, setId] = useState("");
   const [customers, setCustomers] = useState([]);
   const [changed, setChanged] = useState(false);
+  const [levelInput, setLevelInput] = useState("");
 
   function onCustomerChange(index, key, value) {
     const customer = customers[index];
@@ -179,6 +181,44 @@ export function LevelEditor(props) {
         >
           Delete level
         </Button>
+        <div style={{ display: "flex", flexDirection: "row" }}>
+          <Input
+            addonBefore={"Load level"}
+            placeholder={
+              "Paste exported level or pastebin link with exported level"
+            }
+            onChange={e => setLevelInput(e.target.value)}
+          />
+          <Button
+            type={"danger"}
+            onClick={() => {
+              try {
+                const level = loadLevel(levelInput);
+                const nextLevels = { ...levels };
+                nextLevels[level.id] = level;
+                dispatch(levelsLoaded(nextLevels));
+                saveLevelToLocalStorage(level, getState);
+                setId(level.id);
+              } catch (e) {}
+            }}
+          >
+            Load
+          </Button>
+          <Button
+            type={"danger"}
+            onClick={() => {
+              const str = JSON.stringify({ id, customers });
+              const input = document.createElement("input");
+              input.value = str;
+              document.body.appendChild(input);
+              input.select();
+              document.execCommand("copy");
+              document.body.removeChild(input);
+            }}
+          >
+            Export
+          </Button>
+        </div>
       </div>
       <div className={nameContainerStyle}>
         <Input
