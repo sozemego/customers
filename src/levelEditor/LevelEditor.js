@@ -98,6 +98,15 @@ export function LevelEditor(props) {
         >
           Reset level
         </Button>
+        <Button
+          type={"danger"}
+          onClick={() => {
+            customers.sort((a, b) => a.time - b.time);
+            setCustomers([...customers]);
+          }}
+        >
+          Sort customers by time
+        </Button>
       </div>
       <div className={nameContainerStyle}>
         <Input
