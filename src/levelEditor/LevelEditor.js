@@ -146,7 +146,7 @@ export function LevelEditor(props) {
           return (
             <Card
               key={customer.id}
-              style={{ width: "40%" }}
+              style={{ width: "30%" }}
               title={
                 <div className={customerCardTitleStyle}>
                   <Icon type="smile" theme="outlined" />
