@@ -1,4 +1,3 @@
-import { PREPARATION_PHASE } from "./order/business";
 import { createReducer } from "../store/utils";
 import {
   COOK_ADDED,
@@ -21,6 +20,7 @@ import {
 } from "./actions";
 import { CUSTOMER_PHASE } from "./customer/business";
 import { saveToLocalStorage } from "./cook/business";
+import { PREPARATION_PHASE } from "./dish/business";
 
 const initialState = {
   running: false,

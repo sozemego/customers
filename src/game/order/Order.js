@@ -1,11 +1,6 @@
 import React from "react";
 import _ from "lodash";
-import {
-  getPresentParticiple,
-  getVerb,
-  PREPARATION_PHASE,
-  PREPARATION_PHASE_TIME
-} from "./business";
+import { getPresentParticiple, getVerb } from "./business";
 import { css } from "glamor";
 import { Button, Card } from "antd";
 import { InfoCard } from "../../components/InfoCard";
@@ -14,6 +9,7 @@ import { useTimer } from "../../hooks/timer";
 import { getCooks, getCustomers, isOrderDone, isPaused } from "../selectors";
 import { finishPhase, orderNextPhaseStarted } from "../actions";
 import { useDispatch } from "react-redux";
+import { PREPARATION_PHASE, PREPARATION_PHASE_TIME } from "../dish/business";
 
 const titleContainer = css({
   label: "TITLE",
@@ -119,10 +115,7 @@ export function Order({ order }) {
                 }
                 data-testid={`next-phase-${order.id}`}
               >
-                <InfoCard
-                  src={cook.avatar}
-                  name={createButtonText(cook)}
-                />
+                <InfoCard src={cook.avatar} name={createButtonText(cook)} />
               </Button>
             </div>
           ))}

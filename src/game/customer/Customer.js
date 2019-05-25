@@ -3,11 +3,7 @@ import { Button, Row, Col, Progress } from "antd";
 import { css } from "glamor";
 import { InfoCard } from "../../components/InfoCard";
 import { Dish } from "../dish/Dish";
-import {
-  getOrders,
-  isOrderTaken,
-  isPaused
-} from "../selectors";
+import { getOrders, isOrderTaken, isPaused } from "../selectors";
 import { leaveAt, WAITING_TIME_TYPE } from "../business";
 import { useTimer } from "../../hooks/timer";
 

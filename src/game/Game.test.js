@@ -19,7 +19,7 @@ import { createCook } from "./cook/business";
 import { leaveAt } from "./business";
 import { GameStart } from "./GameStart";
 import { GameInfo } from "./GameInfo";
-import { PREPARATION_PHASE } from "./order/business";
+import { PREPARATION_PHASE } from "./dish/business";
 
 let store = null;
 let logFile = "test.txt";

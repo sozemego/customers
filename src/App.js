@@ -10,7 +10,6 @@ import { LevelEditor } from "./levelEditor/LevelEditor";
 import { getPathname } from "./history";
 
 class App extends Component {
-
   componentDidMount() {
     this.pathname = getPathname();
     //poor man's history listener

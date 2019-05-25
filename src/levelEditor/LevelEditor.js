@@ -1,8 +1,11 @@
 import React, { useState } from "react";
 import { Button, Input } from "antd";
+import { Select } from "antd";
 import { redirect } from "../history";
 import { css } from "glamor";
 import faker from "faker";
+
+const Option = Select.Option;
 
 const buttonContainerStyle = css({
   display: "flex",
@@ -38,7 +41,7 @@ const customerContainer = css({
   flexDirection: "column",
   justifyContent: "center",
   alignItems: "center",
-	border: "1px dotted gray"
+  border: "1px dotted gray"
 });
 
 let id = 0;
@@ -100,6 +103,24 @@ export function LevelEditor(props) {
                   }}
                 />
               </div>
+              <Select
+                showSearch
+                style={{ width: 200 }}
+                placeholder="Select a dish"
+                optionFilterProp="children"
+                // onChange={onChange}
+                // onFocus={onFocus}
+                // onBlur={onBlur}
+                // onSearch={onSearch}
+                filterOption={
+                  (input, option) => true
+                  // option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                }
+              >
+                <Option value="jack">Jack</Option>
+                <Option value="lucy">Lucy</Option>
+                <Option value="tom">Tom</Option>
+              </Select>
               <div>
                 <Button
                   type={"danger"}
@@ -118,8 +139,6 @@ export function LevelEditor(props) {
           );
         })}
       </div>
-
-      <div />
     </div>
   );
 }
