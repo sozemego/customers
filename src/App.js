@@ -1,13 +1,13 @@
-import React, { Component } from "react";
+import React, { Component, useEffect } from "react";
 import { Game } from "./game/Game";
 import { GameStart } from "./game/GameStart";
 import { GameInfo } from "./game/GameInfo";
 import "antd/dist/antd.css";
 import { H1 } from "./components/H1";
-import { Provider } from "react-redux";
-import { store } from "./store/store";
 import { LevelEditor } from "./levelEditor/LevelEditor";
 import { getPathname } from "./history";
+import { levelsLoaded } from "./game/actions";
+import { connect } from "react-redux";
 
 class App extends Component {
   componentDidMount() {
@@ -20,6 +20,10 @@ class App extends Component {
         this.setState({});
       }
     }, 50);
+
+    fetch(`/levels.json`)
+      .then(res => res.json())
+      .then(res => this.props.dispatch(levelsLoaded(res)));
   }
 
   render() {
@@ -37,12 +41,19 @@ class App extends Component {
     }
 
     return (
-      <Provider store={store}>
+      <>
         <H1>Customers</H1>
         {component}
-      </Provider>
+      </>
     );
   }
 }
 
-export default App;
+const mapStateToProps = state => {
+  return {};
+};
+
+export default connect(
+  mapStateToProps,
+  null
+)(App);
