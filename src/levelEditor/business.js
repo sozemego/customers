@@ -49,9 +49,14 @@ export function saveLevelToLocalStorage(level, getState) {
   }
   const levels = getLevels(getState);
   levels[level.id] = level;
+  saveLevelsToLocalStorage(levels);
+  console.log(`Saved level ${level.id} to localStorage`);
+}
+
+export function saveLevelsToLocalStorage(levels) {
   const base64 = encode64(levels);
   localStorage.setItem("levels", base64);
-  console.log(`Saved level ${level.id} to localStorage`);
+  console.log(`Saved ${Object.values(levels).length} levels to localStorage`);
 }
 
 export function getLevelsFromLocalStorage() {

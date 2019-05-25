@@ -7,12 +7,14 @@ import faker from "faker";
 import { createDish, DISH } from "../game/dish/business";
 import { Dish } from "../game/dish/Dish";
 import {
-  getLevelsFromLocalStorage,
+  saveLevelsToLocalStorage,
   saveLevelToLocalStorage,
   validateLevel
 } from "./business";
 import { getLevels } from "../game/selectors";
-import { useStore } from "react-redux";
+import { useDispatch, useStore } from "react-redux";
+import { removeId } from "../utils";
+import { levelsLoaded } from "../game/actions";
 
 const Option = Select.Option;
 
@@ -70,6 +72,7 @@ let nextCustomerId = 0;
 
 export function LevelEditor(props) {
   const getState = useStore().getState;
+  const dispatch = useDispatch();
   const levels = getLevels() || {};
   const [id, setId] = useState("");
   const [customers, setCustomers] = useState([]);
@@ -158,9 +161,23 @@ export function LevelEditor(props) {
               getState
             );
             setChanged(false);
+            const nextLevels = { ...levels };
+            nextLevels[id] = { id, customers };
+            dispatch(levelsLoaded(nextLevels));
           }}
         >
           Save {changed ? `*` : null}
+        </Button>
+        <Button
+          type={"danger"}
+          onClick={() => {
+            const nextLevels = { ...levels };
+            delete nextLevels[id];
+            saveLevelsToLocalStorage(nextLevels);
+            dispatch(levelsLoaded(nextLevels));
+          }}
+        >
+          Delete level
         </Button>
       </div>
       <div className={nameContainerStyle}>
