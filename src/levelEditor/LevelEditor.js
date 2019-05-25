@@ -6,6 +6,7 @@ import { css } from "glamor";
 import faker from "faker";
 import { createDish, DISH } from "../game/dish/business";
 import { Dish } from "../game/dish/Dish";
+import { validateLevel } from "./business";
 
 const Option = Select.Option;
 
@@ -19,7 +20,8 @@ const nameContainerStyle = css({
   margin: "4px",
   display: "flex",
   flexDirection: "row",
-  justifyContent: "center"
+  justifyContent: "center",
+  alignItems: "center"
 });
 
 const addCustomerButtonStyle = css({
@@ -52,6 +54,10 @@ const customerCardTitleStyle = css({
   alignItems: "center"
 });
 
+const errorStyle = css({
+  color: "red"
+});
+
 let id = 0;
 
 export function LevelEditor(props) {
@@ -66,6 +72,18 @@ export function LevelEditor(props) {
     customer[key] = value;
     setCustomers([...customers]);
   }
+
+  const errors = validateLevel({
+    name,
+    customers
+  });
+
+  function errorComponent(error) {
+    if (!error) return null;
+    return <div className={errorStyle}>{error}</div>;
+  }
+
+  console.log(errors);
 
   return (
     <div>
@@ -94,6 +112,7 @@ export function LevelEditor(props) {
           }}
           style={{ width: "25%" }}
         />
+        <div>{errorComponent(errors.name)}</div>
       </div>
       <div className={addCustomerButtonStyle}>
         <Button
@@ -113,6 +132,7 @@ export function LevelEditor(props) {
           return (
             <Card
               key={customer.id}
+              style={{ width: "40%" }}
               title={
                 <div className={customerCardTitleStyle}>
                   <Icon type="smile" theme="outlined" />
@@ -133,6 +153,9 @@ export function LevelEditor(props) {
                       setCustomers([...customers]);
                     }}
                   />
+                  <div>
+                    {errorComponent(errors.customers[customer.id].name)}
+                  </div>
                 </div>
               }
             >
@@ -161,9 +184,17 @@ export function LevelEditor(props) {
                         </Option>
                       ))}
                   </Select>
+                  <div>
+                    {errorComponent(errors.customers[customer.id].dish)}
+                  </div>
                 </div>
                 <div>
-                  <div>Time</div>
+                  <div>
+                    Time{" "}
+                    {errorComponent(
+                      errorComponent(errors.customers[customer.id].time)
+                    )}
+                  </div>
                   <InputNumber
                     value={customer.time}
                     onChange={value => onCustomerChange(index, "time", value)}
