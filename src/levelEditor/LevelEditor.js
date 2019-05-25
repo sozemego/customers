@@ -188,10 +188,7 @@ export function LevelEditor(props) {
                 </div>
                 <div>
                   <div>
-                    Time{" "}
-                    {errorComponent(
-                      errorComponent(errors.customers[customer.id].time)
-                    )}
+                    Time {errorComponent(errors.customers[customer.id].time)}
                   </div>
                   <InputNumber
                     value={customer.time}
