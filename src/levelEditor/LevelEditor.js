@@ -1,10 +1,11 @@
 import React, { useState } from "react";
-import { Button, Input } from "antd";
+import { Button, Card, Icon, Input, InputNumber } from "antd";
 import { Select } from "antd";
 import { redirect } from "../history";
 import { css } from "glamor";
 import faker from "faker";
-import { DISH } from "../game/dish/business";
+import { createDish, DISH } from "../game/dish/business";
+import { Dish } from "../game/dish/Dish";
 
 const Option = Select.Option;
 
@@ -31,7 +32,8 @@ const addCustomerButtonStyle = css({
 const customersContainerStyle = css({
   margin: "4px",
   display: "flex",
-  flexDirection: "column",
+  flexDirection: "row",
+  flexWrap: "wrap",
   justifyContent: "center",
   alignItems: "center"
 });
@@ -39,10 +41,15 @@ const customersContainerStyle = css({
 const customerContainer = css({
   margin: "4px",
   display: "flex",
-  flexDirection: "column",
+  flexDirection: "row",
   justifyContent: "center",
-  alignItems: "center",
-  border: "1px dotted gray"
+  alignItems: "center"
+});
+
+const customerCardTitleStyle = css({
+  display: "flex",
+  flexDirection: "row",
+  alignItems: "center"
 });
 
 let id = 0;
@@ -54,13 +61,27 @@ export function LevelEditor(props) {
   console.log("name", name);
   console.log("customers", customers);
 
+  function onCustomerChange(index, key, value) {
+    const customer = customers[index];
+    customer[key] = value;
+    setCustomers([...customers]);
+  }
+
   return (
     <div>
       <div className={buttonContainerStyle}>
         <Button type={"danger"} onClick={() => redirect("/")}>
           Back
         </Button>
-        <Button type={"danger"}>Reset level</Button>
+        <Button
+          type={"danger"}
+          onClick={() => {
+            setCustomers([]);
+            setName(null);
+          }}
+        >
+          Reset level
+        </Button>
       </div>
       <div className={nameContainerStyle}>
         <Input
@@ -80,7 +101,7 @@ export function LevelEditor(props) {
           onClick={() => {
             setCustomers([
               ...customers,
-              { id: ++id, name: faker.name.firstName() }
+              { id: ++id, name: faker.name.firstName(), time: 0 }
             ]);
           }}
         >
@@ -88,60 +109,68 @@ export function LevelEditor(props) {
         </Button>
       </div>
       <div className={customersContainerStyle}>
-        {customers.map(customer => {
+        {customers.map((customer, index) => {
           return (
-            <div key={customer.id} className={customerContainer}>
-              <div>
-                <Input
-                  value={customer.name}
-                  allowClear
-                  onChange={e => {
-                    const index = customers.findIndex(
-                      c => c.id === customer.id
-                    );
-                    customers[index].name = e.target.value;
-                    setCustomers([...customers]);
-                  }}
-                />
+            <Card
+              key={customer.id}
+              title={
+                <div className={customerCardTitleStyle}>
+                  <Icon type="smile" theme="outlined" />
+                  <Input
+                    addonBefore={"Customer name"}
+                    value={customer.name}
+                    allowClear
+                    onChange={e => {
+                      onCustomerChange(index, "name", e.target.value);
+                    }}
+                    style={{ width: "200" }}
+                  />
+                  <Icon
+                    type="delete"
+                    theme={"filled"}
+                    onClick={() => {
+                      customers.splice(index, 1);
+                      setCustomers([...customers]);
+                    }}
+                  />
+                </div>
+              }
+            >
+              <div className={customerContainer}>
+                <div>
+                  <div>Dish</div>
+                  <Select
+                    showSearch
+                    style={{ width: 200 }}
+                    placeholder="Select a dish"
+                    optionFilterProp="children"
+                    onChange={value => {
+                      onCustomerChange(index, "dish", value);
+                    }}
+                    filterOption={(input, option) =>
+                      option.key.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                    }
+                    value={customer.dish}
+                  >
+                    {Object.values(DISH)
+                      .map(dish => dish.name.toUpperCase())
+                      .map(name => createDish(name))
+                      .map(dish => (
+                        <Option value={dish.name} key={dish.name}>
+                          <Dish dish={dish} />
+                        </Option>
+                      ))}
+                  </Select>
+                </div>
+                <div>
+                  <div>Time</div>
+                  <InputNumber
+                    value={customer.time}
+                    onChange={value => onCustomerChange(index, "time", value)}
+                  />
+                </div>
               </div>
-              <Select
-                showSearch
-                style={{ width: 200 }}
-                placeholder="Select a dish"
-                optionFilterProp="children"
-                // onChange={onChange}
-                // onFocus={onFocus}
-                // onBlur={onBlur}
-                // onSearch={onSearch}
-                filterOption={
-                  (input, option) => true
-                  // option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                }
-              >
-                {Object.values(DISH).map(dish => (
-                  <div>
-
-                  </div>
-                ))}
-                <Option value="jack">Jack</Option>
-                <Option value="lucy">Lucy</Option>
-                <Option value="tom">Tom</Option>
-              </Select>
-              <div>
-                <Button
-                  type={"danger"}
-                  onClick={() => {
-                    const index = customers.findIndex(
-                      c => c.id === customer.id
-                    );
-                    customers.splice(index, 1);
-                    setCustomers([...customers]);
-                  }}
-                >
-                  Remove customer
-                </Button>
-              </div>
-            </div>
+            </Card>
           );
         })}
       </div>

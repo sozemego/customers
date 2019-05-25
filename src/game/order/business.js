@@ -1,7 +1,4 @@
-import {
-  createDish,
-  PREPARATION_PHASE,
-} from "../dish/business";
+import { createDish, PREPARATION_PHASE } from "../dish/business";
 
 let id = 0;
 

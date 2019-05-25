@@ -46,7 +46,6 @@ export const DISH = {
   }
 };
 
-
 export function createDish(name) {
   if (!name) {
     const index = _.random(0, Object.keys(DISH).length - 1, false);
