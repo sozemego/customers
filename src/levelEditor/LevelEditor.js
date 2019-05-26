@@ -187,6 +187,7 @@ export function LevelEditor(props) {
             setId={setId}
             levels={levels}
             customers={customers}
+            setCustomers={setCustomers}
           />
         </div>
       </div>

@@ -5,7 +5,7 @@ import React, { useState } from "react";
 import { useDispatch, useStore } from "react-redux";
 
 export function ImportExportLevel(props) {
-  const { id, setId, customers, levels } = props;
+  const { id, setId, customers, levels, setCustomers } = props;
   const dispatch = useDispatch();
   const getState = useStore().getState;
   const [levelInput, setLevelInput] = useState("");
@@ -23,12 +23,14 @@ export function ImportExportLevel(props) {
         type={"danger"}
         onClick={() => {
           try {
+            setId(null);
             const level = loadLevel(levelInput);
             const nextLevels = { ...levels };
             nextLevels[level.id] = level;
             dispatch(levelsLoaded(nextLevels));
             saveLevelToLocalStorage(level, getState);
             setId(level.id);
+            setCustomers(level.customers);
           } catch (e) {}
         }}
       >
