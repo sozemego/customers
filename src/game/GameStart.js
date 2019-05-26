@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Button } from "antd";
 import { getLevels, isPaused, isRunning } from "./selectors";
-import { gamePaused, levelsLoaded, startGame, stopGame } from "./actions";
+import { gamePaused, startGame, stopGame } from "./actions";
 import { useDispatch } from "react-redux";
 import { redirect } from "../history";
 
