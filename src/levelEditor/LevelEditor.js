@@ -1,13 +1,10 @@
 import React, { useState } from "react";
-import { Button, Card, Icon, Input, InputNumber } from "antd";
-import { Select } from "antd";
+import { Button, Input } from "antd";
 import { redirect } from "../history";
 import { css } from "glamor";
 import faker from "faker";
-import { createDish, DISH } from "../game/dish/business";
-import { Dish } from "../game/dish/Dish";
+import { DISH } from "../game/dish/business";
 import {
-  loadLevel,
   saveLevelsToLocalStorage,
   saveLevelToLocalStorage,
   validateLevel
@@ -16,8 +13,7 @@ import { getLevels } from "../game/selectors";
 import { useDispatch, useStore } from "react-redux";
 import { levelsLoaded } from "../game/actions";
 import { ImportExportLevel } from "./ImportExportLevel";
-
-const Option = Select.Option;
+import { CustomerEditor } from "./CustomerEditor";
 
 const buttonContainerStyle = css({
   display: "flex",
@@ -52,20 +48,6 @@ const customersContainerStyle = css({
   alignItems: "center"
 });
 
-const customerContainer = css({
-  margin: "4px",
-  display: "flex",
-  flexDirection: "row",
-  justifyContent: "center",
-  alignItems: "center"
-});
-
-const customerCardTitleStyle = css({
-  display: "flex",
-  flexDirection: "row",
-  alignItems: "center"
-});
-
 const errorStyle = css({
   color: "red"
 });
@@ -80,8 +62,7 @@ export function LevelEditor(props) {
   const [customers, setCustomers] = useState([]);
   const [changed, setChanged] = useState(false);
 
-  function onCustomerChange(index, key, value) {
-    const customer = customers[index];
+  function onCustomerChange(customer, key, value) {
     customer[key] = value;
     setCustomers([...customers]);
     setChanged(true);
@@ -91,6 +72,14 @@ export function LevelEditor(props) {
     id,
     customers
   });
+
+  function removeCustomer(customer) {
+    const index = customers.findIndex(c => c.id === customer.id);
+    if (index > -1) {
+      customers.splice(index, 1);
+      setCustomers([...customers]);
+    }
+  }
 
   function errorComponent(error) {
     if (!error) return null;
@@ -225,75 +214,13 @@ export function LevelEditor(props) {
       <div className={customersContainerStyle}>
         {customers.map((customer, index) => {
           return (
-            <Card
+            <CustomerEditor
               key={customer.id}
-              style={{ width: "30%" }}
-              title={
-                <div className={customerCardTitleStyle}>
-                  <Icon type="smile" theme="outlined" />
-                  <Input
-                    addonBefore={"Customer name"}
-                    value={customer.name}
-                    allowClear
-                    onChange={e => {
-                      onCustomerChange(index, "name", e.target.value);
-                    }}
-                    style={{ width: "200" }}
-                  />
-                  <Icon
-                    type="delete"
-                    theme={"filled"}
-                    onClick={() => {
-                      customers.splice(index, 1);
-                      setCustomers([...customers]);
-                    }}
-                  />
-                  <div>
-                    {errorComponent(errors.customers[customer.id].name)}
-                  </div>
-                </div>
-              }
-            >
-              <div className={customerContainer}>
-                <div>
-                  <div>Dish</div>
-                  <Select
-                    showSearch
-                    style={{ width: 200 }}
-                    placeholder="Select a dish"
-                    optionFilterProp="children"
-                    onChange={value => {
-                      onCustomerChange(index, "dish", value);
-                    }}
-                    filterOption={(input, option) =>
-                      option.key.toUpperCase().indexOf(input.toUpperCase()) >= 0
-                    }
-                    value={customer.dish.toUpperCase()}
-                  >
-                    {Object.values(DISH)
-                      .map(dish => dish.name.toUpperCase())
-                      .map(name => createDish(name))
-                      .map(dish => (
-                        <Option value={dish.name.toUpperCase()} key={dish.name}>
-                          <Dish dish={dish} />
-                        </Option>
-                      ))}
-                  </Select>
-                  <div>
-                    {errorComponent(errors.customers[customer.id].dish)}
-                  </div>
-                </div>
-                <div>
-                  <div>
-                    Time {errorComponent(errors.customers[customer.id].time)}
-                  </div>
-                  <InputNumber
-                    value={customer.time}
-                    onChange={value => onCustomerChange(index, "time", value)}
-                  />
-                </div>
-              </div>
-            </Card>
+              customer={customer}
+              errors={errors}
+              onCustomerChange={onCustomerChange}
+              removeCustomer={removeCustomer}
+            />
           );
         })}
       </div>
