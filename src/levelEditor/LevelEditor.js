@@ -15,6 +15,7 @@ import {
 import { getLevels } from "../game/selectors";
 import { useDispatch, useStore } from "react-redux";
 import { levelsLoaded } from "../game/actions";
+import { ImportExportLevel } from "./ImportExportLevel";
 
 const Option = Select.Option;
 
@@ -78,7 +79,6 @@ export function LevelEditor(props) {
   const [id, setId] = useState("");
   const [customers, setCustomers] = useState([]);
   const [changed, setChanged] = useState(false);
-  const [levelInput, setLevelInput] = useState("");
 
   function onCustomerChange(index, key, value) {
     const customer = customers[index];
@@ -182,42 +182,12 @@ export function LevelEditor(props) {
           Delete level
         </Button>
         <div style={{ display: "flex", flexDirection: "row" }}>
-          <Input
-            addonBefore={"Load level"}
-            placeholder={
-              "Paste exported level or pastebin link with exported level"
-            }
-            onChange={e => setLevelInput(e.target.value)}
+          <ImportExportLevel
+            id={id}
+            setId={setId}
+            levels={levels}
+            customers={customers}
           />
-          <Button
-            type={"danger"}
-            onClick={() => {
-              try {
-                const level = loadLevel(levelInput);
-                const nextLevels = { ...levels };
-                nextLevels[level.id] = level;
-                dispatch(levelsLoaded(nextLevels));
-                saveLevelToLocalStorage(level, getState);
-                setId(level.id);
-              } catch (e) {}
-            }}
-          >
-            Load
-          </Button>
-          <Button
-            type={"danger"}
-            onClick={() => {
-              const str = JSON.stringify({ id, customers });
-              const input = document.createElement("input");
-              input.value = str;
-              document.body.appendChild(input);
-              input.select();
-              document.execCommand("copy");
-              document.body.removeChild(input);
-            }}
-          >
-            Export
-          </Button>
         </div>
       </div>
       <div className={nameContainerStyle}>
