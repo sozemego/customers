@@ -1,9 +1,12 @@
 import React, { useState } from "react";
 import { InfoCard } from "../../components/InfoCard";
 import { Button, Icon, Progress } from "antd";
+import { Collapse } from "antd";
 import { css } from "glamor";
 import { SKILL } from "./skill";
 import { Skill } from "./Skill";
+
+const Panel = Collapse.Panel;
 
 const containerStyle = css({
   display: "flex",
@@ -34,7 +37,6 @@ export function Cook({ cook }) {
   );
 
   const skillToTake = !!skillsToTake;
-  const [showSkillsToTake, setShowSkillsToTake] = useState(false);
 
   return (
     <div className={containerStyle}>
@@ -66,26 +68,27 @@ export function Cook({ cook }) {
                 alignItems: "center"
               }}
             >
-              <Button
-                icon={"read"}
-                onClick={() => setShowSkillsToTake(!showSkillsToTake)}
+              <Collapse bordered={false}
+                        expandIcon={({isActive}) => (<Icon type="read" theme={isActive ? "filled": "outlined"}/>)}
               >
-                Learn new skill
-              </Button>
+                <Panel
+                  key={1}
+                  header={<span>Learn new skill</span>}
+                >
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "row",
+                      flexWrap: "wrap"
+                    }}
+                  >
+                    {Object.values(SKILL).map(skill => (
+                      <Skill skill={skill} />
+                    ))}
+                  </div>
+                </Panel>
+              </Collapse>
             </div>
-            {showSkillsToTake && (
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  flexWrap: "wrap"
-                }}
-              >
-                {Object.values(SKILL).map(skill => (
-                  <Skill skill={skill} />
-                ))}
-              </div>
-            )}
           </div>
         )}
       </div>
