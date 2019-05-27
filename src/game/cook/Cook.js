@@ -1,13 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
 import { InfoCard } from "../../components/InfoCard";
-import { Button, Icon, Progress } from "antd";
-import { Collapse } from "antd";
+import { Progress } from "antd";
 import { css } from "glamor";
-import { SKILL } from "./skill";
-import { Skill } from "./Skill";
 import { SkillPicker } from "./SkillPicker";
-
-const Panel = Collapse.Panel;
 
 const containerStyle = css({
   display: "flex",
