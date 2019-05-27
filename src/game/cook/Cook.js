@@ -3,6 +3,8 @@ import { InfoCard } from "../../components/InfoCard";
 import { Progress } from "antd";
 import { css } from "glamor";
 import { SkillPicker } from "./SkillPicker";
+import { Skill } from "./Skill";
+import { TakenSkill } from "./TakenSkill";
 
 const containerStyle = css({
   display: "flex",
@@ -49,10 +51,12 @@ export function Cook({ cook }) {
           <div>{`Speed modifier: ${cook.speed}`}</div>
         </div>
       </div>
-      <div style={{ display: "flex", flexDirection: "row" }}>
-        {Object.values(skills).map(skill => (
-          <div key={skill.id}>{skill.name}</div>
-        ))}
+      <div style={{ display: "flex", flexDirection: "column" }}>
+				<div style={{display: "flex", flexDirection: "row", flexWrap: "wrap"}}>
+					{Object.values(skills).map(skill => (
+						<TakenSkill key={skill.id} skill={skill} />
+					))}
+				</div>
         <SkillPicker cook={cook} />
       </div>
       <Progress
