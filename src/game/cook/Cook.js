@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import { InfoCard } from "../../components/InfoCard";
-import { Progress } from "antd";
+import { Button, Icon, Progress } from "antd";
 import { css } from "glamor";
+import { SKILL } from "./skill";
+import { Skill } from "./Skill";
 
 const containerStyle = css({
   display: "flex",
@@ -25,11 +27,14 @@ const cookInfoStyle = css({
 });
 
 export function Cook({ cook }) {
-  const { name, avatar, nextLevel, experience } = cook;
+  const { name, avatar, nextLevel, experience, skills, skillsToTake } = cook;
 
   const experienceProgress = Number(
     Number((experience / nextLevel) * 100).toFixed(0)
   );
+
+  const skillToTake = !!skillsToTake;
+  const [showSkillsToTake, setShowSkillsToTake] = useState(false);
 
   return (
     <div className={containerStyle}>
@@ -47,6 +52,42 @@ export function Cook({ cook }) {
           </div>
           <div>{`Speed modifier: ${cook.speed}`}</div>
         </div>
+      </div>
+      <div style={{ display: "flex", flexDirection: "row" }}>
+        {skills.map(skill => (
+          <div key={skill.id}>{skill.name}</div>
+        ))}
+        {skillToTake && (
+          <div>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center"
+              }}
+            >
+              <Button
+                icon={"read"}
+                onClick={() => setShowSkillsToTake(!showSkillsToTake)}
+              >
+                Learn new skill
+              </Button>
+            </div>
+            {showSkillsToTake && (
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  flexWrap: "wrap"
+                }}
+              >
+                {Object.values(SKILL).map(skill => (
+                  <Skill skill={skill} />
+                ))}
+              </div>
+            )}
+          </div>
+        )}
       </div>
       <Progress
         default={"default"}
