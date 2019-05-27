@@ -46,14 +46,14 @@ export const SKILL = {
   [SKILL_SERVER]: {
     id: SKILL_SERVER,
     name: "Master server",
-    description: "Decreases serving time by 5% per level",
+    description: "Decreases serving time by 5% per skill level",
     level: 1,
     icon: "🤹🏿‍♂️"
   },
   [SKILL_BAKER]: {
     id: SKILL_BAKER,
     name: "Master baker",
-    description: "Decrease baking time by 5% per level",
+    description: "Decrease baking time by 5% per skill level",
     level: 1,
     icon: "🔥"
   },
@@ -61,21 +61,21 @@ export const SKILL = {
     id: SKILL_PLEASER,
     name: "People pleaser",
     description:
-      "When order phase is done, increases waiting time by 2% per level",
+      "When order phase is done, increases waiting time by 2% per skill level",
     level: 1,
     icon: "😎"
   },
   [SKILL_MIXER]: {
     id: SKILL_MIXER,
     name: "Master mixer",
-    description: "Decrease mixing time by 5% per level",
+    description: "Decrease mixing time by 5% per skill level",
     level: 1,
     icon: "👩🏼‍🔬"
   },
   [SKILL_COOK]: {
     id: SKILL_COOK,
     name: "Master cook",
-    description: "Decrease time of all actions by 1% per level",
+    description: "Decrease time of all actions by 1% per skill level",
     level: 1,
     icon: "👩‍🍳"
   }
