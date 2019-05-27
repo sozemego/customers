@@ -50,7 +50,7 @@ export function Cook({ cook }) {
         </div>
       </div>
       <div style={{ display: "flex", flexDirection: "row" }}>
-        {skills.map(skill => (
+        {Object.values(skills).map(skill => (
           <div key={skill.id}>{skill.name}</div>
         ))}
         <SkillPicker cook={cook} />

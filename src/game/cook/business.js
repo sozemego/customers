@@ -14,8 +14,8 @@ export function createCook() {
     level: 1,
     experience: 0,
     nextLevel: 1,
-    skills: [],
-    skillsToTake: 5,
+    skills: {},
+    skillsToTake: 5
   };
 }
 
@@ -81,11 +81,10 @@ export const SKILL = {
   }
 };
 
-export function getSkill(name) {
-  const skill = SKILL[name];
+export function getSkill(id) {
+  const skill = SKILL[id];
   if (!skill) {
-    throw new Error(`${name} skill does not exist`);
+    throw new Error(`${id} skill does not exist`);
   }
   return _.cloneDeep(skill);
 }
-

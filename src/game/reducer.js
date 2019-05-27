@@ -16,10 +16,11 @@ import {
   ORDER_TAKEN,
   LEVEL_FINISHED,
   COOKS_RESET,
-  GAME_PAUSED
+  GAME_PAUSED,
+  COOK_LEARNED_SKILL
 } from "./actions";
 import { CUSTOMER_PHASE } from "./customer/business";
-import { saveToLocalStorage } from "./cook/business";
+import { getSkill, saveToLocalStorage } from "./cook/business";
 import { PREPARATION_PHASE } from "./dish/business";
 
 const initialState = {
@@ -79,7 +80,7 @@ function cookAdded(state, { payload: cook }) {
 function cookGainedExperience(state, action) {
   const { cookId, experience } = action;
   const cooks = { ...state.cooks };
-  const cook = cooks[cookId];
+  const cook = { ...cooks[cookId] };
   const { experience: cookExperience, nextLevel } = cook;
   const nextExperience = cookExperience + experience;
   if (nextExperience >= nextLevel) {
@@ -91,6 +92,16 @@ function cookGainedExperience(state, action) {
   } else {
     cook.experience = nextExperience;
   }
+  cooks[cookId] = cook;
+  return { ...state, cooks };
+}
+
+function cookLearnedSkill(state, action) {
+  const { cookId, skillId } = action;
+  const cooks = { ...state.cooks };
+  const cook = { ...cooks[cookId] };
+  cook.skillsToTake -= 1;
+  cook.skills[skillId] = getSkill(skillId);
   cooks[cookId] = cook;
   return { ...state, cooks };
 }
@@ -223,6 +234,7 @@ export const reducer = createReducer(initialState, {
     return { ...state, cooks: {} };
   },
   [COOK_GAINED_EXPERIENCE]: cookGainedExperience,
+  [COOK_LEARNED_SKILL]: cookLearnedSkill,
   [ORDER_ADDED]: orderAdded,
   [ORDER_ATTACHED_TO_CUSTOMER]: orderAttachedToCustomer,
   [ORDER_TAKEN]: orderTaken,
