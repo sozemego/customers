@@ -1,7 +1,7 @@
 import React from "react";
 import { Collapse, Icon } from "antd";
-import { SKILL } from "./skill";
 import { Skill } from "./Skill";
+import { SKILL } from "./business";
 
 const Panel = Collapse.Panel;
 
