@@ -3,7 +3,6 @@ import { InfoCard } from "../../components/InfoCard";
 import { Progress } from "antd";
 import { css } from "glamor";
 import { SkillPicker } from "./SkillPicker";
-import { Skill } from "./Skill";
 import { TakenSkill } from "./TakenSkill";
 
 const containerStyle = css({
