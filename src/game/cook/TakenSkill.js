@@ -2,10 +2,10 @@ import { Button, Tooltip } from "antd";
 import React from "react";
 
 export function TakenSkill({ skill, ...rest }) {
-  const { name, level, description, icon } = skill;
+  const { name, level, icon, takenDescription } = skill;
 
   return (
-    <Tooltip title={description} placement={"bottom"} mouseLeaveDelay={0}>
+    <Tooltip title={takenDescription(level)} placement={"bottom"} mouseLeaveDelay={0}>
       <Button
         style={{
           display: "flex",

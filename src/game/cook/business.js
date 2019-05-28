@@ -47,6 +47,7 @@ export const SKILL = {
     id: SKILL_SERVER,
     name: "Master server",
     description: "Decreases serving time by 5% per skill level",
+    takenDescription: (level) => `Decreases serving time by ${level * 5}%`,
     level: 1,
     icon: "🤹🏿‍♂️"
   },
@@ -54,6 +55,7 @@ export const SKILL = {
     id: SKILL_BAKER,
     name: "Master baker",
     description: "Decrease baking time by 5% per skill level",
+    takenDescription: (level) => `Decreases baking time by ${level * 5}%`,
     level: 1,
     icon: "🔥"
   },
@@ -62,6 +64,7 @@ export const SKILL = {
     name: "People pleaser",
     description:
       "When order phase is done, increases waiting time by 2% per skill level",
+    takenDescription: (level) => `When order phase is done, increases waiting time by ${level * 5}%`,
     level: 1,
     icon: "😎"
   },
@@ -69,6 +72,7 @@ export const SKILL = {
     id: SKILL_MIXER,
     name: "Master mixer",
     description: "Decrease mixing time by 5% per skill level",
+    takenDescription: (level) => `Decreases mixing time by ${level * 5}%`,
     level: 1,
     icon: "👩🏼‍🔬"
   },
@@ -76,6 +80,7 @@ export const SKILL = {
     id: SKILL_COOK,
     name: "Master cook",
     description: "Decrease time of all actions by 1% per skill level",
+    takenDescription: (level) => `Decreases time of all actions by ${level * 1}%`,
     level: 1,
     icon: "👩‍🍳"
   }
