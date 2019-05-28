@@ -26,12 +26,35 @@ export function getFromLocalStorage() {
   }
 
   const cooks = Object.values(decode64(cooks64, true));
+  cooks.forEach(cook => {
+    const { skills } = cook;
+    const nextSkills = {};
+    Object.values(skills).forEach(skill => {
+      const realSkill = getSkill(skill.id);
+      realSkill.level = skill.level;
+      nextSkills[skill.id] = realSkill;
+    });
+    cook.skills = nextSkills;
+  });
   console.log(`Loaded ${cooks.length} cooks from localStorage`);
   return cooks;
 }
 
 export function saveToLocalStorage(cooks) {
-  const cooks64 = encode64(cooks);
+  //1. cooks need to be stripped of skills first, because they contain emojis which cannot be base64'ed
+  const cooksCopy = _.cloneDeep(cooks);
+  Object.values(cooksCopy).forEach(cook => {
+    const { skills } = cook;
+    const nextSkills = {};
+    Object.values(skills).forEach(skill => {
+      nextSkills[skill.id] = {
+        id: skill.id,
+        level: skill.level
+      };
+    });
+    cook.skills = nextSkills;
+  });
+  const cooks64 = encode64(cooksCopy);
   localStorage.setItem("cooks", cooks64);
   console.log(`Saved ${Object.values(cooks).length} cooks to localStorage`);
 }
@@ -47,7 +70,7 @@ export const SKILL = {
     id: SKILL_SERVER,
     name: "Master server",
     description: "Decreases serving time by 5% per skill level",
-    takenDescription: (level) => `Decreases serving time by ${level * 5}%`,
+    takenDescription: level => `Decreases serving time by ${level * 5}%`,
     level: 1,
     icon: "🤹🏿‍♂️"
   },
@@ -55,7 +78,7 @@ export const SKILL = {
     id: SKILL_BAKER,
     name: "Master baker",
     description: "Decrease baking time by 5% per skill level",
-    takenDescription: (level) => `Decreases baking time by ${level * 5}%`,
+    takenDescription: level => `Decreases baking time by ${level * 5}%`,
     level: 1,
     icon: "🔥"
   },
@@ -64,7 +87,8 @@ export const SKILL = {
     name: "People pleaser",
     description:
       "When order phase is done, increases waiting time by 2% per skill level",
-    takenDescription: (level) => `When order phase is done, increases waiting time by ${level * 5}%`,
+    takenDescription: level =>
+      `When order phase is done, increases waiting time by ${level * 5}%`,
     level: 1,
     icon: "😎"
   },
@@ -72,7 +96,7 @@ export const SKILL = {
     id: SKILL_MIXER,
     name: "Master mixer",
     description: "Decrease mixing time by 5% per skill level",
-    takenDescription: (level) => `Decreases mixing time by ${level * 5}%`,
+    takenDescription: level => `Decreases mixing time by ${level * 5}%`,
     level: 1,
     icon: "👩🏼‍🔬"
   },
@@ -80,7 +104,7 @@ export const SKILL = {
     id: SKILL_COOK,
     name: "Master cook",
     description: "Decrease time of all actions by 1% per skill level",
-    takenDescription: (level) => `Decreases time of all actions by ${level * 1}%`,
+    takenDescription: level => `Decreases time of all actions by ${level * 1}%`,
     level: 1,
     icon: "👩‍🍳"
   }

@@ -15,7 +15,8 @@ export function encode64(obj) {
   if (obj instanceof String) {
     return btoa(obj);
   }
-  return btoa(JSON.stringify(obj));
+  const str = JSON.stringify(obj);
+  return btoa(str);
 }
 
 export function decode64(obj, asObject = true) {
