@@ -1,6 +1,6 @@
 import React from "react";
 import _ from "lodash";
-import { getPresentParticiple, getVerb } from "./business";
+import { getOrderPhaseTime, getPresentParticiple, getVerb } from "./business";
 import { css } from "glamor";
 import { Button, Card } from "antd";
 import { InfoCard } from "../../components/InfoCard";
@@ -52,8 +52,7 @@ export function Order({ order }) {
   const customer = customers[customerId];
 
   const currentCook = cooks[order.cookId];
-  const orderTime =
-    _.get(currentCook, "speed", 0) * PREPARATION_PHASE_TIME[dishStatus];
+  const orderTime = getOrderPhaseTime(currentCook, order, dishStatus);
   cooks = nextDishStatus ? Object.values(cooks) : [];
 
   const runTimer = !!currentCook;
@@ -68,7 +67,7 @@ export function Order({ order }) {
 
   function createButtonText(cook) {
     return `${cook.name} ${Number(
-      (cook.speed * PREPARATION_PHASE_TIME[nextDishStatus]) / 1000
+      getOrderPhaseTime(cook, order, nextDishStatus) / 1000
     ).toFixed(1)}s`;
   }
 

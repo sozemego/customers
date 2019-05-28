@@ -1,4 +1,10 @@
-import { createDish, PREPARATION_PHASE } from "../dish/business";
+import _ from "lodash";
+import {
+  createDish,
+  PREPARATION_PHASE,
+  PREPARATION_PHASE_TIME
+} from "../dish/business";
+import { SKILL_BAKER, SKILL_COOK, SKILL_MIXER } from "../cook/business";
 
 let id = 0;
 
@@ -34,4 +40,45 @@ const PHASE_VERB_MAP = {
 
 export function getVerb(phase) {
   return PHASE_VERB_MAP[phase] || phase;
+}
+
+export function getOrderPhaseTime(cook, order, phase) {
+  if (!cook) {
+    return null;
+  }
+  const speed = _.get(cook, "speed", 0);
+  const speedPercent = speed * 100;
+  const basePhaseTime = PREPARATION_PHASE_TIME[phase];
+  const decreaseFromSkill = getTimeDecreaseFromSkill(cook, phase);
+  const speedDecrease = 100 - speedPercent + decreaseFromSkill;
+  const speedMultiplier = (100 - speedDecrease) / 100;
+
+  return speedMultiplier * basePhaseTime;
+}
+
+export function getTimeDecreaseFromSkill(cook, phase) {
+  const { skills } = cook;
+  let decrease = 0;
+  if (phase === PREPARATION_PHASE.BAKE) {
+    const baker = skills[SKILL_BAKER];
+    if (baker) {
+      decrease += baker.level * 5;
+    }
+  }
+  if (phase === PREPARATION_PHASE.GATHER_INGREDIENTS) {
+  }
+  if (phase === PREPARATION_PHASE.MIX) {
+    const mixer = skills[SKILL_MIXER];
+    if (mixer) {
+      decrease = mixer.level * 5;
+    }
+  }
+  if (phase === PREPARATION_PHASE.SERVE) {
+  }
+  const cookSkill = skills[SKILL_COOK];
+  if (cookSkill) {
+    decrease += cookSkill.level;
+  }
+
+  return decrease;
 }
