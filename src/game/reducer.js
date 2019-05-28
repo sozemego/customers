@@ -101,7 +101,13 @@ function cookLearnedSkill(state, action) {
   const cooks = { ...state.cooks };
   const cook = { ...cooks[cookId] };
   cook.skillsToTake -= 1;
-  cook.skills[skillId] = getSkill(skillId);
+  const learnedSkill = cook.skills[skillId];
+  if (learnedSkill) {
+    learnedSkill.level += 1;
+    cook.skills[skillId] = learnedSkill;
+  } else {
+    cook.skills[skillId] = getSkill(skillId);
+  }
   cooks[cookId] = cook;
   return { ...state, cooks };
 }
