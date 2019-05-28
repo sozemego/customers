@@ -517,33 +517,6 @@ testWithLog("8 completing the order should remove order", () => {
   expect(getByTestId("total-customers").textContent).toBe("1");
 });
 
-testWithLog("9 completing phases should add experience to the cook", () => {
-  jest.useFakeTimers();
-  const { queryByTestId, queryByText } = renderWithProvider(<Game />);
-  startLevel(6);
-  addCook();
-  act(() => jest.advanceTimersByTime(1000));
-  fireEvent.click(queryByTestId(`take-order-1`));
-  expect(queryByTestId(/order-id/g)).not.toBeNull();
-
-  fireEvent.click(queryByTestId(/next-phase/g));
-  act(() => jest.advanceTimersByTime(10000));
-  expect(
-    queryByText("Level 1. Experience: 1 / ", { exact: false })
-  ).not.toBeNull();
-  fireEvent.click(queryByTestId(/next-phase/g));
-  act(() => jest.advanceTimersByTime(12000));
-  expect(
-    queryByText("Level 1. Experience: 2 / ", { exact: false })
-  ).not.toBeNull();
-  fireEvent.click(queryByTestId(/next-phase/g));
-  act(() => jest.advanceTimersByTime(10000));
-  expect(
-    queryByText("Level 1. Experience: 3 / ", { exact: false })
-  ).not.toBeNull();
-  expect(queryByTestId(/order-id/g)).toBeNull();
-});
-
 testWithLog(
   "10 Customers should be displayed in the order they arrived in",
   () => {
