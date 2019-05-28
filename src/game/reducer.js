@@ -86,7 +86,7 @@ function cookGainedExperience(state, action) {
   if (nextExperience >= nextLevel) {
     cook.level += 1;
     cook.experience = 0;
-    cook.speed = Number(Number(cook.speed * 0.9).toFixed(1));
+    cook.speed -= 0.01;
     cook.nextLevel = nextLevel * 2;
     cook.skillsToTake += 1;
   } else {

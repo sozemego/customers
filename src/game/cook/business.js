@@ -15,7 +15,7 @@ export function createCook() {
     experience: 0,
     nextLevel: 1,
     skills: {},
-    skillsToTake: 5
+    skillsToTake: 0
   };
 }
 

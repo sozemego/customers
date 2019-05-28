@@ -68,7 +68,7 @@ export function Order({ order }) {
   function createButtonText(cook) {
     return `${cook.name} ${Number(
       getOrderPhaseTime(cook, order, nextDishStatus) / 1000
-    ).toFixed(1)}s`;
+    ).toFixed(2)}s`;
   }
 
   function title() {
