@@ -20,7 +20,7 @@ import {
   COOK_LEARNED_SKILL
 } from "./actions";
 import { CUSTOMER_PHASE } from "./customer/business";
-import { getSkill, saveToLocalStorage } from "./cook/business";
+import { getSkill, saveToLocalStorage, SKILL_PLEASER } from "./cook/business";
 import { PREPARATION_PHASE } from "./dish/business";
 
 const initialState = {
@@ -177,6 +177,12 @@ function orderPhaseFinished(state, action) {
   dish.phase = PREPARATION_PHASE.WAITING;
   order.dish = dish;
   order.cookId = null;
+
+  const skillPleaser = cook.skills[SKILL_PLEASER];
+  if (skillPleaser) {
+    const level = skillPleaser.level;
+    order.timeIncrease += level * 0.02;
+  }
   orders[orderId] = order;
 
   return {

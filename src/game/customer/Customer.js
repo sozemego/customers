@@ -35,7 +35,7 @@ export function Customer({ customer, takeOrder, canMake, onTimeExceeded }) {
   const orderTaken = isOrderTaken(order.id);
 
   const takeOrderEnabled = !orderTaken;
-  const maxWaitTime = leaveAt(order);
+  const maxWaitTime = leaveAt(order, WAITING_TIME_TYPE.WAITING);
   const { time: waitingTime } = useTimer(
     1000,
     1,
@@ -44,7 +44,7 @@ export function Customer({ customer, takeOrder, canMake, onTimeExceeded }) {
     () => onTimeExceeded(WAITING_TIME_TYPE.WAITING, maxWaitTime)
   );
 
-  const maxMakeTime = leaveAt(order);
+  const maxMakeTime = leaveAt(order, WAITING_TIME_TYPE.ORDER);
   const { time: orderTime } = useTimer(
     1000,
     1,

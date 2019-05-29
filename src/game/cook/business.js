@@ -86,9 +86,10 @@ export const SKILL = {
     id: SKILL_PLEASER,
     name: "People pleaser",
     description:
-      "When order phase is done, increases waiting time by 2% per skill level",
+      "When order phase is done, increases time the customer can wait by 2% per skill level",
     takenDescription: level =>
-      `When order phase is done, increases waiting time by ${level * 5}%`,
+      `When order phase is done, increases time the customer can wait by ${level *
+        2}%`,
     level: 1,
     icon: "😎"
   },

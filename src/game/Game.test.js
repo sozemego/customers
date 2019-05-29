@@ -16,7 +16,7 @@ import {
   getTakenOrderIds
 } from "./selectors";
 import { createCook } from "./cook/business";
-import { leaveAt } from "./business";
+import { leaveAt, WAITING_TIME_TYPE } from "./business";
 import { GameStart } from "./GameStart";
 import { GameInfo } from "./GameInfo";
 import { PREPARATION_PHASE } from "./dish/business";
@@ -425,7 +425,7 @@ testWithLog("4 customer should leave after not being taken care of", () => {
   const customers = Object.values(getCustomers(store.getState));
   const customer = customers[0];
   const order = orders[customer.orderId];
-  const leaveAtTime = leaveAt(order);
+  const leaveAtTime = leaveAt(order, WAITING_TIME_TYPE.WAITING);
   for (let i = 0; i < leaveAtTime; i++) {
     act(() => jest.advanceTimersByTime(i * 1000));
   }
@@ -482,7 +482,7 @@ testWithLog(
     const customers = Object.values(getCustomers(store.getState));
     const customer = customers[0];
     const order = orders[customer.orderId];
-    const leaveAtTime = leaveAt(order);
+    const leaveAtTime = leaveAt(order, WAITING_TIME_TYPE.ORDER);
     for (let i = 0; i < leaveAtTime; i++) {
       act(() => jest.advanceTimersByTime(i * 1000));
     }

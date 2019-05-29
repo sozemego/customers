@@ -157,7 +157,7 @@ export function exceedWaitingTime(customer, type, time) {
     if (!order) {
       return;
     }
-    const maxTime = leaveAt(order);
+    const maxTime = leaveAt(order, type);
     if (time >= maxTime) {
       dispatch(
         customerPhaseChanged(customer.id, CUSTOMER_PHASE.ANGRY, Date.now())
@@ -202,24 +202,27 @@ export function finishPhase(orderId, cookId) {
       const arrivedAtTime = arrivedAt(customerActions);
       const orderTakenAtTime = orderTakenAt(orderActions);
       const timeUntilTaken = orderTakenAtTime - arrivedAtTime;
-      const maxTime = leaveAt(order) * 1000;
-      const timeOfResultReduction = maxTime * 0.65;
-      const reductionInterval = maxTime - timeOfResultReduction;
+      const maxWaitTime = leaveAt(order, WAITING_TIME_TYPE.WAITING) * 1000;
+      const maxOrderTime = leaveAt(order, WAITING_TIME_TYPE.ORDER) * 1000;
+      const timeOfResultReductionWait = maxWaitTime * 0.65;
+      const timeOfResultReductionOrder = maxOrderTime * 0.65;
+      const waitReductionInterval = maxWaitTime - timeOfResultReductionWait;
+      const orderReductionInterval = maxOrderTime - timeOfResultReductionOrder;
 
       //3. calculate penalty based on time until order was taken
       let takingOrderPart = 50;
-      const takenTimeOver = timeUntilTaken - timeOfResultReduction;
+      const takenTimeOver = timeUntilTaken - timeOfResultReductionWait;
       if (takenTimeOver > 0) {
-        const reduction = takenTimeOver / reductionInterval;
+        const reduction = takenTimeOver / waitReductionInterval;
         takingOrderPart = round(takingOrderPart - takingOrderPart * reduction);
       }
 
       //4. calculate penalty based on time until order was done
       let makingOrderPart = 50;
       const orderDoneTimeOver =
-        doneAt(customerActions) - orderTakenAtTime - timeOfResultReduction;
+        doneAt(customerActions) - orderTakenAtTime - timeOfResultReductionOrder;
       if (orderDoneTimeOver > 0) {
-        const reduction = orderDoneTimeOver / reductionInterval;
+        const reduction = orderDoneTimeOver / orderReductionInterval;
         makingOrderPart = round(makingOrderPart - makingOrderPart * reduction);
       }
       //4. find out how much time has passed since order was taken and order was served
