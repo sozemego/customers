@@ -64,6 +64,7 @@ export const SKILL_BAKER = "SKILL_BAKER";
 export const SKILL_PLEASER = "SKILL_PLEASER";
 export const SKILL_MIXER = "SKILL_MIXER";
 export const SKILL_COOK = "SKILL_COOK";
+export const SKILL_GATHERER = "SKILL_GATHERER";
 
 export const SKILL = {
   [SKILL_SERVER]: {
@@ -108,6 +109,15 @@ export const SKILL = {
     takenDescription: level => `Decreases time of all actions by ${level * 1}%`,
     level: 1,
     icon: "👩‍🍳"
+  },
+  [SKILL_GATHERER]: {
+    id: SKILL_GATHERER,
+    name: "Master gatherer",
+    description: "Decrease gathering ingredients time by 5% per skill level",
+    takenDescription: level =>
+      `Decreases gathering ingredients time by ${level * 5}%`,
+    level: 1,
+    icon: "👨‍🌾"
   }
 };
 

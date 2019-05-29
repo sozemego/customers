@@ -4,7 +4,12 @@ import {
   PREPARATION_PHASE,
   PREPARATION_PHASE_TIME
 } from "../dish/business";
-import { SKILL_BAKER, SKILL_COOK, SKILL_MIXER } from "../cook/business";
+import {
+  SKILL_BAKER,
+  SKILL_COOK,
+  SKILL_GATHERER,
+  SKILL_MIXER
+} from "../cook/business";
 
 let id = 0;
 
@@ -14,7 +19,7 @@ export function createOrder(dish = createDish()) {
     dish,
     cookId: null,
     customerId: null,
-    timeIncrease: 0,
+    timeIncrease: 0
   };
   return order;
 }
@@ -67,6 +72,10 @@ export function getTimeDecreaseFromSkill(cook, phase) {
     }
   }
   if (phase === PREPARATION_PHASE.GATHER_INGREDIENTS) {
+    const gatherer = skills[SKILL_GATHERER];
+    if (gatherer) {
+      decrease = gatherer.level * 5;
+    }
   }
   if (phase === PREPARATION_PHASE.MIX) {
     const mixer = skills[SKILL_MIXER];
