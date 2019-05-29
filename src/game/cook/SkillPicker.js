@@ -7,7 +7,7 @@ import { cookLearnedSkill } from "../actions";
 
 const Panel = Collapse.Panel;
 
-export function SkillPicker({ cook }) {
+export function SkillPicker({ cook, disabled = false }) {
   const { id, skillsToTake } = cook;
   const dispatch = useDispatch();
 
@@ -29,7 +29,15 @@ export function SkillPicker({ cook }) {
           <Icon type="read" theme={isActive ? "filled" : "outlined"} />
         )}
       >
-        <Panel key={1} header={<span>Learn new skill <Tag color="geekblue">{skillsToTake}</Tag></span>}>
+        <Panel
+          key={1}
+          disabled={disabled}
+          header={
+            <span>
+              Learn new skill <Tag color="geekblue">{skillsToTake}</Tag>
+            </span>
+          }
+        >
           <div
             style={{
               display: "flex",

@@ -4,6 +4,7 @@ import { Progress } from "antd";
 import { css } from "glamor";
 import { SkillPicker } from "./SkillPicker";
 import { TakenSkill } from "./TakenSkill";
+import { isPaused, isRunning } from "../selectors";
 
 const containerStyle = css({
   display: "flex",
@@ -27,6 +28,7 @@ const cookInfoStyle = css({
 });
 
 export function Cook({ cook }) {
+  const paused = isPaused();
   const { name, avatar, nextLevel, experience, skills } = cook;
 
   const experienceProgress = Number(
@@ -56,7 +58,7 @@ export function Cook({ cook }) {
 						<TakenSkill key={skill.id} skill={skill} />
 					))}
 				</div>
-        <SkillPicker cook={cook} />
+        <SkillPicker cook={cook} disabled={!paused}/>
       </div>
       <Progress
         default={"default"}
