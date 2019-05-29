@@ -109,6 +109,12 @@ function cookLearnedSkill(state, action) {
     cook.skills[skillId] = getSkill(skillId);
   }
   cooks[cookId] = cook;
+  const orderCount = Object.values(state.orders).length;
+  const resultCount = Object.values(state.orderIdToResult).length;
+
+  if (orderCount === resultCount) {
+    saveToLocalStorage(state.cooks);
+  }
   return { ...state, cooks };
 }
 
