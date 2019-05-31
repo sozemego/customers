@@ -1,0 +1,138 @@
+{
+  "test 1": {
+    "customers": [
+      {
+        "id": 1,
+        "time": 0,
+        "dish": "SALAD"
+      }
+    ]
+  },
+  "Hard level 1": {
+    "customers": [
+      {
+        "id": 1,
+        "time": 0,
+        "dish": "SALAD"
+      },
+      {
+        "id": 2,
+        "time": 0,
+        "dish": "SALAD"
+      },
+      {
+        "id": 3,
+        "time": 0,
+        "dish": "SALAD"
+      },
+      {
+        "id": 4,
+        "time": 10000,
+        "dish": "PIZZA"
+      },
+      {
+        "id": 5,
+        "time": 11000,
+        "dish": "PIZZA"
+      },
+      {
+        "id": 6,
+        "time": 18000,
+        "dish": "SALAD"
+      },
+      {
+        "id": 7,
+        "time": 19000,
+        "dish": "PIZZA"
+      },
+      {
+        "id": 8,
+        "time": 22000,
+        "dish": "SALAD"
+      },
+      {
+        "id": 9,
+        "time": 22000,
+        "dish": "SALAD"
+      },
+      {
+        "id": 10,
+        "time": 30000,
+        "dish": "SALAD"
+      },
+      {
+        "id": 11,
+        "time": 30000,
+        "dish": "SALAD"
+      }
+    ]
+  },
+  "Level 1": {
+    "customers": [
+      {
+        "id": 1,
+        "time": 2500,
+        "dish": "SALAD"
+      },
+      {
+        "id": 2,
+        "time": 17500,
+        "dish": "SALAD"
+      },
+      {
+        "id": 3,
+        "time": 25000,
+        "dish": "PIZZA"
+      },
+      {
+        "id": 4,
+        "time": 35000,
+        "dish": "SALAD"
+      },
+      {
+        "id": 5,
+        "time": 39000,
+        "dish": "SALAD"
+      }
+    ]
+  },
+  "Level 2": {
+    "customers": [
+      {
+        "id": 1,
+        "time": 2500,
+        "dish": "PIZZA"
+      },
+      {
+        "id": 2,
+        "time": 12500,
+        "dish": "SALAD"
+      },
+      {
+        "id": 3,
+        "time": 25000,
+        "dish": "PIZZA"
+      },
+      {
+        "id": 4,
+        "time": 20000,
+        "dish": "PIZZA"
+      },
+      {
+        "id": 5,
+        "time": 29000,
+        "dish": "SALAD"
+      },
+      {
+        "id": 6,
+        "time": 39000,
+        "dish": "SALAD"
+      },
+      {
+        "id": 7,
+        "time": 39000,
+        "dish": "SALAD"
+      }
+    ]
+  }
+}
