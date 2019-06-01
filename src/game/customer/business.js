@@ -13,7 +13,7 @@ export function createCustomer(customerData) {
     id: customerData.id,
     name: faker.name.firstName(),
     orderId: null,
-    avatar: `avatars/avatar_${random}.png`,
+    avatar: faker.image.avatar(24, 24, true),
     time: customerData.time
   };
   return customer;

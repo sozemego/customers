@@ -16,7 +16,7 @@
     "redux-thunk": "^2.3.0"
   },
   "scripts": {
-    "start": "react-scripts tart",
+    "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "CI=true LOG=true react-scripts test",
     "eject": "react-scripts eject",

@@ -25,7 +25,6 @@ class App extends Component {
     fetch("levels.json")
       .then(res => res.json())
       .then(res => {
-        console.log("pls");
         const levels = getLevelsFromLocalStorage();
         this.props.dispatch(
           levelsLoaded({
