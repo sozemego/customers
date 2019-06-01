@@ -1,7 +1,8 @@
 import React from "react";
 
-const style = { textAlign: "center" };
+const defaultStyle = { textAlign: "center" };
 
-export function H1({ children }) {
+export function H1({ children, style: propsStyle }) {
+  const style = { ...defaultStyle, ...propsStyle };
   return <h1 style={style}>{children}</h1>;
 }

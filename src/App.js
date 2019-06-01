@@ -58,22 +58,30 @@ class App extends Component {
             display: "flex",
             flexDirection: "row",
             alignItems: "center",
-            justifyContent: "center"
+            justifyContent: "space-between"
           }}
         >
-          <H1>Customers</H1>
+          <div style={{ flex: "1" }} />
+          <H1 style={{ flex: "1" }}>Customers</H1>
           <div
             style={{
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "center",
-              alignItems: "center",
               fontSize: "0.6rem",
-              marginLeft: "10px"
+              color: "gray",
+              flex: "1"
             }}
           >
-            <span>{`build: ${build.build} at ${build.date}`}</span>
-            <span>{`version: ${settings.version}`}</span>
+            <div
+              style={{
+                marginRight: "25px",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "flex-end",
+              }}
+            >
+              <span>{`build: ${build.build} at ${build.date}`}</span>
+              <span>{`version: ${settings.version}`}</span>
+            </div>
           </div>
         </div>
         {component}
