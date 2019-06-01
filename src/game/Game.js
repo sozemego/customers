@@ -1,7 +1,7 @@
 import React from "react";
 import { css } from "glamor";
 import { Col, Row } from "antd";
-import { getCooks, getLevelId, isRunning } from "./selectors";
+import { getLevelId, isRunning } from "./selectors";
 import { GameClock } from "../components/GameClock";
 import { Customers } from "./customer/Customers";
 import { Orders } from "./order/Orders";
@@ -22,7 +22,6 @@ const gamePanelsContainer = css({
 export function Game(props) {
   const running = isRunning();
   const levelId = getLevelId();
-  const cooks = getCooks();
 
   if (!running) {
     return null;

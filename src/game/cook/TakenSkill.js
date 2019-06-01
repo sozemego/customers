@@ -26,7 +26,9 @@ export function TakenSkill({ skill, ...rest }) {
       <div
         style={{ display: "flex", flexDirection: "row", alignItems: "center" }}
       >
-        <Tag color={color[level]} style={{marginTop: "8px"}}>{level}</Tag>
+        <Tag color={color[level]} style={{ marginTop: "8px" }}>
+          {level}
+        </Tag>
         <span role={"img"} style={{ fontSize: "2rem", marginRight: "4px" }}>
           {icon}
         </span>

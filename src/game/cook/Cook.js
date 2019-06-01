@@ -4,14 +4,13 @@ import { Progress } from "antd";
 import { css } from "glamor";
 import { SkillPicker } from "./SkillPicker";
 import { TakenSkill } from "./TakenSkill";
-import { isPaused, isRunning } from "../selectors";
+import { isPaused } from "../selectors";
 
 const containerStyle = css({
   display: "flex",
   flexDirection: "column",
   justifyContent: "center",
   alignItems: "flex-start"
-  // height: "96px"
 });
 
 const cookCardContainerStyle = css({
@@ -53,12 +52,14 @@ export function Cook({ cook }) {
         </div>
       </div>
       <div style={{ display: "flex", flexDirection: "column" }}>
-				<div style={{display: "flex", flexDirection: "row", flexWrap: "wrap"}}>
-					{Object.values(skills).map(skill => (
-						<TakenSkill key={skill.id} skill={skill} />
-					))}
-				</div>
-        <SkillPicker cook={cook} disabled={!paused}/>
+        <div
+          style={{ display: "flex", flexDirection: "row", flexWrap: "wrap" }}
+        >
+          {Object.values(skills).map(skill => (
+            <TakenSkill key={skill.id} skill={skill} />
+          ))}
+        </div>
+        <SkillPicker cook={cook} disabled={!paused} />
       </div>
       <Progress
         default={"default"}

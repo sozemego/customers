@@ -90,7 +90,7 @@ export function loadLevel(str) {
 
   const errors = validateLevel(str);
   if (!errors.isValid) {
-  	console.log(`Invalid level ${str}`);
+    console.log(`Invalid level ${str}`);
     throw new Error(`Invalid level ${str}`);
   }
   return str;

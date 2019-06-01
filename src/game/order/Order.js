@@ -9,7 +9,7 @@ import { useTimer } from "../../hooks/timer";
 import { getCooks, getCustomers, isOrderDone, isPaused } from "../selectors";
 import { finishPhase, orderNextPhaseStarted } from "../actions";
 import { useDispatch } from "react-redux";
-import { PREPARATION_PHASE, PREPARATION_PHASE_TIME } from "../dish/business";
+import { PREPARATION_PHASE } from "../dish/business";
 
 const titleContainer = css({
   label: "TITLE",

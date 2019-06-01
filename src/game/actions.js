@@ -86,7 +86,11 @@ export const cookGainedExperience = makeActionCreator(
 );
 
 export const COOK_LEARNED_SKILL = "COOK_LEARNED_SKILL";
-export const cookLearnedSkill = makeActionCreator(COOK_LEARNED_SKILL, 'cookId', 'skillId');
+export const cookLearnedSkill = makeActionCreator(
+  COOK_LEARNED_SKILL,
+  "cookId",
+  "skillId"
+);
 
 export const ACTION_REGISTERED = "ACTION_REGISTERED";
 export const actionRegistered = makeActionCreator(
