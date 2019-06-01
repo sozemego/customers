@@ -22,7 +22,7 @@ class App extends Component {
       }
     }, 50);
 
-    fetch(`/levels.json`)
+    fetch("levels.json")
       .then(res => res.json())
       .then(res => {
         const levels = getLevelsFromLocalStorage();
