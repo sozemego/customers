@@ -9,6 +9,8 @@ import { getPathname } from "./history";
 import { levelsLoaded } from "./game/actions";
 import { connect } from "react-redux";
 import { getLevelsFromLocalStorage } from "./levelEditor/business";
+import settings from "../package.json";
+import build from "./build.json";
 
 class App extends Component {
   componentDidMount() {
@@ -51,7 +53,29 @@ class App extends Component {
 
     return (
       <>
-        <H1>Customers</H1>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "center"
+          }}
+        >
+          <H1>Customers</H1>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+              fontSize: "0.6rem",
+              marginLeft: "10px"
+            }}
+          >
+            <span>{`build: ${build.build} at ${build.date}`}</span>
+            <span>{`version: ${settings.version}`}</span>
+          </div>
+        </div>
         {component}
       </>
     );
