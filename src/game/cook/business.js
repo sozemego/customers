@@ -13,7 +13,7 @@ export function createCook() {
     speed: 1,
     level: 1,
     experience: 0,
-    nextLevel: 1,
+    nextLevel: 4,
     skills: {},
     skillsToTake: 0
   };
